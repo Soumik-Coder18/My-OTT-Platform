@@ -1,75 +1,32 @@
 import React from 'react';
-import styled from 'styled-components';
 import Form from './Form';
 import Loader from './Loader';
 
 const Login = () => {
   return (
-    <LoginWrapper>
-      <div className="container">
-        <div className="left">
+    <div className="w-screen h-screen flex items-center justify-center p-4" style={{ backgroundColor: '#F4EBD3' }}>
+      <div
+        className="flex flex-col md:flex-row w-full max-w-5xl h-auto md:h-[600px] rounded-2xl shadow-xl overflow-hidden border"
+        style={{ backgroundColor: '#DED3C4', borderColor: '#98A1BC' }}
+      >
+        {/* Left - Loader (Hidden on mobile) */}
+        <div
+          className="hidden md:flex flex-1 items-center justify-center p-6 scale-100 md:scale-110 transition-transform duration-300"
+          style={{ backgroundColor: '#98A1BC' }}
+        >
           <Loader />
         </div>
-        <div className="right">
+
+        {/* Right - Form (Always visible) */}
+        <div
+          className="flex-1 flex items-center justify-center p-8"
+          style={{ backgroundColor: '#F4EBD3' }}
+        >
           <Form />
         </div>
       </div>
-    </LoginWrapper>
+    </div>
   );
 };
-
-const LoginWrapper = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: #F4EBD3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .container {
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 0px;
-    padding: 40px;
-    border-radius: 15px;
-    background-color: #ded3c4;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
-    max-width: 1000px;
-    width: 95%;
-    height: 600px;
-    overflow: hidden;
-  }
-
-  .left, .right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .left {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-    transform: scale(1.2); /* Bigger coffee loader */
-  }
-
-  .right {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-      height: auto;
-      padding: 20px;
-    }
-
-    .left, .right {
-      transform: scale(1);
-    }
-  }
-`;
 
 export default Login;

@@ -84,28 +84,30 @@ const Header = () => {
             className="w-full px-4 py-2 rounded-md bg-[#DED3C4] text-[#555879] placeholder:text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#98A1BC]"
           />
           <nav className="flex flex-col space-y-2 text-sm font-medium mt-2">
-            <Link to="/" className="flex items-center gap-2 hover:text-white transition">
+            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white transition">
               <Home size={16} /> Home
             </Link>
-            <Link to="/movies" className="flex items-center gap-2 hover:text-white transition">
+            <Link to="/movies" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white transition">
               <Film size={16} /> Movies
             </Link>
-            <Link to="/series" className="flex items-center gap-2 hover:text-white transition">
+            <Link to="/series" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white transition">
               <MonitorPlay size={16} /> Series
             </Link>
-            <Link to="/favorites" className="flex items-center gap-2 hover:text-white transition">
+            <Link to="/favorites" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white transition">
               <Heart size={16} /> Favorites
             </Link>
           </nav>
           <div className="flex space-x-3 mt-3">
             <Link
               to="/login"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="w-1/2 flex justify-center items-center gap-1 bg-[#F4EBD3] text-[#555879] font-semibold py-2 rounded-md hover:bg-[#DED3C4] transition"
             >
               <LogIn size={16} /> Login
             </Link>
             <Link
               to="/signup"
+              onClick={() => setIsMobileMenuOpen(false)}
               className="w-1/2 flex justify-center items-center gap-1 border border-[#F4EBD3] text-[#F4EBD3] font-semibold py-2 rounded-md hover:bg-[#F4EBD3] hover:text-[#555879] transition"
             >
               <UserPlus size={16} /> Sign Up
@@ -113,6 +115,7 @@ const Header = () => {
           </div>
         </div>
       )}
+
     </header>
   );
 };
