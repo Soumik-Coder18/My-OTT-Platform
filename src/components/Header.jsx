@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Menu,
   X,
@@ -9,30 +10,62 @@ import {
   Heart,
   LogIn,
   UserPlus,
-  Clapperboard
+  Clapperboard,
 } from 'lucide-react';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
+
+    try {
+      const res = await axios.get(
+        `https://api.themoviedb.org/3/search/multi?query=${searchTerm}&language=en-US&page=1&include_adult=false`,
+        {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
+          },
+        }
+      );
+      navigate(`/search?query=${searchTerm}`, {
+        state: { results: res.data.results },
+      });
+      setSearchTerm('');
+      setIsMobileMenuOpen(false); // optional: close mobile menu after search
+    } catch (err) {
+      console.error('Search error:', err);
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-[#555879] text-[#F4EBD3] shadow">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2 font-logo text-2xl md:text-3xl font-bold tracking-wide">
+        <Link
+          to="/"
+          className="flex items-center space-x-2 font-logo text-2xl md:text-3xl font-bold tracking-wide"
+        >
           <Clapperboard size={26} />
           <span>WhisperFrame</span>
         </Link>
 
-        {/* Search (hidden on small screens) */}
-        <div className="hidden md:flex flex-1 mx-6">
+        {/* Search (Desktop) */}
+        <form
+          onSubmit={handleSearch}
+          className="hidden md:flex flex-1 mx-6"
+        >
           <input
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search movies or series..."
             className="w-full px-4 py-2 rounded-md bg-[#DED3C4] text-[#555879] placeholder:text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#98A1BC]"
           />
-        </div>
+        </form>
 
         {/* Desktop Nav + Auth */}
         <div className="hidden md:flex items-center space-x-6">
@@ -67,10 +100,7 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
+        <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -78,11 +108,15 @@ const Header = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-3 bg-[#555879] text-[#F4EBD3]">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full px-4 py-2 rounded-md bg-[#DED3C4] text-[#555879] placeholder:text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#98A1BC]"
-          />
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search..."
+              className="w-full px-4 py-2 rounded-md bg-[#DED3C4] text-[#555879] placeholder:text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#98A1BC]"
+            />
+          </form>
           <nav className="flex flex-col space-y-2 text-sm font-medium mt-2">
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2 hover:text-white transition">
               <Home size={16} /> Home
@@ -115,7 +149,6 @@ const Header = () => {
           </div>
         </div>
       )}
-
     </header>
   );
 };
