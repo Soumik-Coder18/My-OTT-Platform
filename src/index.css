@@ -125,3 +125,12 @@ html, body {
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+
+/* in index.css or global.css */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
