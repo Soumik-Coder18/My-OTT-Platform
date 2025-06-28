@@ -3,7 +3,7 @@ import { getPopularMovies, getPopularSeries } from '../../services/movieApi';
 import Hero from './Hero';
 import MovieSection from './MovieSection';
 import HeroMiddle from './HeroMiddle';
-import Actor from './Actor';
+import Actor from './ActorSection';
 import SeriesSection from './SeriesSection';
 import HeroBottom from './HeroBottom';
 import Loader from '../../components/Loader';

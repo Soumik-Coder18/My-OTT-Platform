@@ -42,7 +42,7 @@ const Actor = () => {
           <h2 className="text-2xl font-semibold text-[#555879]">Popular Actors</h2>
         </div>
         <button
-          onClick={() => navigate('/actors')}
+          onClick={() => navigate('/actor')}
           className="px-4 py-2 bg-[#DED3C4] text-[#222] rounded-full text-sm font-medium hover:scale-105 transition-transform"
         >
           Show More
@@ -72,7 +72,7 @@ const Actor = () => {
           >
             <div
               className="cursor-pointer bg-[#ded3c4] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition duration-300"
-              onClick={() => navigate(`/person/${actor.id}`)}
+              onClick={() => navigate(`/actor/${actor.id}`)}
             >
               <img
                 src={

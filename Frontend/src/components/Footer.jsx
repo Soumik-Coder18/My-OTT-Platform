@@ -12,6 +12,7 @@ import {
   Gavel,
   Mail,
   Clapperboard,
+  User,
 } from 'lucide-react';
 
 const Footer = () => {
@@ -46,6 +47,7 @@ const Footer = () => {
               <li><Link to="/movies" className="flex items-center gap-1 hover:underline hover:text-white transition"><Film size={16} /> Movies</Link></li>
               <li><Link to="/series" className="flex items-center gap-1 hover:underline hover:text-white transition"><MonitorPlay size={16} /> Shows</Link></li>
               <li><Link to="/favorites" className="flex items-center gap-1 hover:underline hover:text-white transition"><Heart size={16} /> Favorites</Link></li>
+              <li><Link to="/actor" className="flex items-center gap-1 hover:underline hover:text-white transition"><User size={16} /> Actors</Link></li>
             </ul>
           </div>
 

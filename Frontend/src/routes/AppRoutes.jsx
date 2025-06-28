@@ -13,6 +13,9 @@ import Series from '../pages/Series/Series';
 import SeriesDetails from '../pages/Series/SeriesDetails';
 import SearchResults from '../pages/SearchResults';
 import Favorites from '../pages/Favorites';
+import ActorDetails from '../pages/ActorDetails/ActorDetails';
+import Actor from '../pages/ActorDetails/Actor'; 
+// Assuming this is the actor section component
 
 const AppRoutes = () => {
   return (
@@ -32,6 +35,8 @@ const AppRoutes = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/actor/:id" element={<ActorDetails />} />
+        <Route path="/actor" element={<Actor />} /> 
       </Routes>
     </>
   );
