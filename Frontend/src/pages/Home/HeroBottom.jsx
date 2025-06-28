@@ -11,6 +11,7 @@ const HeroBottom = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch trending items
   useEffect(() => {
     const fetchTrending = async () => {
       try {
@@ -27,36 +28,40 @@ const HeroBottom = () => {
     fetchTrending();
   }, []);
 
-  // Auto shuffle every 5 seconds
+  // Circular rotate every 4 seconds (anti-clockwise)
   useEffect(() => {
     const interval = setInterval(() => {
-      setItems((prevItems) => shuffleArray(prevItems));
-    }, 5000);
+      setItems((prev) => {
+        const rotated = [...prev];
+        const first = rotated.shift();
+        rotated.push(first); // move first to last (anti-clockwise rotation)
+        return rotated;
+      });
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const shuffleArray = (array) => {
-    return [...array].sort(() => Math.random() - 0.5);
-  };
-
   const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: {
+    initial: { opacity: 0, rotate: -10, y: 10, scale: 0.95 },
+    animate: {
       opacity: 1,
+      rotate: 0,
       y: 0,
       scale: 1,
-      transition: { duration: 0.9, ease: 'easeOut' },
+      transition: { duration: 0.6, ease: 'easeOut' },
     },
     exit: {
       opacity: 0,
-      y: 20,
-      transition: { duration: 3 },
+      rotate: 10,
+      y: -10,
+      scale: 0.95,
+      transition: { duration: 0.4, ease: 'easeIn' },
     },
   };
 
   return (
-    <section className="w-full bg-[#ded3c4] py-12 px-4 md:px-10 rounded-3xl shadow-inner">
+    <section className="w-full bg-[#ded3c4] py-12 px-4 md:px-10 rounded-3xl shadow-inner overflow-hidden">
       <div className="flex justify-center items-center gap-3 mb-8">
         <Sparkles className="w-7 h-7 text-[#565878]" />
         <h2 className="text-3xl font-bold text-[#565878] text-center">
@@ -64,42 +69,42 @@ const HeroBottom = () => {
         </h2>
       </div>
 
-      <motion.div
-  layout
-  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 max-w-7xl mx-auto"
-  transition={{ layout: { duration: 0.8, ease: 'easeInOut' } }}
->
-  {items.map((item) => (
-    <motion.div
-      key={item.id}
-      layout
-      layoutId={item.id.toString()}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      whileHover={{ scale: 1.06, y: -4 }}
-      className="bg-[#f7efe3] rounded-xl overflow-hidden shadow-lg transition cursor-pointer"
-      onClick={() =>
-        navigate(`/${item.media_type === 'tv' ? 'series' : 'movie'}/${item.id}`)
-      }
-    >
-      <img
-        src={
-          item.poster_path
-            ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-            : 'https://via.placeholder.com/300x450?text=No+Image'
-        }
-        alt={item.title || item.name}
-        className="w-full h-[250px] object-cover"
-      />
-      <div className="p-2 text-sm font-semibold text-center text-[#444] truncate">
-        {item.title || item.name}
-      </div>
-    </motion.div>
-  ))}
-</motion.div>
-
-
+      <AnimatePresence>
+        <motion.div
+          layout
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 max-w-7xl mx-auto"
+          transition={{ layout: { duration: 0.8, ease: 'easeInOut' } }}
+        >
+          {items.map((item) => (
+            <motion.div
+              key={item.id}
+              layout
+              variants={itemVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              whileHover={{ scale: 1.06, y: -4 }}
+              className="bg-[#f7efe3] rounded-xl overflow-hidden shadow-lg transition cursor-pointer"
+              onClick={() =>
+                navigate(`/${item.media_type === 'tv' ? 'series' : 'movie'}/${item.id}`)
+              }
+            >
+              <img
+                src={
+                  item.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                    : 'https://via.placeholder.com/300x450?text=No+Image'
+                }
+                alt={item.title || item.name}
+                className="w-full h-[250px] object-cover"
+              />
+              <div className="p-2 text-sm font-semibold text-center text-[#444] truncate">
+                {item.title || item.name}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 };

@@ -32,6 +32,13 @@ export const getMovieById = (id) =>
     },
   });
 
+export const getMovieCast = (id) =>
+  API.get(`/movie/${id}/credits`, {
+    params: {
+      language: 'en-US',
+    },
+  });
+
 export const searchMovies = (query) =>
   API.get(`/search/movie`, {
     params: {
@@ -40,9 +47,6 @@ export const searchMovies = (query) =>
       page: 1,
     },
   });
-
-export const getMovieCast = (id) =>
-  API.get(`/movie/${id}/credits?language=en-US`);
 
 // 📺 TV SERIES
 export const getPopularSeries = (filters = {}, page = 1) => {
@@ -69,6 +73,13 @@ export const getSeriesById = (id) =>
     },
   });
 
+export const getSeriesCast = (id) =>
+  API.get(`/tv/${id}/credits`, {
+    params: {
+      language: 'en-US',
+    },
+  });
+
 export const searchSeries = (query) =>
   API.get(`/search/tv`, {
     params: {
@@ -78,5 +89,40 @@ export const searchSeries = (query) =>
     },
   });
 
-export const getSeriesCast = (id) =>
-  API.get(`/tv/${id}/credits?language=en-US`);
+// 👥 ACTORS
+export const getPopularPeople = (page = 1) =>
+  API.get(`/person/popular`, {
+    params: {
+      language: 'en-US',
+      page,
+    },
+  });
+
+export const getPersonById = (id) =>
+  API.get(`/person/${id}`, {
+    params: {
+      language: 'en-US',
+      append_to_response: 'movie_credits,tv_credits,images,external_ids',
+    },
+  });
+
+export const searchPeople = (query) =>
+  API.get(`/search/person`, {
+    params: {
+      query,
+      language: 'en-US',
+      page: 1,
+    },
+  });
+
+// ✨ SIMULATED ACTOR RECOMMENDATIONS
+export const getActorRecommendations = async (currentActorId, page = 1) => {
+  const res = await getPopularPeople(page);
+  return {
+    ...res,
+    data: {
+      ...res.data,
+      results: res.data.results.filter((person) => person.id !== Number(currentActorId)),
+    },
+  };
+};

@@ -187,87 +187,88 @@ const Hero = ({ featured }) => {
     : `/series/${currentItem.id}`;
 
   return (
-    <section className="relative w-full h-[420px] md:h-[520px] rounded-3xl overflow-hidden mb-14 bg-[#111]">
-      {showLoader ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
-          <Loader />
-        </div>
-      ) : (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentItem.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="absolute inset-0 flex flex-col md:flex-row"
-          >
-            {/* Left Half */}
-            <div className="w-full md:w-2/3 relative">
-              <img
-                src={`https://image.tmdb.org/t/p/original${
-                  currentItem.backdrop_path || currentItem.poster_path
-                }`}
-                alt={currentItem.title || currentItem.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
-              <div className="absolute bottom-6 left-6 md:left-12 text-white">
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="text-3xl md:text-5xl font-bold"
-                >
-                  {currentItem.title || currentItem.name}
-                </motion.h1>
-              </div>
-            </div>
-
-            {/* Right Content */}
-            <motion.div
-              initial={{ x: 100, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 100, opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              className="w-full md:w-1/3 bg-[#1a1a1a] text-white flex flex-col justify-center p-6 md:p-8"
-            >
-              <img
-                src={`https://image.tmdb.org/t/p/w300${
-                  currentItem.poster_path || currentItem.backdrop_path
-                }`}
-                alt="Poster"
-                className="w-40 md:w-52 rounded-xl mb-4 self-center shadow-lg"
-              />
-              <p className="text-sm md:text-base text-gray-300 line-clamp-5 mb-6">
-                {currentItem.overview}
-              </p>
-              <Link
-                to={detailPath}
-                className="bg-[#DED3C4] text-[#222] font-medium px-5 py-2 rounded-xl text-center hover:scale-105 transition-transform"
-              >
-                View Details
-              </Link>
-            </motion.div>
-          </motion.div>
-        </AnimatePresence>
-      )}
-
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-        {featured.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleChangeSlide(index)}
-            className={`h-2.5 w-2.5 rounded-full ${
-              index === currentIndex
-                ? 'bg-[#DED3C4]'
-                : 'bg-[#DED3C4]/40 hover:bg-[#DED3C4]/70'
+    <section className="relative w-full h-[620px] sm:h-[520px] md:h-[520px] rounded-3xl overflow-hidden mb-14 bg-[#111]">
+  {showLoader ? (
+    <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+      <Loader />
+    </div>
+  ) : (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentItem.id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+        className="absolute inset-0 flex flex-col md:flex-row"
+      >
+        {/* Left Half */}
+        <div className="w-full md:w-2/3 relative h-1/2 md:h-full">
+          <img
+            src={`https://image.tmdb.org/t/p/original${
+              currentItem.backdrop_path || currentItem.poster_path
             }`}
+            alt={currentItem.title || currentItem.name}
+            className="w-full h-full object-cover object-center"
           />
-        ))}
-      </div>
-    </section>
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
+          <div className="absolute bottom-4 left-4 md:bottom-6 md:left-12 text-white">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold max-w-[90%] md:max-w-[70%]"
+            >
+              {currentItem.title || currentItem.name}
+            </motion.h1>
+          </div>
+        </div>
+
+        {/* Right Content */}
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 100, opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full md:w-1/3 bg-[#1a1a1a] text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 space-y-4"
+        >
+          <img
+            src={`https://image.tmdb.org/t/p/w300${
+              currentItem.poster_path || currentItem.backdrop_path
+            }`}
+            alt="Poster"
+            className="w-32 sm:w-40 md:w-48 rounded-xl self-center shadow-lg"
+          />
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 text-center sm:text-left flex-grow line-clamp-none max-h-[120px] overflow-y-auto">
+            {currentItem.overview}
+          </p>
+          <Link
+            to={detailPath}
+            className="bg-[#DED3C4] text-[#222] font-medium text-sm sm:text-base px-4 py-2 rounded-xl text-center hover:scale-105 transition-transform self-center sm:self-start"
+          >
+            View Details
+          </Link>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  )}
+
+  {/* Dots */}
+  <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+    {featured.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => handleChangeSlide(index)}
+        className={`h-2.5 w-2.5 rounded-full transition ${
+          index === currentIndex
+            ? 'bg-[#DED3C4]'
+            : 'bg-[#DED3C4]/40 hover:bg-[#DED3C4]/70'
+        }`}
+      />
+    ))}
+  </div>
+</section>
+
   );
 };
 
