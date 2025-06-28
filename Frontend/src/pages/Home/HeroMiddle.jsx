@@ -1,0 +1,129 @@
+import React, { useEffect, useState } from 'react';
+import { getPopularMovies, getPopularSeries } from '../../services/movieApi';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_TMDB_BASE_URL;
+const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
+
+const HeroMiddle = ({ type = 'movie' }) => {
+  const [items, setItems] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoKey, setVideoKey] = useState(null);
+  const [videoAvailable, setVideoAvailable] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = type === 'movie' ? await getPopularMovies() : await getPopularSeries();
+        setItems(response.data.results || []);
+        setCurrentIndex(0);
+      } catch (err) {
+        console.error('Failed to fetch items:', err);
+      }
+    };
+    fetchItems();
+  }, [type]);
+
+  useEffect(() => {
+    const fetchVideoKey = async () => {
+      if (!items[currentIndex]) return;
+
+      setVideoKey(null);
+      setVideoAvailable(true);
+      setLoading(true);
+
+      try {
+        const endpoint =
+          type === 'movie'
+            ? `/movie/${items[currentIndex].id}/videos`
+            : `/tv/${items[currentIndex].id}/videos`;
+
+        const res = await axios.get(`${API_BASE}${endpoint}`, {
+          headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+          params: { language: 'en-US' },
+        });
+
+        const trailers = res.data.results.filter(
+          (v) => v.site === 'YouTube' && v.type === 'Trailer'
+        );
+
+        if (trailers.length) {
+          setVideoKey(trailers[0].key);
+        } else {
+          setVideoAvailable(false);
+        }
+      } catch (err) {
+        console.error('Video fetch failed:', err);
+        setVideoAvailable(false);
+      }
+
+      setLoading(false);
+    };
+
+    if (items.length) fetchVideoKey();
+  }, [items, currentIndex, type]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((i) => (i + 1) % items.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [items]);
+
+  const currentItem = items[currentIndex];
+
+  if (!items.length || !currentItem) return null;
+
+  return (
+    <section className="relative w-full my-12 px-4">
+      <div className="relative w-full aspect-[16/6] rounded-3xl overflow-hidden bg-black shadow-2xl">
+        {videoKey && videoAvailable ? (
+          <iframe
+            title={currentItem.title || currentItem.name}
+            src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&loop=1&playlist=${videoKey}&controls=0&modestbranding=1&showinfo=0&rel=0`}
+            className="w-full h-full"
+            frameBorder="0"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            onError={() => setVideoAvailable(false)}
+          />
+        ) : (
+          <img
+            src={`https://image.tmdb.org/t/p/original${
+              currentItem.backdrop_path || currentItem.poster_path
+            }`}
+            alt={currentItem.title || currentItem.name}
+            className="w-full h-full object-cover"
+          />
+        )}
+
+        {/* Overlay info */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 text-white">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            {currentItem.title || currentItem.name}
+          </h2>
+          <p className="text-sm md:text-base mt-2 line-clamp-3">{currentItem.overview}</p>
+        </div>
+
+        {/* Navigation buttons */}
+        <button
+          onClick={() =>
+            setCurrentIndex((i) => (i === 0 ? items.length - 1 : i - 1))
+          }
+          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-3xl bg-black/40 hover:bg-black/60 rounded-full p-2 z-10"
+        >
+          ‹
+        </button>
+        <button
+          onClick={() => setCurrentIndex((i) => (i + 1) % items.length)}
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-3xl bg-black/40 hover:bg-black/60 rounded-full p-2 z-10"
+        >
+          ›
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default HeroMiddle;
