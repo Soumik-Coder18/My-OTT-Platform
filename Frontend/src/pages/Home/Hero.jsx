@@ -74,7 +74,7 @@
 //             animate={{ x: 0, opacity: 1 }}
 //             exit={{ x: 100, opacity: 0 }}
 //             transition={{ duration: 0.6 }}
-//             className="w-full md:w-1/3 bg-[#1a1a1a] text-white flex flex-col justify-center p-6 md:p-8 shadow-[inset_0_0_40px_#000]"
+//             className="w-full md:w-1/3 bg-[#565878] text-white flex flex-col justify-center p-6 md:p-8 shadow-[inset_0_0_40px_#000]"
 //           >
 //             <img
 //               src={`https://image.tmdb.org/t/p/w300${
@@ -187,9 +187,9 @@ const Hero = ({ featured }) => {
     : `/series/${currentItem.id}`;
 
   return (
-    <section className="relative w-full h-[620px] sm:h-[520px] md:h-[520px] rounded-3xl overflow-hidden mb-14 bg-[#111]">
+    <section className="relative w-full h-[620px] sm:h-[520px] md:h-[520px] rounded-3xl overflow-hidden mb-7 bg-[#111]">
   {showLoader ? (
-    <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+    <div className="absolute inset-0 flex items-center justify-center bg-[#565878] z-10">
       <Loader />
     </div>
   ) : (
@@ -230,7 +230,7 @@ const Hero = ({ featured }) => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 100, opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full md:w-1/3 bg-[#1a1a1a] text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 space-y-4"
+          className="w-full md:w-1/3 bg-[#565878] text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 space-y-4"
         >
           <img
             src={`https://image.tmdb.org/t/p/w300${
