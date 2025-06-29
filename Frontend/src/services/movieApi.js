@@ -1,5 +1,10 @@
+// ==========================================
+// 🌐 TMDB API Configuration & Endpoints
+// ==========================================
+
 import axios from 'axios';
 
+// 🛠️ Create a reusable axios instance with base URL and headers
 const API = axios.create({
   baseURL: import.meta.env.VITE_TMDB_BASE_URL,
   headers: {
@@ -7,7 +12,16 @@ const API = axios.create({
   },
 });
 
-// 🔥 MOVIES
+
+// ==========================================
+// 🎬 MOVIES ENDPOINTS
+// ==========================================
+
+/**
+ * 🔥 Get popular movies or discover with filters
+ * @param {Object} filters - genre, year, rating, sort_by
+ * @param {number} page - page number for pagination
+ */
 export const getPopularMovies = (filters = {}, page = 1) => {
   const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
   const endpoint = hasFilters ? '/discover/movie' : '/movie/popular';
@@ -24,6 +38,10 @@ export const getPopularMovies = (filters = {}, page = 1) => {
   return API.get(endpoint, { params });
 };
 
+/**
+ * 🎥 Get movie details by ID
+ * Includes: credits (cast & crew)
+ */
 export const getMovieById = (id) =>
   API.get(`/movie/${id}`, {
     params: {
@@ -32,6 +50,9 @@ export const getMovieById = (id) =>
     },
   });
 
+/**
+ * 👥 Get movie cast by movie ID
+ */
 export const getMovieCast = (id) =>
   API.get(`/movie/${id}/credits`, {
     params: {
@@ -39,6 +60,9 @@ export const getMovieCast = (id) =>
     },
   });
 
+/**
+ * 🔎 Search movies by query
+ */
 export const searchMovies = (query) =>
   API.get(`/search/movie`, {
     params: {
@@ -48,7 +72,16 @@ export const searchMovies = (query) =>
     },
   });
 
-// 📺 TV SERIES
+
+// ==========================================
+// 📺 TV SERIES ENDPOINTS
+// ==========================================
+
+/**
+ * 🔥 Get popular TV series or discover with filters
+ * @param {Object} filters - genre, year, rating, sort_by
+ * @param {number} page - page number for pagination
+ */
 export const getPopularSeries = (filters = {}, page = 1) => {
   const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
   const endpoint = hasFilters ? '/discover/tv' : '/tv/popular';
@@ -65,6 +98,10 @@ export const getPopularSeries = (filters = {}, page = 1) => {
   return API.get(endpoint, { params });
 };
 
+/**
+ * 📺 Get TV series details by ID
+ * Includes: credits
+ */
 export const getSeriesById = (id) =>
   API.get(`/tv/${id}`, {
     params: {
@@ -73,6 +110,9 @@ export const getSeriesById = (id) =>
     },
   });
 
+/**
+ * 👥 Get series cast by series ID
+ */
 export const getSeriesCast = (id) =>
   API.get(`/tv/${id}/credits`, {
     params: {
@@ -80,6 +120,9 @@ export const getSeriesCast = (id) =>
     },
   });
 
+/**
+ * 🔎 Search TV series by query
+ */
 export const searchSeries = (query) =>
   API.get(`/search/tv`, {
     params: {
@@ -89,7 +132,14 @@ export const searchSeries = (query) =>
     },
   });
 
-// 👥 ACTORS
+
+// ==========================================
+// 👤 ACTORS (PEOPLE) ENDPOINTS
+// ==========================================
+
+/**
+ * 🌟 Get popular actors (people)
+ */
 export const getPopularPeople = (page = 1) =>
   API.get(`/person/popular`, {
     params: {
@@ -98,6 +148,10 @@ export const getPopularPeople = (page = 1) =>
     },
   });
 
+/**
+ * 🧑‍🎤 Get actor details by ID
+ * Includes: movie + TV credits, images, external IDs
+ */
 export const getPersonById = (id) =>
   API.get(`/person/${id}`, {
     params: {
@@ -106,6 +160,9 @@ export const getPersonById = (id) =>
     },
   });
 
+/**
+ * 🔍 Search actors by name
+ */
 export const searchPeople = (query) =>
   API.get(`/search/person`, {
     params: {
@@ -115,7 +172,9 @@ export const searchPeople = (query) =>
     },
   });
 
-// ✨ SIMULATED ACTOR RECOMMENDATIONS
+/**
+ * ✨ Simulated actor recommendations (excluding current actor)
+ */
 export const getActorRecommendations = async (currentActorId, page = 1) => {
   const res = await getPopularPeople(page);
   return {
@@ -126,3 +185,26 @@ export const getActorRecommendations = async (currentActorId, page = 1) => {
     },
   };
 };
+
+
+// ==========================================
+// 🏷️ GENRE ENDPOINTS
+// ==========================================
+
+/**
+ * 🎭 Get genres list by type (movie or tv)
+ */
+export const getGenres = (type = 'movie') =>
+  API.get(`/genre/${type}/list`, {
+    params: { language: 'en-US' },
+  });
+
+  export const getMoviesByGenre = (genreId, page = 1) =>
+  API.get(`/discover/movie`, {
+    params: {
+      with_genres: genreId,
+      page,
+      language: 'en-US',
+      sort_by: 'popularity.desc',
+    },
+  });
