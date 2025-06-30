@@ -2,27 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import { UserRound, SearchX } from 'lucide-react';
-import { getPopularPeople } from '../../services/movieApi';
+import { getPopularPeople, getIndianActorsFromMovies } from '../../services/movieApi';
 
 const Actor = () => {
   const [actors, setActors] = useState([]);
+  const [indianActors, setIndianActors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchActors(page);
+    fetchIndianActors(page); // pass current page
   }, [page]);
 
-  const fetchActors = (pageNum = 1) => {
+  const fetchActors = async (pageNum = 1) => {
     setLoading(true);
-    getPopularPeople(pageNum)
-      .then((res) => {
-        setActors(res.data.results);
-        setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
-      })
-      .catch((err) => console.error('Error fetching actors:', err))
-      .finally(() => setLoading(false));
+    try {
+      const res = await getPopularPeople(pageNum);
+      setActors(res.data.results);
+      setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
+    } catch (err) {
+      console.error('Error fetching actors:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchIndianActors = async (pageNum = 1) => {
+    try {
+      const results = await getIndianActorsFromMovies('hi', pageNum); // use pageNum
+      setIndianActors(results);
+    } catch (err) {
+      console.error('Error fetching Indian actors:', err);
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -38,11 +51,13 @@ const Actor = () => {
 
   if (loading) return <Loader />;
 
-  // Filter by known_for_department
-  const maleActors = actors.filter((a) => a.gender === 2 && a.known_for_department === 'Acting');
-  const femaleActors = actors.filter((a) => a.gender === 1 && a.known_for_department === 'Acting');
+  const maleActors = actors.filter(a => a.gender === 2 && a.known_for_department === 'Acting');
+  const femaleActors = actors.filter(a => a.gender === 1 && a.known_for_department === 'Acting');
 
-  const renderSection = (title, list) => (
+  const indianMaleActors = indianActors.filter(a => a.gender === 2 && a.known_for_department === 'Acting');
+  const indianFemaleActors = indianActors.filter(a => a.gender === 1 && a.known_for_department === 'Acting');
+
+  const renderSection = (title, list) =>
     list.length > 0 && (
       <div className="mb-10">
         <h2 className="text-2xl font-semibold text-[#555879] mb-4">{title}</h2>
@@ -69,8 +84,7 @@ const Actor = () => {
           ))}
         </div>
       </div>
-    )
-  );
+    );
 
   return (
     <div className="min-h-screen px-4 py-10 bg-[#F4EBD3]">
@@ -79,10 +93,12 @@ const Actor = () => {
         <h1 className="text-3xl font-bold text-[#555879]">Popular Actors</h1>
       </div>
 
-      {actors.length > 0 ? (
+      {(actors.length > 0 || indianActors.length > 0) ? (
         <>
           {renderSection('Male Actors', maleActors)}
           {renderSection('Female Actors', femaleActors)}
+          {renderSection('Indian Male Actors', indianMaleActors)}
+          {renderSection('Indian Female Actors', indianFemaleActors)}
 
           {/* Pagination */}
           <div className="flex justify-center items-center gap-2 mt-8 text-[#555879]">

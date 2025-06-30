@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMoviesByGenre, getGenres } from '../services/movieApi';
 import { motion } from 'framer-motion';
-import { Sparkles, Film, ChevronLeft, ChevronRight } from 'lucide-react';
+import { SlidersHorizontal, Film } from 'lucide-react';
 import Loader from '../components/Loader';
 
 const Genre = () => {
@@ -11,10 +11,11 @@ const Genre = () => {
   const [movies, setMovies] = useState([]);
   const [heroItems, setHeroItems] = useState([]);
   const [genreName, setGenreName] = useState('');
-  const [recommendedGenres, setRecommendedGenres] = useState([]);
+  const [allGenres, setAllGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchGenreAndMovies = async () => {
@@ -23,15 +24,11 @@ const Genre = () => {
 
       try {
         const genresRes = await getGenres();
-        const allGenres = genresRes.data.genres || [];
-        const genre = allGenres.find((g) => String(g.id) === String(id));
-        setGenreName(genre ? genre.name : 'Unknown Genre');
+        const allGenresData = genresRes.data.genres || [];
+        setAllGenres(allGenresData);
 
-        const randomGenres = allGenres
-          .filter((g) => g.id !== Number(id))
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 5);
-        setRecommendedGenres(randomGenres);
+        const genre = allGenresData.find((g) => String(g.id) === String(id));
+        setGenreName(genre ? genre.name : 'Unknown Genre');
 
         const moviesRes = await getMoviesByGenre(id, page);
         const fetchedMovies = moviesRes.data.results || [];
@@ -41,7 +38,6 @@ const Genre = () => {
       } catch (err) {
         setGenreName('Unknown Genre');
         setMovies([]);
-        setRecommendedGenres([]);
       }
 
       setLoading(false);
@@ -77,14 +73,49 @@ const Genre = () => {
 
   return (
     <section className="px-4 md:px-10 py-10 bg-[#F4EBD3] min-h-screen">
-      <motion.h2
-        className="text-4xl font-extrabold text-[#555879] mb-10 text-center flex justify-center items-center gap-3"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Film className="w-7 h-7 text-[#555879]" /> {genreName}
-      </motion.h2>
+      {/* Header and Filter Button */}
+      <div className="flex justify-between items-center mb-10 relative">
+        <motion.h2
+          className="text-4xl font-extrabold text-[#555879] flex items-center gap-3"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Film className="w-7 h-7 text-[#555879]" /> {genreName}
+        </motion.h2>
+
+        <div className="relative">
+          <button
+            onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
+            className="bg-[#555879] text-[#F4EBD3] px-4 py-2 rounded hover:bg-[#3e4059] transition flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#555879]"
+          >
+            <SlidersHorizontal size={18} />
+            Filter
+          </button>
+
+          {genreDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-[#DED3C4] p-3 rounded-xl shadow-lg z-10 text-[#555879]">
+              <h4 className="font-semibold mb-2">Select Genre</h4>
+              <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
+                {allGenres.map((genre) => (
+                  <button
+                    key={genre.id}
+                    onClick={() => {
+                      navigate(`/genre/${genre.id}`);
+                      setGenreDropdownOpen(false);
+                    }}
+                    className={`text-left hover:bg-[#e4d6bb] p-2 rounded ${
+                      String(genre.id) === String(id) ? 'bg-[#cbbca5] font-semibold' : ''
+                    }`}
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Hero Section */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-14">
@@ -203,24 +234,6 @@ const Genre = () => {
         >
           Next
         </button>
-      </div>
-
-      {/* Recommended Genres */}
-      <div className="mt-20">
-        <h3 className="text-2xl font-bold text-[#555879] mb-6 text-center flex items-center justify-center gap-2">
-          <Sparkles className="w-6 h-6 text-[#555879]" /> Recommended Genres
-        </h3>
-        <div className="flex justify-center flex-wrap gap-4">
-          {recommendedGenres.map((g) => (
-            <button
-              key={g.id}
-              onClick={() => navigate(`/genre/${g.id}`)}
-              className="bg-[#DED3C4] hover:bg-[#e4d6bb] text-[#555879] px-5 py-2 rounded-full shadow transition-all font-medium"
-            >
-              {g.name}
-            </button>
-          ))}
-        </div>
       </div>
     </section>
   );

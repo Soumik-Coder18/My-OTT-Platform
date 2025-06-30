@@ -15,6 +15,8 @@ import NotFound from '../pages/NotFound';
 import SearchResults from '../pages/SearchResults';
 import Favorites from '../pages/Favorites';
 import Genre from '../pages/Genre';
+import IndianMovie from '../pages/IndianMovie/IndianMovie';
+import IndianShow from '../pages/IndianShow/IndianShow';
 
 // 🔹 Actor Components
 import ActorDetails from '../pages/ActorDetails/ActorDetails';
@@ -46,10 +48,12 @@ const AppRoutes = () => {
         {/* 🎬 Movie Routes */}
         <Route path="/movies" element={<Movies />} />
         <Route path="/movie/:id" element={<MovieDetail />} />
+        <Route path="/indian-movies" element={<IndianMovie />} />
 
         {/* 📺 Series Routes */}
         <Route path="/series" element={<Series />} />
         <Route path="/series/:id" element={<SeriesDetails />} />
+        <Route path="/indian-show" element={<IndianShow />} />
 
         {/* 🔐 Authentication Routes */}
         <Route path="/login" element={<Login />} />
