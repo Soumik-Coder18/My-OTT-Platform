@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getPopularMovies } from '../../services/movieApi';
-import { Link } from 'react-router-dom';
 import Loader from '../../components/Loader';
 import FilterDropdown from '../../components/Filter&Sort/FilterDropdown';
 import SortDropdown from '../../components/Filter&Sort/SortDropdown';
 import { SearchX, Clapperboard } from 'lucide-react';
+import MovieCard from '../../components/MovieCard';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-
   const [filters, setFilters] = useState({
     genre: '',
     year: '',
     rating: '',
     sort_by: '',
   });
-
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
-  // Fetch movies whenever page or filters change
   useEffect(() => {
     fetchMoviesWithFilters(page);
   }, [page, filters]);
@@ -30,20 +29,18 @@ const Movies = () => {
     getPopularMovies(filters, pageNum)
       .then((res) => {
         setMovies(res.data.results);
-        setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages); // TMDB caps at 500 pages
+        setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
       })
       .catch((err) => console.error('Error fetching filtered movies:', err))
       .finally(() => setLoading(false));
   };
 
-  // Handle page change and scroll to top smoothly
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > totalPages) return;
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Reset page to 1 and update filters, triggering useEffect fetch
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
     setPage(1);
@@ -52,24 +49,31 @@ const Movies = () => {
 
   if (loading) return <Loader />;
 
-  // Pagination buttons: current page ± 2 pages shown
   const pageNumbers = [];
   const startPage = Math.max(1, page - 2);
   const endPage = Math.min(totalPages, page + 2);
-
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
 
   return (
     <div className="min-h-screen px-4 py-10 bg-[#F4EBD3]">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-2">
           <Clapperboard className="w-8 h-8 text-[#555879]" />
           <h1 className="text-3xl font-bold text-[#555879]">Popular Movies</h1>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
+          {/* Styled like Filter/Sort buttons */}
+          <button
+            onClick={() => navigate('/indian-movies')}
+            className="bg-[#555879] text-[#F4EBD3] px-4 py-2 rounded hover:bg-[#3e4059] transition flex items-center gap-2
+              focus:outline-none focus:ring-2 focus:ring-[#555879]"
+          >
+            Indian Movies
+          </button>
+
           <FilterDropdown
             filters={filters}
             setFilters={applyFilters}
@@ -88,31 +92,10 @@ const Movies = () => {
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
             {movies.map((movie) => (
-              <Link
-                to={`/movie/${movie.id}`}
-                key={movie.id}
-                className="bg-[#DED3C4] rounded-lg overflow-hidden shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300"
-              >
-                <img
-                  src={
-                    movie.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                      : 'https://via.placeholder.com/300x450?text=No+Image'
-                  }
-                  alt={movie.title}
-                  className="w-full h-90 object-cover"
-                />
-                <div className="p-3 text-[#555879]">
-                  <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
-                  <p className="text-sm text-[#888da8]">
-                    {movie.release_date?.slice(0, 4)} • ⭐ {movie.vote_average}
-                  </p>
-                </div>
-              </Link>
+              <MovieCard key={movie.id} media={movie} />
             ))}
           </div>
 
-          {/* Pagination */}
           <div className="flex justify-center items-center gap-2 mt-8 text-[#555879]">
             <button
               onClick={() => handlePageChange(page - 1)}

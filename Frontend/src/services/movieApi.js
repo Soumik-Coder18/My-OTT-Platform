@@ -4,7 +4,6 @@
 
 import axios from 'axios';
 
-// 🛠️ Create a reusable axios instance with base URL and headers
 const API = axios.create({
   baseURL: import.meta.env.VITE_TMDB_BASE_URL,
   headers: {
@@ -12,22 +11,26 @@ const API = axios.create({
   },
 });
 
-
 // ==========================================
 // 🎬 MOVIES ENDPOINTS
 // ==========================================
 
-/**
- * 🔥 Get popular movies or discover with filters
- * @param {Object} filters - genre, year, rating, sort_by
- * @param {number} page - page number for pagination
- */
-export const getPopularMovies = (filters = {}, page = 1) => {
+export const getIndianMovies = (language = 'hi', page = 1) =>
+  API.get(`/discover/movie`, {
+    params: {
+      with_original_language: language, // hi (Hindi), ta (Tamil), te (Telugu)
+      sort_by: 'popularity.desc',
+      page,
+    },
+  });
+
+export const getPopularMovies = (filters = {}, page = 1, region = 'US') => {
   const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
   const endpoint = hasFilters ? '/discover/movie' : '/movie/popular';
 
   const params = {
     language: 'en-US',
+    region,
     page,
     ...(filters.genre && { with_genres: filters.genre }),
     ...(filters.year && { primary_release_year: filters.year }),
@@ -38,10 +41,6 @@ export const getPopularMovies = (filters = {}, page = 1) => {
   return API.get(endpoint, { params });
 };
 
-/**
- * 🎥 Get movie details by ID
- * Includes: credits (cast & crew)
- */
 export const getMovieById = (id) =>
   API.get(`/movie/${id}`, {
     params: {
@@ -50,44 +49,32 @@ export const getMovieById = (id) =>
     },
   });
 
-/**
- * 👥 Get movie cast by movie ID
- */
 export const getMovieCast = (id) =>
   API.get(`/movie/${id}/credits`, {
-    params: {
-      language: 'en-US',
-    },
+    params: { language: 'en-US' },
   });
 
-/**
- * 🔎 Search movies by query
- */
-export const searchMovies = (query) =>
+export const searchMovies = (query, region = 'US') =>
   API.get(`/search/movie`, {
     params: {
       query,
       language: 'en-US',
+      region,
       page: 1,
     },
   });
-
 
 // ==========================================
 // 📺 TV SERIES ENDPOINTS
 // ==========================================
 
-/**
- * 🔥 Get popular TV series or discover with filters
- * @param {Object} filters - genre, year, rating, sort_by
- * @param {number} page - page number for pagination
- */
-export const getPopularSeries = (filters = {}, page = 1) => {
+export const getPopularSeries = (filters = {}, page = 1, region = 'US') => {
   const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
   const endpoint = hasFilters ? '/discover/tv' : '/tv/popular';
 
   const params = {
     language: 'en-US',
+    region,
     page,
     ...(filters.genre && { with_genres: filters.genre }),
     ...(filters.year && { first_air_date_year: filters.year }),
@@ -98,10 +85,6 @@ export const getPopularSeries = (filters = {}, page = 1) => {
   return API.get(endpoint, { params });
 };
 
-/**
- * 📺 Get TV series details by ID
- * Includes: credits
- */
 export const getSeriesById = (id) =>
   API.get(`/tv/${id}`, {
     params: {
@@ -110,36 +93,34 @@ export const getSeriesById = (id) =>
     },
   });
 
-/**
- * 👥 Get series cast by series ID
- */
 export const getSeriesCast = (id) =>
   API.get(`/tv/${id}/credits`, {
-    params: {
-      language: 'en-US',
-    },
+    params: { language: 'en-US' },
   });
 
-/**
- * 🔎 Search TV series by query
- */
-export const searchSeries = (query) =>
+export const searchSeries = (query, region = 'US') =>
   API.get(`/search/tv`, {
     params: {
       query,
       language: 'en-US',
+      region,
       page: 1,
     },
   });
 
+export const getIndianTvShows = (language = 'hi', page = 1) =>
+  API.get(`/discover/tv`, {
+    params: {
+      with_original_language: language,
+      sort_by: 'popularity.desc',
+      page,
+    },
+  });
 
 // ==========================================
-// 👤 ACTORS (PEOPLE) ENDPOINTS
+// 👤 PEOPLE ENDPOINTS
 // ==========================================
 
-/**
- * 🌟 Get popular actors (people)
- */
 export const getPopularPeople = (page = 1) =>
   API.get(`/person/popular`, {
     params: {
@@ -148,10 +129,6 @@ export const getPopularPeople = (page = 1) =>
     },
   });
 
-/**
- * 🧑‍🎤 Get actor details by ID
- * Includes: movie + TV credits, images, external IDs
- */
 export const getPersonById = (id) =>
   API.get(`/person/${id}`, {
     params: {
@@ -160,9 +137,6 @@ export const getPersonById = (id) =>
     },
   });
 
-/**
- * 🔍 Search actors by name
- */
 export const searchPeople = (query) =>
   API.get(`/search/person`, {
     params: {
@@ -172,9 +146,6 @@ export const searchPeople = (query) =>
     },
   });
 
-/**
- * ✨ Simulated actor recommendations (excluding current actor)
- */
 export const getActorRecommendations = async (currentActorId, page = 1) => {
   const res = await getPopularPeople(page);
   return {
@@ -186,25 +157,75 @@ export const getActorRecommendations = async (currentActorId, page = 1) => {
   };
 };
 
+// ✅ Enhanced: Indian Actors with gender & department for separation
+export const getIndianActorsFromMovies = async (language = 'hi', page = 1) => {
+  try {
+    const movieRes = await API.get(`/discover/movie`, {
+      params: {
+        with_original_language: language,
+        sort_by: 'popularity.desc',
+        page,
+      },
+    });
+
+    const movies = movieRes.data.results;
+    const actorMap = new Map();
+
+    for (const movie of movies) {
+      const creditsRes = await API.get(`/movie/${movie.id}/credits`);
+      const cast = creditsRes.data.cast;
+
+      cast.forEach((person) => {
+        if (!actorMap.has(person.id)) {
+          actorMap.set(person.id, {
+            id: person.id,
+            name: person.name,
+            profile_path: person.profile_path,
+            popularity: person.popularity,
+            gender: person.gender,
+            known_for_department: person.known_for_department,
+          });
+        }
+      });
+    }
+
+    // Sort by popularity and limit to top 20
+    const sortedActors = [...actorMap.values()]
+      .sort((a, b) => b.popularity - a.popularity)
+      .slice(0, 20);
+
+    return sortedActors;
+  } catch (error) {
+    console.error('Error fetching Indian actors from movies:', error);
+    return [];
+  }
+};
 
 // ==========================================
-// 🏷️ GENRE ENDPOINTS
+// 🏷️ GENRES & DISCOVERY
 // ==========================================
 
-/**
- * 🎭 Get genres list by type (movie or tv)
- */
 export const getGenres = (type = 'movie') =>
   API.get(`/genre/${type}/list`, {
     params: { language: 'en-US' },
   });
 
-  export const getMoviesByGenre = (genreId, page = 1) =>
+export const getMoviesByGenre = (genreId, page = 1, region = 'US') =>
   API.get(`/discover/movie`, {
     params: {
       with_genres: genreId,
       page,
+      region,
       language: 'en-US',
       sort_by: 'popularity.desc',
+    },
+  });
+
+export const getUpcomingMovies = (region = 'US') =>
+  API.get('/movie/upcoming', {
+    params: {
+      language: 'en-US',
+      region,
+      page: 1,
     },
   });

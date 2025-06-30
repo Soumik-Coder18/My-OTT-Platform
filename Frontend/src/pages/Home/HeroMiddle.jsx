@@ -10,7 +10,6 @@ const HeroMiddle = ({ type = 'movie' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoKey, setVideoKey] = useState(null);
   const [videoAvailable, setVideoAvailable] = useState(true);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -31,7 +30,6 @@ const HeroMiddle = ({ type = 'movie' }) => {
 
       setVideoKey(null);
       setVideoAvailable(true);
-      setLoading(true);
 
       try {
         const endpoint =
@@ -57,8 +55,6 @@ const HeroMiddle = ({ type = 'movie' }) => {
         console.error('Video fetch failed:', err);
         setVideoAvailable(false);
       }
-
-      setLoading(false);
     };
 
     if (items.length) fetchVideoKey();
@@ -72,21 +68,19 @@ const HeroMiddle = ({ type = 'movie' }) => {
   }, [items]);
 
   const currentItem = items[currentIndex];
-
   if (!items.length || !currentItem) return null;
 
   return (
-    <section className="relative w-full my-12 px-4">
-      <div className="relative w-full aspect-[16/6] rounded-3xl overflow-hidden bg-black shadow-2xl">
+    <section className="relative w-full my-12 px-4 md:px-10">
+      <div className="relative w-full aspect-[16/9] sm:aspect-[16/6] rounded-3xl overflow-hidden shadow-2xl bg-black animate-fade-in-slow">
         {videoKey && videoAvailable ? (
           <iframe
             title={currentItem.title || currentItem.name}
-            src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&loop=1&playlist=${videoKey}&controls=0&modestbranding=1&showinfo=0&rel=0`}
-            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&loop=1&playlist=${videoKey}&controls=0&modestbranding=1&showinfo=0&rel=0&disablekb=1`}
+            className="w-full h-full pointer-events-none"
             frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-            onError={() => setVideoAvailable(false)}
           />
         ) : (
           <img
@@ -98,29 +92,15 @@ const HeroMiddle = ({ type = 'movie' }) => {
           />
         )}
 
-        {/* Overlay info */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 text-white">
-          <h2 className="text-2xl md:text-3xl font-bold">
+        {/* Overlay Info (hidden on mobile) */}
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 sm:p-6 text-white hidden sm:block">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold line-clamp-2">
             {currentItem.title || currentItem.name}
           </h2>
-          <p className="text-sm md:text-base mt-2 line-clamp-3">{currentItem.overview}</p>
+          <p className="text-xs sm:text-sm md:text-base mt-1 md:mt-2 line-clamp-3">
+            {currentItem.overview}
+          </p>
         </div>
-
-        {/* Navigation buttons */}
-        <button
-          onClick={() =>
-            setCurrentIndex((i) => (i === 0 ? items.length - 1 : i - 1))
-          }
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white text-3xl bg-black/40 hover:bg-black/60 rounded-full p-2 z-10"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => setCurrentIndex((i) => (i + 1) % items.length)}
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white text-3xl bg-black/40 hover:bg-black/60 rounded-full p-2 z-10"
-        >
-          ›
-        </button>
       </div>
     </section>
   );

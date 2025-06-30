@@ -7,7 +7,7 @@ import { Sparkles } from 'lucide-react';
 const API_BASE = import.meta.env.VITE_TMDB_BASE_URL;
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
 
-const HeroBottom = () => {
+const Trending = () => {
   const [topRow, setTopRow] = useState([]);
   const [bottomRow, setBottomRow] = useState([]);
   const navigate = useNavigate();
@@ -140,4 +140,4 @@ const HeroBottom = () => {
   );
 };
 
-export default HeroBottom;
+export default Trending;

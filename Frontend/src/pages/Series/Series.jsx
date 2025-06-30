@@ -5,24 +5,21 @@ import Loader from '../../components/Loader';
 import FilterDropdown from '../../components/Filter&Sort/FilterDropdown';
 import SortDropdown from '../../components/Filter&Sort/SortDropdown';
 import { SearchX, Tv } from 'lucide-react';
+import MovieCard from '../../components/MovieCard';
 
 const Series = () => {
   const [seriesList, setSeriesList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-
   const [filters, setFilters] = useState({
     genre: '',
     year: '',
     rating: '',
     sort_by: '',
   });
-
   const [page, setPage] = useState(1);
-
   const navigate = useNavigate();
 
-  // Fetch series whenever page or filters change
   useEffect(() => {
     fetchSeriesWithFilters(page);
   }, [page, filters]);
@@ -32,20 +29,18 @@ const Series = () => {
     getPopularSeries(filters, pageNum)
       .then((res) => {
         setSeriesList(res.data.results);
-        setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages); // cap 500 pages
+        setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
       })
       .catch((err) => console.error('Error fetching series:', err))
       .finally(() => setLoading(false));
   };
 
-  // Handle page change with scroll to top
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > totalPages) return;
     setPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Apply new filters and reset page to 1 with scroll
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
     setPage(1);
@@ -54,24 +49,31 @@ const Series = () => {
 
   if (loading) return <Loader message="Loading series..." />;
 
-  // Pagination buttons - current page ± 2 pages
   const pageNumbers = [];
   const startPage = Math.max(1, page - 2);
   const endPage = Math.min(totalPages, page + 2);
-
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(i);
   }
 
   return (
-    <div className="min-h-screen bg-[#F4EBD3] text-[#555879] p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen px-4 py-10 bg-[#F4EBD3]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div className="flex items-center gap-2">
           <Tv className="w-8 h-8 text-[#555879]" />
           <h1 className="text-3xl font-bold text-[#555879]">Popular Shows</h1>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
+          {/* Indian Shows Button */}
+          <button
+            onClick={() => navigate('/indian-show')}
+            className="bg-[#555879] text-[#F4EBD3] px-4 py-2 rounded hover:bg-[#3e4059] transition flex items-center gap-2
+              focus:outline-none focus:ring-2 focus:ring-[#555879]"
+          >
+            Indian Shows
+          </button>
+
           <FilterDropdown
             filters={filters}
             setFilters={applyFilters}
@@ -89,26 +91,8 @@ const Series = () => {
       {seriesList.length > 0 ? (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {seriesList.map(series => (
-              <div
-                key={series.id}
-                onClick={() => navigate(`/series/${series.id}`)}
-                className="cursor-pointer rounded-lg shadow-md hover:scale-105 transition-transform duration-200 overflow-hidden bg-[#DED3C4]"
-              >
-                <img
-                  src={
-                    series.poster_path
-                      ? `https://image.tmdb.org/t/p/w300${series.poster_path}`
-                      : 'https://via.placeholder.com/300x450?text=No+Image'
-                  }
-                  alt={series.name}
-                  className="w-full h-[340px] object-cover rounded-md"
-                />
-                <h2 className="mt-2 text-base font-semibold truncate px-2">{series.name}</h2>
-                <p className="text-sm text-[#888da8] px-2 mb-2">
-                  {series.first_air_date?.slice(0, 4)}
-                </p>
-              </div>
+            {seriesList.map((series) => (
+              <MovieCard key={series.id} media={series} />
             ))}
           </div>
 
@@ -124,7 +108,7 @@ const Series = () => {
               Previous
             </button>
 
-            {pageNumbers.map(num => (
+            {pageNumbers.map((num) => (
               <button
                 key={num}
                 onClick={() => handlePageChange(num)}

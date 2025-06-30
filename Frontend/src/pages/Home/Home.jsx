@@ -12,8 +12,11 @@ import MovieSection from './MovieSection';
 import HeroMiddle from './HeroMiddle';
 import Actor from './ActorSection';
 import SeriesSection from './SeriesSection';
-import HeroBottom from './HeroBottom';
+import Trending from './Trending';
 import GenreSection from './GenreSection';
+import UpcomingReleases from './UpcomingReleases';
+import IndianMoviesSection from './IndianMoviesSection';
+import IndianTvShowsSection from './IndianTvShowsSection';
 
 // 🔄 Loader & Animation
 import Loader from '../../components/Loader';
@@ -85,6 +88,15 @@ const Home = () => {
         <MovieSection movies={movies} />
       </motion.div>
 
+      {/* 🇮🇳 Indian Movies Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.8 }}
+      >
+        <IndianMoviesSection />
+      </motion.div>
+
       {/* 🧩 Middle Hero Banner (Movie/Series Highlight) */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -104,11 +116,23 @@ const Home = () => {
         <SeriesSection series={series} />
       </motion.div>
 
+      {/* 🇮🇳 Indian TV Shows Section */}  
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+      >
+        <IndianTvShowsSection />
+      </motion.div>
+
       {/* 👥 Featured Actors Section */}
       <Actor />
 
       {/* 📣 Bottom Promotional or CTA Section */}
-      <HeroBottom />
+      <Trending />
+
+      {/* 📅 Upcoming Releases Section */}
+      <UpcomingReleases />
     </div>
   );
 };
