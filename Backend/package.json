@@ -1,0 +1,22 @@
+{
+  "name": "whisperframe",
+  "version": "1.0.0",
+  "description": "A full-featured OTT media streaming platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soumik-Coder18/My-OTT-Platform.git#main"
+  },
+  "author": "Soumik Bag",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Soumik-Coder18/My-OTT-Platform/issues"
+  },
+  "homepage": "https://github.com/Soumik-Coder18/My-OTT-Platform/tree/main#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
