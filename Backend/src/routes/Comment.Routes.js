@@ -1,6 +1,6 @@
 
 import express from 'express';
-import {Comment} from '../models/Comment.models.js';
+import { Comment } from '../models/Comment.models.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -48,3 +48,42 @@ router.delete('/:id', verifyToken, async (req, res) => {
 });
 
 export default router;
+
+// POST: Like a comment
+router.post('/like/:id', verifyToken, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ error: 'Comment not found' });
+
+    // Prevent double liking
+    if (!comment.likes.includes(req.user.id)) {
+      comment.likes.push(req.user.id);
+      // Remove dislike if exists
+      comment.dislikes = comment.dislikes.filter(userId => userId.toString() !== req.user.id);
+      await comment.save();
+    }
+
+    res.status(200).json({ message: 'Comment liked', likes: comment.likes.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to like comment' });
+  }
+});
+
+// POST: Dislike a comment
+router.post('/dislike/:id', verifyToken, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).json({ error: 'Comment not found' });
+
+    if (!comment.dislikes.includes(req.user.id)) {
+      comment.dislikes.push(req.user.id);
+      // Remove like if exists
+      comment.likes = comment.likes.filter(userId => userId.toString() !== req.user.id);
+      await comment.save();
+    }
+
+    res.status(200).json({ message: 'Comment disliked', dislikes: comment.dislikes.length });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to dislike comment' });
+  }
+});

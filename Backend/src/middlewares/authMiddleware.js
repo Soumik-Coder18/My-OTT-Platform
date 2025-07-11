@@ -8,7 +8,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
   try {
     const token =
       req.cookies?.accessToken ||
-      req.header("Authorization")?.replace("Bearer", "").trim();
+      req.header("Authorization")?.split(" ")[1];
 
     console.log('Token received:', token);
 
@@ -18,7 +18,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+    const user = await User.findById(decodedToken.id).select("-password -refreshToken");
 
     if (!user) {
       throw new apiError(401, "Invalid Access Token");

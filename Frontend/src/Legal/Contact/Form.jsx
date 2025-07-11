@@ -1,19 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import API from '../../services/api';
 
 const Form = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSend = async () => {
+    try {
+      await API.post('/contact', {
+        name,
+        email,
+        message,
+      });
+      alert('Message sent successfully');
+      setName('');
+      setEmail('');
+      setMessage('');
+    } catch (error) {
+      alert('Failed to send message');
+      console.error(error);
+    }
+  };
+
+  const handleReset = () => {
+    setName('');
+    setEmail('');
+    setMessage('');
+  };
+
   return (
     <StyledWrapper>
       <div className="form-container">
         <div className="form">
           <span className="heading">Get in touch</span>
-          <input placeholder="Name" type="text" className="input" />
-          <input placeholder="Email" id="mail" type="email" className="input" />
-          <textarea placeholder="Say Hello" rows={10} cols={30} id="message" name="message" className="textarea" defaultValue={""} />
+          <input placeholder="Name" type="text" className="input" value={name} onChange={(e) => setName(e.target.value)} />
+          <input placeholder="Email" type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <textarea placeholder="Say Hello" rows={10} cols={30} className="textarea" value={message} onChange={(e) => setMessage(e.target.value)} />
           <div className="button-container">
-            <div className="send-button">Send</div>
+            <button onClick={handleSend} className="send-button">Send</button>
             <div className="reset-button-container">
-              <div id="reset-btn" className="reset-button">Reset</div>
+              <button onClick={handleReset} className="reset-button">Reset</button>
             </div>
           </div>
         </div>

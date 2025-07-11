@@ -26,8 +26,8 @@ export const register = asyncHandler(async (req, res) => {
     throw new apiError(400, 'Username already taken');
   }
 
-  const hashedPassword = await bcrypt.hash(password, 12);
-  const user = await User.create({ username, email, password: hashedPassword });
+  const user = new User({ username, email, password });
+  await user.save();
 
   const token = jwt.sign({ id: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
 
@@ -46,11 +46,17 @@ export const login = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
+    console.warn('Login failed: user not found for email', email);
     throw new apiError(401, 'Invalid credentials');
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await user.isPasswordCorrect(password);
+  console.log('Attempting login for:', email);
+  console.log('Stored hashed password:', user.password);
+  console.log('Password match result:', isMatch);
+
   if (!isMatch) {
+    console.warn('Login failed: incorrect password for email', email);
     throw new apiError(401, 'Invalid credentials');
   }
 
