@@ -6,150 +6,203 @@ import {
   ThumbsUp,
   ThumbsDown,
 } from 'lucide-react';
-import { useFanComments } from '../../hooks/useFanComments';
+import { motion } from 'framer-motion';
+import { useComments } from '../../hooks/useComments';
+import { useAuth } from '../../contexts/AuthContext';
 
-const FanComments = ({ title = 'default' }) => {
+const FanComments = ({ mediaId, mediaType = 'movie', title = 'default' }) => {
+  const { user, isAuthenticated } = useAuth();
   const {
     comments,
+    loading,
     addComment,
-    updateComment,
     deleteComment,
     likeComment,
     dislikeComment,
-  } = useFanComments(title);
+    hasLiked,
+    hasDisliked,
+    canDelete,
+  } = useComments(mediaId, mediaType);
 
-  const [author, setAuthor] = useState('');
   const [message, setMessage] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [editMessage, setEditMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!author.trim() || !message.trim()) return;
-    addComment(author.trim(), message.trim());
-    setAuthor('');
+    if (!message.trim()) return;
+    
+    await addComment(message.trim());
     setMessage('');
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = async (commentId) => {
     if (!editMessage.trim()) return;
-    updateComment(id, editMessage.trim());
-    setEditingId(null);
-    setEditMessage('');
-  };
-
-  const hasLiked = (comment) => comment.likes.includes(author.trim());
-  const hasDisliked = (comment) => comment.dislikes.includes(author.trim());
-
-  const handleLike = (id) => {
-    const comment = comments.find((c) => c.id === id);
-    if (!author.trim()) return alert("Please enter your name to react.");
-
-    if (hasLiked(comment)) {
-      likeComment(id, 'remove', author.trim());
-    } else {
-      if (hasDisliked(comment)) {
-        dislikeComment(id, 'remove', author.trim());
-      }
-      likeComment(id, 'add', author.trim());
+    
+    // For now, we'll delete and recreate the comment since the backend doesn't have update
+    // In a real implementation, you'd add an update endpoint
+    try {
+      await deleteComment(commentId);
+      await addComment(editMessage.trim());
+      setEditingId(null);
+      setEditMessage('');
+    } catch (error) {
+      console.error('Failed to update comment:', error);
     }
   };
 
-  const handleDislike = (id) => {
-    const comment = comments.find((c) => c.id === id);
-    if (!author.trim()) return alert("Please enter your name to react.");
-
-    if (hasDisliked(comment)) {
-      dislikeComment(id, 'remove', author.trim());
+  const handleLike = async (commentId) => {
+    if (hasLiked(comments.find(c => c._id === commentId))) {
+      // If already liked, withdraw the like
+      await likeComment(commentId, 'withdraw');
     } else {
-      if (hasLiked(comment)) {
-        likeComment(id, 'remove', author.trim());
-      }
-      dislikeComment(id, 'add', author.trim());
+      // If not liked, add like
+      await likeComment(commentId);
     }
   };
 
-  const formatDate = (ts) => new Date(ts).toLocaleString();
+  const handleDislike = async (commentId) => {
+    if (hasDisliked(comments.find(c => c._id === commentId))) {
+      // If already disliked, withdraw the dislike
+      await dislikeComment(commentId, 'withdraw');
+    } else {
+      // If not disliked, add dislike
+      await dislikeComment(commentId);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleString();
+  };
+
+  const getUsername = (comment) => {
+    return comment.userId?.username || 'Anonymous';
+  };
+
+  if (loading) {
+    return (
+      <motion.section 
+        className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <MessageSquare className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-2xl font-bold text-white">
+            Fan Comments for {title}
+          </h3>
+        </div>
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mx-auto"></div>
+          <p className="text-gray-300 mt-2">Loading comments...</p>
+        </div>
+      </motion.section>
+    );
+  }
 
   return (
-    <section className="bg-[#DED3C4] p-6 rounded-2xl shadow-md">
-      <div className="flex items-center gap-2 mb-4">
-        <MessageSquare className="text-[#555879] w-6 h-6" />
-        <h3 className="text-2xl font-semibold text-[#555879]">
+    <motion.section 
+      className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+          <MessageSquare className="w-5 h-5 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold text-white">
           Fan Comments for {title}
         </h3>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          className="w-full px-4 py-2 rounded-xl border border-[#bbb] bg-[#F4EBD3] text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#555879]"
-        />
-        <textarea
-          placeholder="Write your thoughts..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rows={3}
-          className="w-full px-4 py-2 rounded-xl border border-[#bbb] bg-[#F4EBD3] text-[#555879] focus:outline-none focus:ring-2 focus:ring-[#555879]"
-        />
-        <button
-          type="submit"
-          className="bg-[#555879] text-[#F4EBD3] px-6 py-2 rounded-xl hover:opacity-90"
-        >
-          Post Comment
-        </button>
+        {!isAuthenticated ? (
+          <div className="text-center py-4 bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl">
+            <p className="text-white font-semibold">Please log in to comment</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-sm text-gray-300 font-semibold">
+                Commenting as: {user?.username}
+              </span>
+            </div>
+            <textarea
+              placeholder="Write your thoughts..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-3 rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 font-medium"
+            />
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 font-bold"
+            >
+              Post Comment
+            </button>
+          </>
+        )}
       </form>
 
       {/* Comments */}
       {comments.length > 0 ? (
         comments.map((comment) => (
           <div
-            key={comment.id}
-            className="bg-[#F4EBD3] rounded-xl p-4 border mb-4 shadow"
+            key={comment._id}
+            className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-4 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <div className="flex justify-between items-start mb-2">
               <div>
-                <h4 className="font-semibold text-[#555879]">{comment.author}</h4>
-                <p className="text-sm text-[#888da8]">
-                  Last updated: {formatDate(comment.updatedAt)}
+                <h4 className="font-semibold text-white">{getUsername(comment)}</h4>
+                <p className="text-sm text-gray-300">
+                  {formatDate(comment.createdAt)}
                 </p>
               </div>
               <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setEditingId(comment.id);
-                    setEditMessage(comment.message);
-                  }}
-                >
-                  <Pencil className="w-4 h-4 text-[#555879]" />
-                </button>
-                <button onClick={() => deleteComment(comment.id)}>
-                  <Trash2 className="w-4 h-4 text-red-500" />
-                </button>
+                {canDelete(comment) && (
+                  <>
+                    <button
+                      onClick={() => {
+                        setEditingId(comment._id);
+                        setEditMessage(comment.message);
+                      }}
+                      className="hover:opacity-70 transition-opacity p-1 rounded bg-white/10 hover:bg-white/20"
+                    >
+                      <Pencil className="w-4 h-4 text-white" />
+                    </button>
+                    <button 
+                      onClick={() => deleteComment(comment._id)}
+                      className="hover:opacity-70 transition-opacity p-1 rounded bg-red-500 hover:bg-red-600"
+                    >
+                      <Trash2 className="w-4 h-4 text-white" />
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
-            {editingId === comment.id ? (
+            {editingId === comment._id ? (
               <>
                 <textarea
                   value={editMessage}
                   onChange={(e) => setEditMessage(e.target.value)}
-                  className="w-full px-3 py-2 border rounded bg-[#DED3C4] text-[#555879]"
+                  className="w-full px-3 py-2 border border-white/20 rounded bg-white/10 backdrop-blur-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <div className="flex justify-end gap-2 mt-2">
                   <button
-                    onClick={() => handleUpdate(comment.id)}
-                    className="bg-[#555879] text-white px-4 py-1 rounded"
+                    onClick={() => handleUpdate(comment._id)}
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded hover:scale-105 transition-all duration-300 font-semibold"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => setEditingId(null)}
-                    className="bg-[#bbb] px-4 py-1 rounded"
+                    className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-1 rounded hover:bg-white/20 transition-all duration-300 font-semibold"
                   >
                     Cancel
                   </button>
@@ -157,25 +210,33 @@ const FanComments = ({ title = 'default' }) => {
               </>
             ) : (
               <>
-                <p className="text-[#555879] mt-1 mb-2">{comment.message}</p>
+                <p className="text-white mt-1 mb-2 font-medium">{comment.message}</p>
                 <div className="flex items-center gap-4">
                   <button
-                    className={`flex items-center gap-1 ${
-                      hasLiked(comment) ? 'text-green-600' : 'text-[#555879]'
+                    className={`flex items-center gap-1 transition-all duration-300 p-2 rounded-lg ${
+                      hasLiked(comment) 
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg' 
+                        : 'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:shadow-md'
                     }`}
-                    onClick={() => handleLike(comment.id)}
+                    onClick={() => handleLike(comment._id)}
+                    disabled={!isAuthenticated}
+                    title={hasLiked(comment) ? 'Click to withdraw like' : 'Click to like'}
                   >
                     <ThumbsUp className="w-4 h-4" />
-                    <span>{comment.likes.length}</span>
+                    <span className="font-semibold">{comment.likes?.length || 0}</span>
                   </button>
                   <button
-                    className={`flex items-center gap-1 ${
-                      hasDisliked(comment) ? 'text-red-600' : 'text-[#555879]'
+                    className={`flex items-center gap-1 transition-all duration-300 p-2 rounded-lg ${
+                      hasDisliked(comment) 
+                        ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg' 
+                        : 'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:shadow-md'
                     }`}
-                    onClick={() => handleDislike(comment.id)}
+                    onClick={() => handleDislike(comment._id)}
+                    disabled={!isAuthenticated}
+                    title={hasDisliked(comment) ? 'Click to withdraw dislike' : 'Click to dislike'}
                   >
                     <ThumbsDown className="w-4 h-4" />
-                    <span>{comment.dislikes.length}</span>
+                    <span className="font-semibold">{comment.dislikes?.length || 0}</span>
                   </button>
                 </div>
               </>
@@ -183,9 +244,13 @@ const FanComments = ({ title = 'default' }) => {
           </div>
         ))
       ) : (
-        <p className="text-[#888da8] italic">No comments yet. Be the first to share!</p>
+        <div className="text-center py-8">
+          <p className="text-gray-300 italic font-medium">
+            No comments yet. Be the first to share!
+          </p>
+        </div>
       )}
-    </section>
+    </motion.section>
   );
 };
 

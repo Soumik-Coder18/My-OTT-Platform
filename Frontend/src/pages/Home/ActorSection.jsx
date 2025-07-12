@@ -38,12 +38,14 @@ const Actor = () => {
     <section className="mb-10" ref={ref}>
       <div className="flex items-center justify-between mb-4 px-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2">
-          <UserRound className="w-6 h-6 text-[#555879]" />
-          <h2 className="text-2xl font-semibold text-[#555879]">Popular Actors</h2>
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <UserRound className="w-5 h-5 text-white" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">Popular Actors</h2>
         </div>
         <button
           onClick={() => navigate('/actor')}
-          className="px-4 py-2 bg-[#DED3C4] text-[#222] rounded-full text-sm font-medium hover:scale-105 transition-transform"
+          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
         >
           Show More
         </button>
@@ -71,7 +73,7 @@ const Actor = () => {
             }}
           >
             <div
-              className="cursor-pointer bg-[#ded3c4] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:scale-105 transition duration-300"
+              className="cursor-pointer bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-purple-500/25 hover:scale-105 hover:border-purple-500/30 transition-all duration-300"
               onClick={() => navigate(`/actor/${actor.id}`)}
             >
               <img
@@ -83,7 +85,7 @@ const Actor = () => {
                 alt={actor.name}
                 className="w-full h-60 object-cover"
               />
-              <div className="p-3 text-center text-[#222] font-semibold">
+              <div className="p-3 text-center text-white font-semibold">
                 {actor.name}
               </div>
             </div>

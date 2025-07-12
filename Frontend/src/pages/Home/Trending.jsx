@@ -95,7 +95,7 @@ const Trending = () => {
         onClick={() =>
           navigate(`/${item.media_type === 'tv' ? 'series' : 'movie'}/${item.id}`)
         }
-        className="bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-2xl cursor-pointer transform-gpu"
+                  className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-2xl hover:shadow-purple-500/25 hover:border-purple-500/30 cursor-pointer transform-gpu"
       >
         <img
           src={
@@ -106,17 +106,19 @@ const Trending = () => {
           alt={item.title || item.name}
           className="w-full h-[250px] object-cover"
         />
-        <div className="p-2 text-sm font-semibold text-center text-[#222] truncate">
-          {item.title || item.name}
-        </div>
+                  <div className="p-2 text-sm font-semibold text-center text-white truncate">
+            {item.title || item.name}
+          </div>
       </motion.div>
     ));
 
   return (
-    <section className="w-full bg-[#e4dcd1] py-14 px-4 md:px-10 rounded-3xl shadow-2xl overflow-hidden">
+    <section className="w-full bg-gradient-to-br from-slate-900/50 via-purple-900/30 to-slate-900/50 backdrop-blur-sm border border-purple-500/20 py-14 px-4 md:px-10 rounded-3xl shadow-2xl overflow-hidden">
       <div className="flex justify-center items-center gap-3 mb-10">
-        <Sparkles className="w-7 h-7 text-[#3b3d40]" />
-        <h2 className="text-3xl font-extrabold text-[#2d2d2d] text-center tracking-wide">
+        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+          <Sparkles className="w-6 h-6 text-white" />
+        </div>
+        <h2 className="text-3xl font-extrabold text-white text-center tracking-wide">
           Trending Picks This Week
         </h2>
       </div>

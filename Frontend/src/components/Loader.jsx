@@ -110,13 +110,20 @@ const Loader = () => {
 }
 
 const StyledWrapper = styled.div`
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  animation: stageBackground 5s ease-in-out infinite;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   @keyframes stageBackground {
     0%, 10%, 90%, 100% {
-      background-color: #00B6BB;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     }
 
     25%, 75% {
-      background-color: #0094bd;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
     }
   }
 
@@ -132,11 +139,11 @@ const StyledWrapper = styled.div`
 
   @keyframes sunrise {
     0%, 10%, 90%, 100% {
-      box-shadow: 0 0 0 25px #5ad6bd, 0 0 0 40px #4acead, 0 0 0 60px rgba(74, 206, 173, 0.6), 0 0 0 90px rgba(74, 206, 173, 0.3);
+      box-shadow: 0 0 0 25px #8b5cf6, 0 0 0 40px #7c3aed, 0 0 0 60px rgba(139, 92, 246, 0.6), 0 0 0 90px rgba(139, 92, 246, 0.3);
     }
 
     25%, 75% {
-      box-shadow: 0 0 0 0 #5ad6bd, 0 0 0 0 #4acead, 0 0 0 0 rgba(74, 206, 173, 0.6), 0 0 0 0 rgba(74, 206, 173, 0.3);
+      box-shadow: 0 0 0 0 #8b5cf6, 0 0 0 0 #7c3aed, 0 0 0 0 rgba(139, 92, 246, 0.6), 0 0 0 0 rgba(139, 92, 246, 0.3);
     }
   }
 
@@ -170,11 +177,11 @@ const StyledWrapper = styled.div`
 
   @keyframes hotPan {
     0%, 90% {
-      background-color: #74667e;
+      background-color: #8b5cf6;
     }
 
     50%, 75% {
-      background-color: #b2241c;
+      background-color: #7c3aed;
     }
   }
 
@@ -320,7 +327,7 @@ const StyledWrapper = styled.div`
     margin-left: -600px;
     border-left: 600px solid transparent;
     border-right: 600px solid transparent;
-    border-bottom: 950px solid #000;
+    border-bottom: 950px solid #374151;
   }
 
   .tree .branch.branch-top {
@@ -422,25 +429,14 @@ const StyledWrapper = styled.div`
     height: 100%;
     margin-right: 10%;
     position: relative;
-    /*bottom: 0;
-    right: 9%;*/
     z-index: 1;
-    border-top: 4px solid #4D4454;
-    border-right: 4px solid #4D4454;
-    border-left: 4px solid #4D4454;
+    border-top: 4px solid #4b5563;
+    border-right: 4px solid #4b5563;
+    border-left: 4px solid #4b5563;
     border-top-right-radius: 6px;
     transform: skew(30deg);
-    box-shadow: inset -3px 3px 0px 0px #F7B563;
-    /*background: linear-gradient(
-      to bottom, 
-      rgba(246,212,132,1) 0%,
-      rgba(246,212,132,1) 24%,
-      rgba(#F0B656,1) 25%,
-      rgba(#F0B656,1) 74%,
-      rgba(235,151,53,1) 75%,
-      rgba(235,151,53,1) 100%
-    );*/
-    background: #f6d484;
+    box-shadow: inset -3px 3px 0px 0px #8b5cf6;
+    background: #7c3aed;
   }
 
   .roof:before {
@@ -452,7 +448,7 @@ const StyledWrapper = styled.div`
     left: 15%;
     z-index: 0;
     border-radius: 10%;
-    background-color: #E78C20;
+    background-color: #6d28d9;
   }
 
   .roof:after {
@@ -463,7 +459,7 @@ const StyledWrapper = styled.div`
     bottom: 0;
     right: 0;
     z-index: 1;
-    background: linear-gradient(to bottom, rgba(231, 140, 32, 0.4) 0%, rgba(231, 140, 32, 0.4) 64%, rgba(231, 140, 32, 0.8) 65%, rgba(231, 140, 32, 0.8) 100%);
+    background: linear-gradient(to bottom, rgba(109, 40, 217, 0.4) 0%, rgba(109, 40, 217, 0.4) 64%, rgba(109, 40, 217, 0.8) 65%, rgba(109, 40, 217, 0.8) 100%);
   }
 
   .roof-border-left {
@@ -484,7 +480,7 @@ const StyledWrapper = styled.div`
     display: block;
     width: 100%;
     border-radius: 2px;
-    border: 2px solid #4D4454;
+    border: 2px solid #4b5563;
   }
 
   .roof-border-left .roof-border1 {
@@ -492,231 +488,141 @@ const StyledWrapper = styled.div`
   }
 
   .roof-border-left .roof-border2 {
-    height: 10%;
+    height: 35%;
   }
 
   .roof-border-left .roof-border3 {
-    height: 40%;
+    height: 25%;
   }
 
-  .door {
-    width: 55px;
-    height: 92px;
+  .entrance {
+    display: block;
+    width: 30%;
+    height: 50%;
     position: absolute;
-    bottom: 2%;
-    overflow: hidden;
-    z-index: 0;
-    transform-origin: 0 105%;
-  }
-
-  .left-door {
-    transform: rotate(35deg);
-    position: absolute;
-    left: 13.5%;
-    bottom: -3%;
-    z-index: 0;
-  }
-
-  .left-door .left-door-inner {
-    width: 100%;
-    height: 100%;
-    transform-origin: 0 105%;
-    transform: rotate(-35deg);
-    position: absolute;
-    top: 0;
-    overflow: hidden;
-    background-color: #EDDDC2;
-  }
-
-  .left-door .left-door-inner:before {
-    content: "";
-    width: 15%;
-    height: 100%;
-    position: absolute;
-    top: 0;
+    bottom: 0;
     right: 0;
-    background: repeating-linear-gradient(#D4BC8B, #D4BC8B 4%, #E0D2A8 5%, #E0D2A8 10%);
-  }
-
-  .left-door .left-door-inner:after {
-    content: "";
-    width: 50%;
-    height: 100%;
-    position: absolute;
-    top: 15%;
-    left: 10%;
-    transform: rotate(25deg);
-    background-color: #fff;
-  }
-
-  .right-door {
-    height: 89px;
-    right: 21%;
-    transform-origin: 0 105%;
-    transform: rotate(-30deg) scaleX(-1);
-    position: absolute;
-    bottom: -3%;
     z-index: 0;
   }
 
-  .right-door .right-door-inner {
-    width: 100%;
-    height: 100%;
-    transform-origin: 0 120%;
-    transform: rotate(-30deg);
-    position: absolute;
-    bottom: 0px;
-    overflow: hidden;
-    background-color: #EFE7CF;
-  }
-
-  .right-door .right-door-inner:before {
-    content: "";
+  .entrance .door {
+    display: inline-block;
     width: 50%;
     height: 100%;
-    position: absolute;
-    top: 15%;
-    right: -28%;
-    z-index: 1;
-    transform: rotate(15deg);
-    background-color: #524A5A;
+    position: relative;
+    border: 2px solid #4b5563;
+    background-color: #374151;
   }
 
-  .right-door .right-door-inner:after {
-    content: "";
-    width: 50%;
-    height: 100%;
-    position: absolute;
-    top: 15%;
-    right: -20%;
-    transform: rotate(20deg);
-    background-color: #fff;
+  .entrance .left-door {
+    border-right: 1px solid #4b5563;
+  }
+
+  .entrance .right-door {
+    border-left: 1px solid #4b5563;
+  }
+
+  .entrance .left-door-inner {
+    display: block;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+    border-radius: 2px;
+    background-color: #6b7280;
+  }
+
+  .entrance .right-door-inner {
+    display: block;
+    width: 80%;
+    height: 80%;
+    margin: 10%;
+    border-radius: 2px;
+    background-color: #6b7280;
   }
 
   .floor {
-    width: 80%;
+    display: block;
+    width: 100%;
+    height: 5%;
     position: absolute;
-    right: 10%;
     bottom: 0;
-    z-index: 1;
+    z-index: 0;
   }
 
   .floor .ground {
+    display: block;
+    width: 100%;
+    height: 100%;
     position: absolute;
+    bottom: 0;
     border-radius: 2px;
-    border: 2px solid #4D4454;
   }
 
-  .floor .ground.ground1 {
-    width: 65%;
-    left: 0;
+  .floor .ground1 {
+    background-color: #374151;
   }
 
-  .floor .ground.ground2 {
-    width: 30%;
-    right: 0;
+  .floor .ground2 {
+    background-color: #4b5563;
+    height: 50%;
+    bottom: 50%;
   }
 
   .fireplace {
     display: block;
-    width: 24%;
+    width: 15%;
     height: 20%;
     position: absolute;
-    left: 5%;
-  }
-
-  .fireplace:before {
-    content: "";
-    display: block;
-    width: 8%;
-    position: absolute;
-    bottom: -4px;
-    left: 2%;
-    border-radius: 2px;
-    border: 2px solid #4D4454;
-    background: #4D4454;
+    bottom: 5%;
+    left: 15%;
+    z-index: 1;
   }
 
   .fireplace .support {
     display: block;
-    height: 105%;
-    width: 2px;
+    width: 15%;
+    height: 100%;
     position: absolute;
-    bottom: -5%;
-    left: 10%;
-    border: 2px solid #4D4454;
+    bottom: 0;
+    background-color: #6b7280;
   }
 
-  .fireplace .support:before {
-    content: "";
-    width: 100%;
-    height: 15%;
-    position: absolute;
-    top: -18%;
-    left: -4px;
-    border-radius: 2px;
-    border: 2px solid #4D4454;
-    transform-origin: 100% 100%;
-    transform: rotate(45deg);
+  .fireplace .support:first-child {
+    left: 0;
   }
 
-  .fireplace .support:after {
-    content: "";
-    width: 100%;
-    height: 15%;
-    position: absolute;
-    top: -18%;
-    left: 0px;
-    border-radius: 2px;
-    border: 2px solid #4D4454;
-    transform-origin: 0 100%;
-    transform: rotate(-45deg);
-  }
-
-  .fireplace .support:nth-child(1) {
-    left: 85%;
+  .fireplace .support:last-child {
+    right: 0;
   }
 
   .fireplace .bar {
+    display: block;
     width: 100%;
-    height: 2px;
-    border-radius: 2px;
-    border: 2px solid #4D4454;
+    height: 8%;
+    position: absolute;
+    top: 20%;
+    background-color: #6b7280;
   }
 
   .fireplace .hanger {
     display: block;
-    width: 2px;
-    height: 25%;
-    margin-left: -4px;
+    width: 60%;
+    height: 2%;
     position: absolute;
-    left: 50%;
-    border: 2px solid #4D4454;
+    top: 30%;
+    left: 20%;
+    background-color: #6b7280;
   }
 
   .fireplace .pan {
     display: block;
-    width: 25%;
-    height: 50%;
+    width: 40%;
+    height: 15%;
+    position: absolute;
+    top: 40%;
+    left: 30%;
     border-radius: 50%;
-    border: 4px solid #4D4454;
-    position: absolute;
-    top: 25%;
-    left: 35%;
-    overflow: hidden;
-    animation: heat 5s linear infinite;
-  }
-
-  .fireplace .pan:before {
-    content: "";
-    display: block;
-    height: 53%;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    z-index: -1;
-    border-top: 4px solid #4D4454;
-    background-color: #74667e;
+    background-color: #8b5cf6;
     animation: hotPan 5s linear infinite;
   }
 
@@ -752,8 +658,8 @@ const StyledWrapper = styled.div`
     bottom: -4px;
     z-index: 1;
     border-radius: 2px;
-    border: 1px solid #efb54a;
-    background-color: #efb54a;
+    border: 1px solid #f59e0b;
+    background-color: #f59e0b;
   }
 
   .fireplace .fire .line {
@@ -782,7 +688,7 @@ const StyledWrapper = styled.div`
     top: 100%;
     z-index: 1;
     border-radius: 2px;
-    border: 2px solid #efb54a;
+    border: 2px solid #f59e0b;
     animation: fireParticles 0.5s linear infinite;
   }
 
@@ -828,9 +734,9 @@ const StyledWrapper = styled.div`
     top: 20%;
     left: 40%;
     border-radius: 50%;
-    box-shadow: 0 0 0 25px #5ad6bd, 0 0 0 40px #4acead, 0 0 0 60px rgba(74, 206, 173, 0.6), 0 0 0 90px rgba(74, 206, 173, 0.3);
+    box-shadow: 0 0 0 25px #8b5cf6, 0 0 0 40px #7c3aed, 0 0 0 60px rgba(139, 92, 246, 0.6), 0 0 0 90px rgba(139, 92, 246, 0.3);
     animation: sunrise 5s ease-in-out infinite;
-    background-color: #ef9431;
+    background-color: #8b5cf6;
   }
 
   .time .night {

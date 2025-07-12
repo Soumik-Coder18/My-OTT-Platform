@@ -26,15 +26,15 @@ const FilterDropdown = ({ filters, setFilters, onApply }) => {
     <div className="relative text-right">
       <button
         onClick={toggleDropdown}
-        className="bg-[#555879] text-[#F4EBD3] px-4 py-2 rounded hover:bg-[#3e4059] transition flex items-center gap-2
-          focus:outline-none focus:ring-2 focus:ring-[#555879]"
+        className="bg-[#2E004F] text-[#FFFFFF] px-4 py-2 rounded hover:bg-[#4A004E] transition flex items-center gap-2
+          focus:outline-none focus:ring-2 focus:ring-[#2E004F]"
       >
         <SlidersHorizontal size={18} />
         {open ? 'Close Filters' : 'Filter'}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-64 bg-[#DED3C4] p-4 rounded-xl shadow-lg z-10 text-[#555879]">
+        <div className="absolute right-0 mt-2 w-64 bg-[#EBA9FF] p-4 rounded-xl shadow-lg z-10 text-[#2E004F]">
           <h2 className="text-lg font-semibold mb-4 text-left">Filters</h2>
 
           <div className="mb-4 text-left">
@@ -42,8 +42,8 @@ const FilterDropdown = ({ filters, setFilters, onApply }) => {
             <select
   value={localFilters.genre}
   onChange={(e) => setLocalFilters({ ...localFilters, genre: e.target.value })}
-  className="w-full border border-[#aaa] rounded p-2 bg-[#F4EBD3] text-[#555879]
-    focus:outline-none focus:ring-2 focus:ring-[#555879]"
+  className="w-full border border-[#7D4C9E] rounded p-2 bg-[#F9D1F5] text-[#2E004F]
+    focus:outline-none focus:ring-2 focus:ring-[#2E004F]"
 >
   <option value="">All</option>
   <option value="28">Action</option>
@@ -76,8 +76,8 @@ const FilterDropdown = ({ filters, setFilters, onApply }) => {
               max="10"
               value={localFilters.rating}
               onChange={(e) => setLocalFilters({ ...localFilters, rating: e.target.value })}
-              className="w-full border border-[#aaa] rounded p-2 bg-[#F4EBD3] text-[#555879]
-                focus:outline-none focus:ring-2 focus:ring-[#555879]"
+              className="w-full border border-[#7D4C9E] rounded p-2 bg-[#F9D1F5] text-[#2E004F]
+                focus:outline-none focus:ring-2 focus:ring-[#2E004F]"
             />
           </div>
 
@@ -87,15 +87,15 @@ const FilterDropdown = ({ filters, setFilters, onApply }) => {
               type="number"
               value={localFilters.year}
               onChange={(e) => setLocalFilters({ ...localFilters, year: e.target.value })}
-              className="w-full border border-[#aaa] rounded p-2 bg-[#F4EBD3] text-[#555879]
-                focus:outline-none focus:ring-2 focus:ring-[#555879]"
+              className="w-full border border-[#7D4C9E] rounded p-2 bg-[#F9D1F5] text-[#2E004F]
+                focus:outline-none focus:ring-2 focus:ring-[#2E004F]"
             />
           </div>
 
           <button
             onClick={handleApply}
-            className="w-full bg-[#555879] text-[#F4EBD3] px-4 py-2 rounded hover:bg-[#3e4059] transition
-              focus:outline-none focus:ring-2 focus:ring-[#555879]"
+            className="w-full bg-[#2E004F] text-[#FFFFFF] px-4 py-2 rounded hover:bg-[#4A004E] transition
+              focus:outline-none focus:ring-2 focus:ring-[#2E004F]"
           >
             Apply Filters
           </button>

@@ -29,6 +29,8 @@ import Terms from '../Legal/Terms/Terms';
 
 // 🔹 Utility Components
 import ScrollToTop from '../components/ScrollToTop';
+import ProtectedRoute from '../components/ProtectedRoute';
+import PublicRoute from '../components/PublicRoute';
 
 
 // ==========================================
@@ -42,38 +44,94 @@ const AppRoutes = () => {
 
       {/* 🌐 Defining All App Routes */}
       <Routes>
-        {/* 🔸 Home Page */}
+        {/* 🔸 Home Page - Public */}
         <Route path="/" element={<Home />} />
 
-        {/* 🎬 Movie Routes */}
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/movie/:id" element={<MovieDetail />} />
-        <Route path="/indian-movies" element={<IndianMovie />} />
+        {/* 🎬 Movie Routes - Protected */}
+        <Route path="/movies" element={
+          <ProtectedRoute>
+            <Movies />
+          </ProtectedRoute>
+        } />
+        <Route path="/movie/:id" element={
+          <ProtectedRoute>
+            <MovieDetail />
+          </ProtectedRoute>
+        } />
+        <Route path="/indian-movies" element={
+          <ProtectedRoute>
+            <IndianMovie />
+          </ProtectedRoute>
+        } />
 
-        {/* 📺 Series Routes */}
-        <Route path="/series" element={<Series />} />
-        <Route path="/series/:id" element={<SeriesDetails />} />
-        <Route path="/indian-show" element={<IndianShow />} />
+        {/* 📺 Series Routes - Protected */}
+        <Route path="/series" element={
+          <ProtectedRoute>
+            <Series />
+          </ProtectedRoute>
+        } />
+        <Route path="/series/:id" element={
+          <ProtectedRoute>
+            <SeriesDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/indian-show" element={
+          <ProtectedRoute>
+            <IndianShow />
+          </ProtectedRoute>
+        } />
 
-        {/* 🔐 Authentication Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        {/* 🔐 Authentication Routes - Public Only */}
+        <Route path="/login" element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        } />
+        <Route path="/signup" element={
+          <PublicRoute>
+            <Signup />
+          </PublicRoute>
+        } />
 
-        {/* 📜 Legal Pages */}
+        {/* 📜 Legal Pages - Public */}
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/terms" element={<Terms />} />
 
-        {/* 🔍 Search & Favorites */}
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/favorites" element={<Favorites />} />
+        {/* 🔍 Search & Favorites - Protected */}
+        <Route path="/search" element={
+          <ProtectedRoute>
+            <SearchResults />
+          </ProtectedRoute>
+        } />
+        <Route path="/favorites" element={
+          <ProtectedRoute>
+            <Favorites />
+          </ProtectedRoute>
+        } />
 
-        {/* 👤 Actor Related Routes */}
-        <Route path="/actor" element={<Actor />} />
-        <Route path="/actor/:id" element={<ActorDetails />} />
+        {/* 👤 Actor Related Routes - Protected */}
+        <Route path="/actor" element={
+          <ProtectedRoute>
+            <Actor />
+          </ProtectedRoute>
+        } />
+        <Route path="/actor/:id" element={
+          <ProtectedRoute>
+            <ActorDetails />
+          </ProtectedRoute>
+        } />
 
-        {/* 🎭 Genre Page */ }
-        <Route path="/genre/:id" element={<Genre />} />
+        {/* 🎭 Genre Page - Protected */}
+        <Route path="/genre/:id" element={
+          <ProtectedRoute>
+            <Genre />
+          </ProtectedRoute>
+        } />
+        
+        {/* 🚫 NotFound Page - Public */}
+        <Route path="/404" element={<NotFound />} />
+        
         {/* 🚫 Catch-All NotFound Page */}
         <Route path="*" element={<NotFound />} />
       </Routes>

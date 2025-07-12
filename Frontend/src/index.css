@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 @import "tailwindcss";
 
 
@@ -11,12 +13,12 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: #555879 transparent;
+  scrollbar-color: #2E004F transparent;
 }
 
 body {
-  background-color: #DED3C4;       /* base */
-  color: #555879;                  /* primary text */
+  background: linear-gradient(135deg, #1A0033 0%, #2E004F 20%, #4A004E 40%, #7D4C9E 60%, #B8A9C9 80%, #F9D1F5 100%);
+  color: #2E004F;
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
@@ -29,7 +31,7 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #555879;
+  background-color: #2E004F;
   border-radius: 10px;
 }
 
@@ -44,21 +46,21 @@ body {
 }
 
 .btn-primary {
-  background-color: #555879;
-  color: #F4EBD3;
+  background-color: #2E004F;
+  color: #FFFFFF;
 }
 
 .btn-primary:hover {
-  background-color: #98A1BC;
+  background-color: #7D4C9E;
 }
 
 .btn-secondary {
-  background-color: #98A1BC;
+  background-color: #7D4C9E;
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #555879;
+  background-color: #2E004F;
 }
 
 /* Container helper */
@@ -69,8 +71,6 @@ body {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
 
 .font-logo {
   font-family: 'Cinzel', serif;
@@ -85,8 +85,6 @@ body {
   50% { filter: brightness(0.95) contrast(1.2); }
   100% { filter: brightness(1.05); }
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 @keyframes b {
   100% {
@@ -134,4 +132,3 @@ html, body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-

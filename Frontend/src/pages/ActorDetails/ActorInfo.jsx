@@ -1,147 +1,183 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Loader from '../../components/Loader';
-import { getPersonById } from '../../services/movieApi';
+import React from 'react';
 import { motion } from 'framer-motion';
 import {
   Facebook,
   Instagram,
   Twitter,
+  Calendar,
+  MapPin,
+  Users,
+  Award,
+  Star,
+  Sparkles
 } from 'lucide-react';
 
-const ActorInfo = () => {
-  const { id } = useParams();
-  const [actor, setActor] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchActorDetails();
-  }, [id]);
-
-  const fetchActorDetails = async () => {
-    try {
-      const res = await getPersonById(id);
-      setActor(res.data);
-    } catch (err) {
-      console.error('Error fetching actor data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <Loader />;
-  if (!actor) return <p className="text-center text-red-500">Actor not found.</p>;
+const ActorInfo = ({ actor }) => {
+  if (!actor) return null;
 
   return (
     <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="flex flex-col md:flex-row p-6 md:p-10 gap-10 bg-[#F4EBD3] items-start"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="grid lg:grid-cols-3 gap-8"
     >
-
-      {/* Actor Image */}
-      <div className="md:w-1/3 flex justify-center">
-        <img
-          src={
-            actor.profile_path
-              ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-              : '/no-avatar.png'
-          }
-          alt={actor.name}
-          className="rounded-xl max-w-[300px] w-full h-full object-contain shadow-lg"
-        />
-      </div>
-
-      {/* Info Panel */}
-      <div className="md:w-2/3">
-        <h1 className="text-4xl font-bold mb-2 text-[#555879]">{actor.name}</h1>
-
-        {/* Biography */}
-        {actor.biography && (
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold mb-1 text-[#98A1BC]">Biography</h3>
-            <p className="text-base leading-relaxed text-[#555879] text-justify">
+      {/* Biography Section */}
+      <div className="lg:col-span-2">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg">
+              <Sparkles className="w-5 h-5 text-purple-300" />
+            </div>
+            <h2 className="text-2xl font-bold text-white">Biography</h2>
+          </div>
+          
+          {actor.biography ? (
+            <p className="text-gray-300 leading-relaxed text-lg">
               {actor.biography}
             </p>
-          </div>
-        )}
+          ) : (
+            <p className="text-gray-400 italic">No biography available.</p>
+          )}
+        </motion.div>
+      </div>
 
-        {/* Facts Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-[#98A1BC] mb-6">
-          {actor.birthday && (
-            <p>
-              <strong className="text-[#555879]">Born:</strong> {actor.birthday}
-            </p>
-          )}
-          {actor.place_of_birth && (
-            <p>
-              <strong className="text-[#555879]">Place of Birth:</strong> {actor.place_of_birth}
-            </p>
-          )}
-          {actor.gender && (
-            <p>
-              <strong className="text-[#555879]">Gender:</strong>{' '}
-              {actor.gender === 1 ? 'Female' : actor.gender === 2 ? 'Male' : 'Other'}
-            </p>
-          )}
-          {actor.known_for_department && (
-            <p>
-              <strong className="text-[#555879]">Known For:</strong> {actor.known_for_department}
-            </p>
-          )}
-          {actor.popularity && (
-            <p>
-              <strong className="text-[#555879]">Popularity:</strong> {actor.popularity.toFixed(1)}
-            </p>
-          )}
-          {actor.deathday && (
-            <p>
-              <strong className="text-[#555879]">Died:</strong> {actor.deathday}
-            </p>
-          )}
-        </div>
+      {/* Facts Section */}
+      <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg">
+              <Star className="w-5 h-5 text-purple-300" />
+            </div>
+            <h2 className="text-2xl font-bold text-white">Personal Info</h2>
+          </div>
+          
+          <div className="space-y-4">
+            {actor.birthday && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <Calendar className="w-5 h-5 text-purple-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Birthday</p>
+                  <p className="text-white font-semibold">{actor.birthday}</p>
+                </div>
+              </div>
+            )}
+            
+            {actor.place_of_birth && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <MapPin className="w-5 h-5 text-purple-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Place of Birth</p>
+                  <p className="text-white font-semibold">{actor.place_of_birth}</p>
+                </div>
+              </div>
+            )}
+            
+            {actor.gender && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <Award className="w-5 h-5 text-purple-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Gender</p>
+                  <p className="text-white font-semibold">
+                    {actor.gender === 1 ? 'Female' : actor.gender === 2 ? 'Male' : 'Other'}
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            {actor.known_for_department && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <Star className="w-5 h-5 text-purple-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Known For</p>
+                  <p className="text-white font-semibold">{actor.known_for_department}</p>
+                </div>
+              </div>
+            )}
+            
+            {actor.popularity && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <Users className="w-5 h-5 text-purple-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Popularity</p>
+                  <p className="text-white font-semibold">{actor.popularity.toFixed(1)}</p>
+                </div>
+              </div>
+            )}
+            
+            {actor.deathday && (
+              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                <Calendar className="w-5 h-5 text-red-300" />
+                <div>
+                  <p className="text-gray-400 text-sm">Died</p>
+                  <p className="text-white font-semibold">{actor.deathday}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
 
         {/* Social Section */}
         {actor.external_ids &&
           (actor.external_ids.twitter_id ||
             actor.external_ids.instagram_id ||
             actor.external_ids.facebook_id) && (
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold mb-2 text-[#98A1BC]">Social</h3>
-              <div className="flex gap-4 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="mt-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6"
+            >
+              <h3 className="text-xl font-bold text-white mb-4">Social Media</h3>
+              <div className="flex gap-4">
                 {actor.external_ids.twitter_id && (
-                  <a
+                  <motion.a
                     href={`https://twitter.com/${actor.external_ids.twitter_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#555879] hover:text-[#3e4059] transition"
+                    className="p-3 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-400/30 rounded-xl hover:from-blue-500/30 hover:to-blue-600/30 transition-all duration-300 text-blue-300 hover:text-blue-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Twitter className="w-6 h-6" />
-                  </a>
+                  </motion.a>
                 )}
                 {actor.external_ids.instagram_id && (
-                  <a
+                  <motion.a
                     href={`https://instagram.com/${actor.external_ids.instagram_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#555879] hover:text-[#3e4059] transition"
+                    className="p-3 bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/30 rounded-xl hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300 text-pink-300 hover:text-pink-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Instagram className="w-6 h-6" />
-                  </a>
+                  </motion.a>
                 )}
                 {actor.external_ids.facebook_id && (
-                  <a
+                  <motion.a
                     href={`https://facebook.com/${actor.external_ids.facebook_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#555879] hover:text-[#3e4059] transition"
+                    className="p-3 bg-gradient-to-r from-blue-600/20 to-blue-700/20 border border-blue-500/30 rounded-xl hover:from-blue-600/30 hover:to-blue-700/30 transition-all duration-300 text-blue-300 hover:text-blue-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     <Facebook className="w-6 h-6" />
-                  </a>
+                  </motion.a>
                 )}
               </div>
-            </div>
+            </motion.div>
           )}
       </div>
     </motion.div>

@@ -2,17 +2,23 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes/AppRoutes';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import './index.css';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Header />
-      <main className="pt-16 min-h-screen bg-[#DED3C4] text-[#555879]">
-        <AppRoutes />
-      </main>
-      <Footer />
-    </BrowserRouter>
+    <AuthProvider>
+      <ToastProvider>
+        <BrowserRouter>
+          <Header />
+          <main className="pt-16 min-h-screen bg-transparent text-[#2E004F]">
+            <AppRoutes />
+          </main>
+          <Footer />
+        </BrowserRouter>
+      </ToastProvider>
+    </AuthProvider>
   );
 }
 

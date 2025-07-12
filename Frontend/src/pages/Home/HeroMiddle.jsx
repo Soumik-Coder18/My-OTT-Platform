@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getPopularMovies, getPopularSeries } from '../../services/movieApi';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Play, Star, Calendar, Users, Info, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_TMDB_BASE_URL;
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
@@ -10,6 +13,7 @@ const HeroMiddle = ({ type = 'movie' }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoKey, setVideoKey] = useState(null);
   const [videoAvailable, setVideoAvailable] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -70,38 +74,251 @@ const HeroMiddle = ({ type = 'movie' }) => {
   const currentItem = items[currentIndex];
   if (!items.length || !currentItem) return null;
 
-  return (
-    <section className="relative w-full my-12 px-4 md:px-10">
-      <div className="relative w-full aspect-[16/9] sm:aspect-[16/6] rounded-3xl overflow-hidden shadow-2xl bg-black animate-fade-in-slow">
-        {videoKey && videoAvailable ? (
-          <iframe
-            title={currentItem.title || currentItem.name}
-            src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&loop=1&playlist=${videoKey}&controls=0&modestbranding=1&showinfo=0&rel=0&disablekb=1`}
-            className="w-full h-full pointer-events-none"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
-        ) : (
-          <img
-            src={`https://image.tmdb.org/t/p/original${
-              currentItem.backdrop_path || currentItem.poster_path
-            }`}
-            alt={currentItem.title || currentItem.name}
-            className="w-full h-full object-cover"
-          />
-        )}
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).getFullYear();
+  };
 
-        {/* Overlay Info (hidden on mobile) */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 sm:p-6 text-white hidden sm:block">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold line-clamp-2">
-            {currentItem.title || currentItem.name}
-          </h2>
-          <p className="text-xs sm:text-sm md:text-base mt-1 md:mt-2 line-clamp-3">
-            {currentItem.overview}
-          </p>
+  // Navigation functions
+  const handleWatchNow = async () => {
+    try {
+      // Fetch watch providers for this item
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/${type}/${currentItem.id}/watch/providers`,
+        {
+          headers: { Authorization: `Bearer ${ACCESS_TOKEN}` },
+        }
+      );
+
+      const usProviders = response.data.results?.US;
+      const streamingPlatforms = usProviders?.flatrate || [];
+
+      if (streamingPlatforms.length > 0) {
+        // If streaming platforms are available, open the first one
+        const platform = streamingPlatforms[0];
+        const platformUrls = {
+          8: 'https://www.netflix.com', // Netflix
+          119: 'https://www.primevideo.com', // Amazon Prime
+          350: 'https://www.appletv.com', // Apple TV+
+          220: 'https://www.hulu.com', // Hulu
+          192: 'https://www.hbo.com', // HBO
+          118: 'https://www.disneyplus.com', // Disney+
+        };
+        
+        const url = platformUrls[platform.provider_id] || 
+          `https://www.justwatch.com/us/search?q=${encodeURIComponent(currentItem.title || currentItem.name)}`;
+        
+        window.open(url, '_blank');
+      } else {
+        // Fallback to JustWatch if no streaming platforms found
+        const title = currentItem.title || currentItem.name;
+        const searchQuery = encodeURIComponent(`${title} ${type === 'movie' ? 'movie' : 'tv show'} streaming`);
+        const justWatchUrl = `https://www.justwatch.com/us/search?q=${searchQuery}`;
+        window.open(justWatchUrl, '_blank');
+      }
+    } catch (error) {
+      console.error('Error fetching watch providers:', error);
+      // Fallback to JustWatch
+      const title = currentItem.title || currentItem.name;
+      const searchQuery = encodeURIComponent(`${title} ${type === 'movie' ? 'movie' : 'tv show'} streaming`);
+      const justWatchUrl = `https://www.justwatch.com/us/search?q=${searchQuery}`;
+      window.open(justWatchUrl, '_blank');
+    }
+  };
+
+  const handleMoreInfo = () => {
+    const detailPath = type === 'movie' 
+      ? `/movie/${currentItem.id}` 
+      : `/series/${currentItem.id}`;
+    navigate(detailPath);
+  };
+
+  return (
+    <section className="relative w-full my-16 px-4 md:px-10">
+      <motion.div 
+        className="relative w-full aspect-[16/9] sm:aspect-[16/6] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border border-white/10 group"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        {/* Background Video/Image */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentItem.id}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.6 }}
+            className="absolute inset-0"
+          >
+            {videoKey && videoAvailable ? (
+              <iframe
+                title={currentItem.title || currentItem.name}
+                src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1&loop=1&playlist=${videoKey}&controls=0&modestbranding=1&showinfo=0&rel=0&disablekb=1`}
+                className="w-full h-full pointer-events-none"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            ) : (
+              <img
+                src={`https://image.tmdb.org/t/p/original${
+                  currentItem.backdrop_path || currentItem.poster_path
+                }`}
+                alt={currentItem.title || currentItem.name}
+                className="w-full h-full object-cover"
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-purple-900/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-purple-900/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-pink-600/20" />
+
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 md:p-12">
+          <motion.div
+            key={currentItem.id}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="max-w-2xl"
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4 border border-white/20"
+            >
+              <Play className="w-4 h-4" />
+              {type === 'movie' ? 'Featured Movie' : 'Featured Series'}
+            </motion.div>
+
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
+            >
+              {currentItem.title || currentItem.name}
+            </motion.h2>
+
+            {/* Stats Row */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-200"
+            >
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                <span>{currentItem.vote_average?.toFixed(1) || 'N/A'}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4 text-purple-300" />
+                <span>{formatDate(currentItem.release_date || currentItem.first_air_date)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="w-4 h-4 text-pink-300" />
+                <span>{currentItem.vote_count?.toLocaleString() || '0'} votes</span>
+              </div>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="text-sm sm:text-base text-gray-200 line-clamp-3 mb-6 leading-relaxed"
+            >
+              {currentItem.overview || 'No description available'}
+            </motion.p>
+
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="flex flex-wrap gap-3"
+            >
+              <motion.button 
+                onClick={handleWatchNow}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Play className="w-5 h-5" />
+                Watch Now
+                <ExternalLink className="w-4 h-4" />
+              </motion.button>
+              <motion.button 
+                onClick={handleMoreInfo}
+                className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Info className="w-5 h-5" />
+                More Info
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
+
+        {/* Floating Elements */}
+        <div className="absolute top-6 right-6 hidden md:block">
+          <motion.div
+            animate={{ 
+              y: [0, -10, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{ 
+              duration: 4, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-full border border-white/10"
+          />
+        </div>
+
+        <div className="absolute bottom-6 left-6 hidden md:block">
+          <motion.div
+            animate={{ 
+              y: [0, 10, 0],
+              rotate: [0, -5, 0]
+            }}
+            transition={{ 
+              duration: 5, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1
+            }}
+            className="w-12 h-12 bg-gradient-to-br from-pink-500/20 to-purple-500/20 backdrop-blur-sm rounded-full border border-white/10"
+          />
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {items.slice(0, 5).map((_, index) => (
+            <motion.button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 w-8'
+                  : 'bg-white/40 hover:bg-white/60'
+              }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 };

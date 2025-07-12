@@ -60,15 +60,16 @@ const StyledWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ddcfcc;
+    background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
     border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(168, 85, 247, 0.3);
   }
   .loader .container .coffee-header__buttons {
     width: 25px;
     height: 25px;
-    background-color: #282323;
+    background-color: #1f2937;
     border-radius: 50%;
-    box-shadow: 40px 0 0 0 #282323;
+    box-shadow: 40px 0 0 0 #1f2937;
   }
   .loader .container .coffee-header__buttons::before {
     content: "";
@@ -76,16 +77,16 @@ const StyledWrapper = styled.div`
     height: 8px;
     display: block;
     transform: translate(100%, 25px);
-    background-color: #615e5e;
-    box-shadow: 40px 0 0 0 #615e5e;
+    background-color: #a855f7;
+    box-shadow: 40px 0 0 0 #a855f7;
   }
   .loader .container .coffee-header__display {
     width: 50px;
     height: 50px;
     display: block;
     border-radius: 50%;
-    background-color: #9acfc5;
-    border: 5px solid #43beae;
+    background-color: #1f2937;
+    border: 5px solid #a855f7;
     box-sizing: border-box;
   }
   .loader .container .coffee-header__details {
@@ -93,22 +94,22 @@ const StyledWrapper = styled.div`
     margin-left: 16px;
     height: 20px;
     align-self: flex-start;
-    background-color: #9b9091;
+    background-color: #ec4899;
     box-shadow:
-      -12px 0 0 #9b9091,
-      -24px 0 0 #9b9091;
+      -12px 0 0 #ec4899,
+      -24px 0 0 #ec4899;
   }
   .loader .container .coffee-medium {
     width: 90%;
     height: 160px;
     position: relative;
-    background-color: #bcb0af;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
   }
   .loader .container .coffee-medium:before {
     content: "";
     width: 90%;
     height: 100px;
-    background-color: #776f6e;
+    background-color: #1f2937;
     position: absolute;
     bottom: 0;
     left: 5%;
@@ -120,7 +121,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     top: 0;
     left: calc(50% - 30px);
-    background-color: #231f20;
+    background-color: #374151;
   }
   .loader .container .coffe-medium__exit::before {
     content: "";
@@ -130,7 +131,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     bottom: -20px;
     left: calc(50% - 25px);
-    background-color: #231f20;
+    background-color: #374151;
   }
   .loader .container .coffe-medium__exit::after {
     content: "";
@@ -139,7 +140,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     bottom: -30px;
     left: calc(50% - 5px);
-    background-color: #231f20;
+    background-color: #374151;
   }
   .loader .container .coffee-medium__arm {
     width: 70px;
@@ -147,7 +148,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     top: 15px;
     right: 25px;
-    background-color: #231f20;
+    background-color: #374151;
   }
   .loader .container .coffee-medium__arm::before {
     content: "";
@@ -156,7 +157,7 @@ const StyledWrapper = styled.div`
     position: absolute;
     top: 7px;
     left: -15px;
-    background-color: #9e9495;
+    background-color: #6b7280;
   }
   .loader .container .coffee-medium__cup {
     width: 80px;
@@ -164,8 +165,10 @@ const StyledWrapper = styled.div`
     position: absolute;
     bottom: 0;
     left: calc(50% - 40px);
-    background-color: #fff;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
     border-radius: 0 0 70px 70px/0 0 110px 110px;
+    border: 2px solid #d1d5db;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   .loader .container .coffee-medium__cup::after {
     content: "";
@@ -174,8 +177,10 @@ const StyledWrapper = styled.div`
     position: absolute;
     top: 6px;
     right: -13px;
-    border: 5px solid #fff;
+    border: 5px solid #f3f4f6;
     border-radius: 50%;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .loader .container .coffee-medium__liquid {
     width: 6px;
@@ -192,7 +197,7 @@ const StyledWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: block;
-    background-color: #74372b;
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
     animation: liquid 5000ms linear 3500ms infinite normal both;
   }
   .loader .container .smoke {
@@ -201,7 +206,7 @@ const StyledWrapper = styled.div`
     height: 20px;
     position: absolute;
     border-radius: 5px;
-    background-color: #b3aeae;
+    background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
   }
   .loader .container .smoke.one {
     bottom: 30px;
@@ -227,8 +232,8 @@ const StyledWrapper = styled.div`
     content: "";
     width: 95%;
     height: 15px;
-    background-color: #41bdad;
-    box-shadow: 0 15px 0 5px #000;
+    background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    box-shadow: 0 15px 0 5px #1f2937;
     border-radius: 10px;
   }
 
@@ -248,7 +253,7 @@ const StyledWrapper = styled.div`
       opacity: 0.5;
     }
     100% {
-      transform: translateY(-30px);
+      transform: translateY(-20px);
       opacity: 0;
     }
   }
@@ -269,31 +274,34 @@ const StyledWrapper = styled.div`
       opacity: 0.5;
     }
     100% {
-      transform: translateY(-30px);
+      transform: translateY(-20px);
       opacity: 0;
     }
   }
+
   @-webkit-keyframes liquid {
-    10% {
-      transform: translateY(0);
+    0% {
+      transform: translateY(-100%);
     }
-    90% {
+    5%, 95% {
       transform: translateY(0);
     }
     100% {
       transform: translateY(100%);
     }
   }
+
   @keyframes liquid {
-    10% {
-      transform: translateY(0);
+    0% {
+      transform: translateY(-100%);
     }
-    90% {
+    5%, 95% {
       transform: translateY(0);
     }
     100% {
       transform: translateY(100%);
     }
-  }`;
+  }
+`;
 
 export default Loader;

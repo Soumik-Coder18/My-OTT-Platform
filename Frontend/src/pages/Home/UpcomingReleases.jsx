@@ -49,18 +49,20 @@ const UpcomingReleases = () => {
 
   return (
     <motion.section
-      className="px-6 md:px-10 py-14 bg-[#F4EBD3]"
+      className="px-6 md:px-10 py-14"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.h2
-        className="text-3xl md:text-4xl font-bold text-[#555879] mb-10 flex items-center justify-center gap-3"
+        className="text-3xl md:text-4xl font-bold text-white mb-10 flex items-center justify-center gap-3"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 120, damping: 20 }}
       >
-        <CalendarClock className="w-7 h-7 text-[#555879]" />
+        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+          <CalendarClock className="w-6 h-6 text-white" />
+        </div>
         Upcoming Releases
       </motion.h2>
 
@@ -74,7 +76,7 @@ const UpcomingReleases = () => {
         {upcoming.slice(0, 9).map((movie) => (
           <motion.div
             key={movie.id}
-            className="bg-[#DED3C4] rounded-xl shadow-md overflow-hidden hover:scale-[1.02] transition-transform duration-300 cursor-pointer flex flex-col"
+            className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-xl shadow-md hover:shadow-xl hover:shadow-purple-500/25 overflow-hidden hover:scale-[1.02] hover:border-purple-500/30 transition-all duration-300 cursor-pointer flex flex-col"
             onClick={() => navigate(`/movie/${movie.id}`)}
             variants={cardVariants}
             initial="hidden"
@@ -92,9 +94,9 @@ const UpcomingReleases = () => {
               alt={movie.title}
               className="w-full h-[180px] object-cover"
             />
-            <div className="p-4 text-[#555879]">
+            <div className="p-4 text-white">
               <h3 className="text-lg font-semibold truncate mb-1">{movie.title}</h3>
-              <p className="text-sm text-[#98A1BC]">{movie.release_date}</p>
+              <p className="text-sm text-gray-300">{movie.release_date}</p>
             </div>
           </motion.div>
         ))}
@@ -102,7 +104,7 @@ const UpcomingReleases = () => {
 
       {!upcoming.length && (
         <motion.div
-          className="text-center text-gray-500 mt-10"
+          className="text-center text-gray-400 mt-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >

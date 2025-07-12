@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getPopularMovies, getPopularSeries } from '../../services/movieApi';
+import { useAuth } from '../../contexts/AuthContext';
 
 // 🔹 Sections
 import Hero from './Hero';
@@ -20,9 +21,12 @@ import IndianTvShowsSection from './IndianTvShowsSection';
 
 // 🔄 Loader & Animation
 import Loader from '../../components/Loader';
+import LandingPage from '../../components/LandingPage';
 import { motion } from 'framer-motion';
 
 const Home = () => {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  
   // =============================
   // 🧠 State Management
   // =============================
@@ -32,9 +36,14 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   // =============================
-  // 📡 Fetch Popular Movies & Series
+  // 📡 Fetch Popular Movies & Series (Only for authenticated users)
   // =============================
   useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     const fetchContent = async () => {
       try {
         const [movieRes, seriesRes] = await Promise.all([
@@ -60,18 +69,98 @@ const Home = () => {
     };
 
     fetchContent();
-  }, []);
+  }, [isAuthenticated]);
 
   // =============================
   // ⏳ Loading UI
   // =============================
-  if (loading) return <Loader message="Loading content..." />;
+  if (authLoading || loading) return <Loader message="Loading content..." />;
 
   // =============================
-  // ✅ Render Home Page Sections
+  // 🚫 Show Landing Page for Unauthenticated Users
+  // =============================
+  if (!isAuthenticated) {
+    return <LandingPage />;
+  }
+
+  // =============================
+  // ✅ Render Home Page Sections (Authenticated Users Only)
   // =============================
   return (
-    <div className="min-h-screen bg-[#F4EBD3] p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10" />
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
+      
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute top-40 right-20 w-16 h-16 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, 15, 0],
+            x: [0, -10, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-20 w-24 h-24 bg-gradient-to-r from-pink-500/20 to-red-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, -10, 0],
+            x: [0, 15, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+        <motion.div
+          className="absolute top-60 left-1/4 w-12 h-12 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, 25, 0],
+            x: [0, -15, 0],
+          }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-1/3 w-18 h-18 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, -15, 0],
+            x: [0, 20, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 p-6">
       
       {/* 🎬 Top Banner - Featured Movies + Series */}
       <Hero featured={featured} />
@@ -133,6 +222,7 @@ const Home = () => {
 
       {/* 📅 Upcoming Releases Section */}
       <UpcomingReleases />
+      </div>
     </div>
   );
 };
