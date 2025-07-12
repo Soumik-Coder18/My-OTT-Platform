@@ -229,3 +229,15 @@ export const getUpcomingMovies = (region = 'US') =>
       page: 1,
     },
   });
+
+// ==========================================
+// 🔥 TRENDING ENDPOINTS
+// ==========================================
+
+export const getTrending = (mediaType = 'all', timeWindow = 'week') =>
+  API.get(`/trending/${mediaType}/${timeWindow}`, {
+    params: {
+      language: 'en-US',
+      page: 1,
+    },
+  });

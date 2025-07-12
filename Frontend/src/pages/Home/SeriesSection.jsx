@@ -52,12 +52,14 @@ const seriesSection = ({ series }) => {
     <section className="mb-10" ref={ref}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Tv className="w-6 h-6 text-[#555879]" />
-          <h2 className="text-2xl font-semibold text-[#555879]">Popular shows</h2>
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <Tv className="w-5 h-5 text-white" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">Popular shows</h2>
         </div>
         <Link
           to="/series"
-          className="px-4 py-2 bg-[#DED3C4] text-[#222] rounded-full text-sm font-medium hover:scale-105 transition-transform"
+          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
         >
           Show More
         </Link>
@@ -85,7 +87,7 @@ const seriesSection = ({ series }) => {
             }}
           >
             <Link to={`/series/${show.id}`}>
-              <div className="rounded-lg overflow-hidden bg-[#DED3C4] transition-transform duration-300 transform hover:scale-105 shadow-md hover:shadow-xl">
+              <div className="rounded-lg overflow-hidden bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 transition-all duration-300 transform hover:scale-105 hover:border-purple-500/30 shadow-md hover:shadow-xl hover:shadow-purple-500/25">
                 <img
                   src={
                     show.poster_path
@@ -95,7 +97,7 @@ const seriesSection = ({ series }) => {
                   alt={show.name}
                   className="w-full h-90 object-cover"
                 />
-                <div className="p-2 text-sm font-medium text-[#555879] truncate">
+                <div className="p-2 text-sm font-medium text-white truncate">
                   {show.name}
                 </div>
               </div>

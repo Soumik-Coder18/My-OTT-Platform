@@ -83,7 +83,14 @@ import {
   Laugh, Sparkle
 } from 'lucide-react';
 
-const colorPalette = ['#555879', '#98A1BC', '#DED3C4', '#F4EBD3'];
+const colorPalette = [
+  'from-purple-500 to-pink-500',
+  'from-pink-500 to-purple-600',
+  'from-purple-600 to-pink-600',
+  'from-pink-600 to-purple-700',
+  'from-purple-700 to-pink-700',
+  'from-pink-700 to-purple-800'
+];
 
 const genreIcons = {
   Action: Flame,
@@ -128,7 +135,7 @@ const GenreSection = ({ type = 'movie' }) => {
   const rows = [genres.slice(0, 8), genres.slice(8, 16)];
 
   return (
-    <section className="px-6 md:px-10 py-14" style={{ backgroundColor: '#F4EBD3' }}>
+    <section className="px-6 md:px-10 py-14 bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm border border-white/10 rounded-2xl mb-8">
       <motion.div
         className="flex justify-center items-center gap-3 mb-10"
         initial={{ opacity: 0, y: 40 }}
@@ -136,8 +143,10 @@ const GenreSection = ({ type = 'movie' }) => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <Clapperboard className="w-6 h-6 text-[#555879]" />
-        <h2 className="text-3xl md:text-4xl font-bold text-[#555879] text-center">
+        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+          <Clapperboard className="w-6 h-6 text-white" />
+        </div>
+        <h2 className="text-3xl md:text-4xl font-bold text-white text-center">
           Browse Genres
         </h2>
       </motion.div>
@@ -155,27 +164,21 @@ const GenreSection = ({ type = 'movie' }) => {
         >
           {row.map((genre, i) => {
             const Icon = genreIcons[genre.name] || Clapperboard;
-            const bg = colorPalette[(i + rowIndex * 9) % colorPalette.length];
-            const text = bg === '#DED3C4' || bg === '#F4EBD3' ? '#555879' : '#F4EBD3';
+            const gradientClass = colorPalette[(i + rowIndex * 9) % colorPalette.length];
 
             return (
               <motion.button
                 key={genre.id}
                 onClick={() => navigate(`/genre/${genre.id}`)}
-                whileHover={{ scale: 1.08 }}
+                whileHover={{ scale: 1.08, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 variants={{
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                className="min-w-[140px] px-5 py-3 rounded-full flex items-center justify-center gap-2 font-medium text-sm shadow-sm transition-all duration-300"
-                style={{
-                  backgroundColor: bg,
-                  color: text,
-                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.06)',
-                }}
+                className={`min-w-[140px] px-5 py-3 rounded-full flex items-center justify-center gap-2 font-medium text-sm shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r ${gradientClass} text-white border border-white/20 hover:border-white/40`}
               >
-                <Icon className="w-5 h-5 opacity-80" />
+                <Icon className="w-5 h-5 opacity-90" />
                 {genre.name}
               </motion.button>
             );

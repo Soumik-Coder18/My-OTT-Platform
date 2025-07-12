@@ -1,667 +1,180 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Home, Film, Tv, ArrowLeft, WifiOff } from 'lucide-react';
 
-const Card = () => {
+const NotFound = () => {
   return (
-    <StyledWrapper>
-      <div className="main_wrapper">
-        <div className="main">
-          <div className="antenna">
-            <div className="antenna_shadow" />
-            <div className="a1" />
-            <div className="a1d" />
-            <div className="a2" />
-            <div className="a2d" />
-            <div className="a_base" />
-          </div>
-          <div className="tv">
-            <div className="cruve">
-              <svg className="curve_svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 189.929 189.929" xmlSpace="preserve">
-                <path d="M70.343,70.343c-30.554,30.553-44.806,72.7-39.102,115.635l-29.738,3.951C-5.442,137.659,11.917,86.34,49.129,49.13
-        C86.34,11.918,137.664-5.445,189.928,1.502l-3.95,29.738C143.041,25.54,100.895,39.789,70.343,70.343z" />
-              </svg>
-            </div>
-            <div className="display_div">
-              <div className="screen_out">
-                <div className="screen_out1">
-                  <div className="screen">
-                    <span className="notfound_text"> NOT FOUND</span>
-                  </div>
-                  <div className="screenM">
-                    <span className="notfound_text"> NOT FOUND</span>
-                  </div>
-                </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10" />
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
+      
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, -20, 0],
+            x: [0, 10, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute top-40 right-20 w-16 h-16 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, 15, 0],
+            x: [0, -10, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-20 w-24 h-24 bg-gradient-to-r from-pink-500/20 to-red-500/20 rounded-full blur-xl"
+          animate={{
+            y: [0, -10, 0],
+            x: [0, 15, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-6">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* 404 Number */}
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-8"
+          >
+            <h1 className="text-8xl md:text-9xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+              404
+            </h1>
+          </motion.div>
+
+          {/* Main Content */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="mb-12"
+          >
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <WifiOff className="w-8 h-8 text-white" />
               </div>
             </div>
-            <div className="lines">
-              <div className="line1" />
-              <div className="line2" />
-              <div className="line3" />
+            
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Oops! Page Not Found
+            </h2>
+            
+            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              The page you're looking for seems to have wandered off into the digital void. 
+              Don't worry, we've got plenty of amazing content waiting for you!
+            </p>
+          </motion.div>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+          >
+            <Link
+              to="/"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25"
+            >
+              <Home className="w-5 h-5" />
+              Go Home
+            </Link>
+            
+            <Link
+              to="/movies"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+            >
+              <Film className="w-5 h-5" />
+              Browse Movies
+            </Link>
+            
+            <Link
+              to="/series"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/25"
+            >
+              <Tv className="w-5 h-5" />
+              Watch Series
+            </Link>
+          </motion.div>
+
+          {/* Quick Navigation */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.8 }}
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
+          >
+            <h3 className="text-lg font-semibold text-white mb-4">Quick Navigation</h3>
+            <div className="grid grid-cols-3 gap-4">
+              <Link
+                to="/movies"
+                className="flex items-center gap-2 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300 group"
+              >
+                <Film className="w-4 h-4 text-purple-400 group-hover:text-purple-300" />
+                <span className="text-gray-300 group-hover:text-white text-sm">Movies</span>
+              </Link>
+              
+              <Link
+                to="/series"
+                className="flex items-center gap-2 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300 group"
+              >
+                <Tv className="w-4 h-4 text-pink-400 group-hover:text-pink-300" />
+                <span className="text-gray-300 group-hover:text-white text-sm">Series</span>
+              </Link>
+              
+              <Link
+                to="/favorites"
+                className="flex items-center gap-2 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors duration-300 group"
+              >
+                <div className="w-4 h-4 text-yellow-400 group-hover:text-yellow-300">★</div>
+                <span className="text-gray-300 group-hover:text-white text-sm">Favorites</span>
+              </Link>
             </div>
-            <div className="buttons_div">
-              <div className="b1"><div /></div>
-              <div className="b2" />
-              <div className="speakers">
-                <div className="g1">
-                  <div className="g11" />
-                  <div className="g12" />
-                  <div className="g13" />
-                </div>
-                <div className="g" />
-                <div className="g" />
-              </div>
-            </div>
-          </div>
-          <div className="bottom">
-            <div className="base1" />
-            <div className="base2" />
-            <div className="base3" />
-          </div>
-        </div>
-        <div className="text_404">
-          <div className="text_4041">4</div>
-          <div className="text_4042">0</div>
-          <div className="text_4043">4</div>
+          </motion.div>
+
+          {/* Back Button */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="mt-8"
+          >
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300 group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
+              <span>Go Back</span>
+            </button>
+          </motion.div>
         </div>
       </div>
-    </StyledWrapper>
+    </div>
   );
-}
+};
 
-const StyledWrapper = styled.div`
-  /* Design Inspired by one of Stefan Devai's Design on Dribble */
-
- /* Ensure the wrapper takes full height */
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
-/* Main wrapper: centers content both ways */
-.main_wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-}
-
-/* Optional: remove margin from .main to help centering */
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 0; /* Remove this unless needed for design */
-}
-
-
-  .antenna {
-    width: 5em;
-    height: 5em;
-    border-radius: 50%;
-    border: 2px solid black;
-    background-color: #f27405;
-    margin-bottom: -6em;
-    margin-left: 0em;
-    z-index: 4;
-  }
-  .antenna_shadow {
-    position: absolute;
-    background-color: transparent;
-    width: 50px;
-    height: 56px;
-    margin-left: 1.68em;
-    border-radius: 45%;
-    transform: rotate(140deg);
-    border: 4px solid transparent;
-    box-shadow:
-      inset 0px 16px #a85103,
-      inset 0px 16px 1px 1px #a85103;
-    -moz-box-shadow:
-      inset 0px 16px #a85103,
-      inset 0px 16px 1px 1px #a85103;
-  }
-  .antenna::after {
-    content: "";
-    position: absolute;
-    margin-top: -9.4em;
-    margin-left: 0.4em;
-    transform: rotate(-25deg);
-    width: 1em;
-    height: 0.5em;
-    border-radius: 50%;
-    background-color: #f69e50;
-  }
-  .antenna::before {
-    content: "";
-    position: absolute;
-    margin-top: 0.2em;
-    margin-left: 1.25em;
-    transform: rotate(-20deg);
-    width: 1.5em;
-    height: 0.8em;
-    border-radius: 50%;
-    background-color: #f69e50;
-  }
-  .a1 {
-    position: relative;
-    top: -102%;
-    left: -130%;
-    width: 12em;
-    height: 5.5em;
-    border-radius: 50px;
-    background-image: linear-gradient(
-      #171717,
-      #171717,
-      #353535,
-      #353535,
-      #171717
-    );
-    transform: rotate(-29deg);
-    clip-path: polygon(50% 0%, 49% 100%, 52% 100%);
-  }
-  .a1d {
-    position: relative;
-    top: -211%;
-    left: -35%;
-    transform: rotate(45deg);
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 50%;
-    border: 2px solid black;
-    background-color: #979797;
-    z-index: 1;
-  }
-  .a2 {
-    position: relative;
-    top: -210%;
-    left: -10%;
-    width: 12em;
-    height: 4em;
-    border-radius: 50px;
-    background-color: #171717;
-    background-image: linear-gradient(
-      #171717,
-      #171717,
-      #353535,
-      #353535,
-      #171717
-    );
-    margin-right: 5em;
-    clip-path: polygon(
-      47% 0,
-      47% 0,
-      34% 34%,
-      54% 25%,
-      32% 100%,
-      29% 96%,
-      49% 32%,
-      30% 38%
-    );
-    transform: rotate(-8deg);
-  }
-  .a2d {
-    position: relative;
-    top: -294%;
-    left: 94%;
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 50%;
-    border: 2px solid black;
-    background-color: #979797;
-    z-index: 1;
-  }
-
-  .notfound_text {
-    background-color: black;
-    padding-left: 0.3em;
-    padding-right: 0.3em;
-    font-size: 0.75em;
-    color: white;
-    letter-spacing: 0;
-    border-radius: 5px;
-    z-index: 2;
-  }
-  .tv {
-    width: 17em;
-    height: 9em;
-    margin-top: 3em;
-    border-radius: 15px;
-    background-color: #d36604;
-    display: flex;
-    justify-content: center;
-    border: 2px solid #1d0e01;
-    box-shadow: inset 0.2em 0.2em #e69635;
-  }
-  .tv::after {
-    content: "";
-    position: absolute;
-    width: 17em;
-    height: 9em;
-    border-radius: 15px;
-    background:
-      repeating-radial-gradient(#d36604 0 0.0001%, #00000070 0 0.0002%) 50% 0/2500px
-        2500px,
-      repeating-conic-gradient(#d36604 0 0.0001%, #00000070 0 0.0002%) 60% 60%/2500px
-        2500px;
-    background-blend-mode: difference;
-    opacity: 0.09;
-  }
-  .curve_svg {
-    position: absolute;
-    margin-top: 0.25em;
-    margin-left: -0.25em;
-    height: 12px;
-    width: 12px;
-  }
-  .display_div {
-    display: flex;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-    border-radius: 15px;
-    box-shadow: 3.5px 3.5px 0px #e69635;
-  }
-  .screen_out {
-    width: auto;
-    height: auto;
-
-    border-radius: 10px;
-  }
-  .screen_out1 {
-    width: 11em;
-    height: 7.75em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-  }
-  .screen {
-    width: 13em;
-    height: 7.85em;
-    font-family: Montserrat;
-    border: 2px solid #1d0e01;
-    background:
-      repeating-radial-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 50% 0/2500px
-        2500px,
-      repeating-conic-gradient(#000 0 0.0001%, #ffffff 0 0.0002%) 60% 60%/2500px
-        2500px;
-    background-blend-mode: difference;
-    animation: b 0.2s infinite alternate;
-    border-radius: 10px;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #252525;
-    letter-spacing: 0.15em;
-    text-align: center;
-  }
-
-  .screenM {
-    width: 13em;
-    height: 7.85em;
-    position: relative;
-    font-family: Montserrat;
-    background: linear-gradient(
-      to right,
-      #002fc6 0%,
-      #002bb2 14.2857142857%,
-      #3a3a3a 14.2857142857%,
-      #303030 28.5714285714%,
-      #ff0afe 28.5714285714%,
-      #f500f4 42.8571428571%,
-      #6c6c6c 42.8571428571%,
-      #626262 57.1428571429%,
-      #0affd9 57.1428571429%,
-      #00f5ce 71.4285714286%,
-      #3a3a3a 71.4285714286%,
-      #303030 85.7142857143%,
-      white 85.7142857143%,
-      #fafafa 100%
-    );
-    border-radius: 10px;
-    border: 2px solid black;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #252525;
-    letter-spacing: 0.15em;
-    text-align: center;
-    overflow: hidden;
-  }
-  .screenM:before,
-  .screenM:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    z-index: 2;
-    width: 100%;
-  }
-  .screenM:before {
-    top: 0;
-    height: 68.4782608696%;
-    background: linear-gradient(
-      to right,
-      white 0%,
-      #fafafa 14.2857142857%,
-      #ffe60a 14.2857142857%,
-      #f5dc00 28.5714285714%,
-      #0affd9 28.5714285714%,
-      #00f5ce 42.8571428571%,
-      #10ea00 42.8571428571%,
-      #0ed600 57.1428571429%,
-      #ff0afe 57.1428571429%,
-      #f500f4 71.4285714286%,
-      #ed0014 71.4285714286%,
-      #d90012 85.7142857143%,
-      #002fc6 85.7142857143%,
-      #002bb2 100%
-    );
-  }
-  .screenM:after {
-    bottom: 0;
-    height: 21.7391304348%;
-    background: linear-gradient(
-      to right,
-      #006c6b 0%,
-      #005857 16.6666666667%,
-      white 16.6666666667%,
-      #fafafa 33.3333333333%,
-      #001b75 33.3333333333%,
-      #001761 50%,
-      #6c6c6c 50%,
-      #626262 66.6666666667%,
-      #929292 66.6666666667%,
-      #888888 83.3333333333%,
-      #3a3a3a 83.3333333333%,
-      #303030 100%
-    );
-  }
-
-  @keyframes b {
-    100% {
-      background-position:
-        50% 0,
-        60% 50%;
-    }
-  }
-
-  /* Another Error Screen to Use 
-
-  .screen {
-    width: 13em;
-    height: 7.85em;
-    position: relative;
-    background: linear-gradient(to right, #002fc6 0%, #002bb2 14.2857142857%, #3a3a3a 14.2857142857%, #303030 28.5714285714%, #ff0afe 28.5714285714%, #f500f4 42.8571428571%, #6c6c6c 42.8571428571%, #626262 57.1428571429%, #0affd9 57.1428571429%, #00f5ce 71.4285714286%, #3a3a3a 71.4285714286%, #303030 85.7142857143%, white 85.7142857143%, #fafafa 100%);
-    border-radius: 10px;
-    border: 2px solid black;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #252525;
-    letter-spacing: 0.15em;
-    text-align: center;
-    overflow: hidden;
-  }
-  .screen:before, .screen:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    z-index: 2;
-    width: 100%;
-  }
-  .screen:before {
-    top: 0;
-    height: 68.4782608696%;
-    background: linear-gradient(to right, white 0%, #fafafa 14.2857142857%, #ffe60a 14.2857142857%, #f5dc00 28.5714285714%, #0affd9 28.5714285714%, #00f5ce 42.8571428571%, #10ea00 42.8571428571%, #0ed600 57.1428571429%, #ff0afe 57.1428571429%, #f500f4 71.4285714286%, #ed0014 71.4285714286%, #d90012 85.7142857143%, #002fc6 85.7142857143%, #002bb2 100%);
-  }
-  .screen:after {
-    bottom: 0;
-    height: 21.7391304348%;
-    background: linear-gradient(to right, #006c6b 0%, #005857 16.6666666667%, white 16.6666666667%, #fafafa 33.3333333333%, #001b75 33.3333333333%, #001761 50%, #6c6c6c 50%, #626262 66.6666666667%, #929292 66.6666666667%, #888888 83.3333333333%, #3a3a3a 83.3333333333%, #303030 100%);
-  }
-
-    */
-
-  .lines {
-    display: flex;
-    column-gap: 0.1em;
-    align-self: flex-end;
-  }
-  .line1,
-  .line3 {
-    width: 2px;
-    height: 0.5em;
-    background-color: black;
-    border-radius: 25px 25px 0px 0px;
-    margin-top: 0.5em;
-  }
-  .line2 {
-    flex-grow: 1;
-    width: 2px;
-    height: 1em;
-    background-color: black;
-    border-radius: 25px 25px 0px 0px;
-  }
-
-  .buttons_div {
-    width: 4.25em;
-    align-self: center;
-    height: 8em;
-    background-color: #e69635;
-    border: 2px solid #1d0e01;
-    padding: 0.6em;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    row-gap: 0.75em;
-    box-shadow: 3px 3px 0px #e69635;
-  }
-  .b1 {
-    width: 1.65em;
-    height: 1.65em;
-    border-radius: 50%;
-    background-color: #7f5934;
-    border: 2px solid black;
-    box-shadow:
-      inset 2px 2px 1px #b49577,
-      -2px 0px #513721,
-      -2px 0px 0px 1px black;
-  }
-  .b1::before {
-    content: "";
-    position: absolute;
-    margin-top: 1em;
-    margin-left: 0.5em;
-    transform: rotate(47deg);
-    border-radius: 5px;
-    width: 0.1em;
-    height: 0.4em;
-    background-color: #000000;
-  }
-  .b1::after {
-    content: "";
-    position: absolute;
-    margin-top: 0.9em;
-    margin-left: 0.8em;
-    transform: rotate(47deg);
-    border-radius: 5px;
-    width: 0.1em;
-    height: 0.55em;
-    background-color: #000000;
-  }
-  .b1 div {
-    content: "";
-    position: absolute;
-    margin-top: -0.1em;
-    margin-left: 0.65em;
-    transform: rotate(45deg);
-    width: 0.15em;
-    height: 1.5em;
-    background-color: #000000;
-  }
-  .b2 {
-    width: 1.65em;
-    height: 1.65em;
-    border-radius: 50%;
-    background-color: #7f5934;
-    border: 2px solid black;
-    box-shadow:
-      inset 2px 2px 1px #b49577,
-      -2px 0px #513721,
-      -2px 0px 0px 1px black;
-  }
-  .b2::before {
-    content: "";
-    position: absolute;
-    margin-top: 1.05em;
-    margin-left: 0.8em;
-    transform: rotate(-45deg);
-    border-radius: 5px;
-    width: 0.15em;
-    height: 0.4em;
-    background-color: #000000;
-  }
-  .b2::after {
-    content: "";
-    position: absolute;
-    margin-top: -0.1em;
-    margin-left: 0.65em;
-    transform: rotate(-45deg);
-    width: 0.15em;
-    height: 1.5em;
-    background-color: #000000;
-  }
-  .speakers {
-    display: flex;
-    flex-direction: column;
-    row-gap: 0.5em;
-  }
-  .speakers .g1 {
-    display: flex;
-    column-gap: 0.25em;
-  }
-  .speakers .g1 .g11,
-  .g12,
-  .g13 {
-    width: 0.65em;
-    height: 0.65em;
-    border-radius: 50%;
-    background-color: #7f5934;
-    border: 2px solid black;
-    box-shadow: inset 1.25px 1.25px 1px #b49577;
-  }
-  .speakers .g {
-    width: auto;
-    height: 2px;
-    background-color: #171717;
-  }
-
-  .bottom {
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    column-gap: 8.7em;
-  }
-  .base1 {
-    height: 1em;
-    width: 2em;
-    border: 2px solid #171717;
-    background-color: #4d4d4d;
-    margin-top: -0.15em;
-    z-index: 4;
-  }
-  .base2 {
-    height: 1em;
-    width: 2em;
-    border: 2px solid #171717;
-    background-color: #4d4d4d;
-    margin-top: -0.15em;
-    z-index: 4;
-  }
-  .base3 {
-    position: absolute;
-    height: 0.15em;
-    width: 17.5em;
-    background-color: #171717;
-    margin-top: 0.8em;
-  }
-
-  .text_404 {
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    column-gap: 6em;
-    z-index: 0;
-    margin-bottom: 2em;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.5;
-    font-family: Montserrat;
-  }
-  .text_4041 {
-    transform: scaleY(24.5) scaleX(9);
-  }
-  .text_4042 {
-    transform: scaleY(24.5) scaleX(9);
-  }
-  .text_4043 {
-    transform: scaleY(24.5) scaleX(9);
-  }
-
-  @media only screen and (max-width: 495px) {
-    .text_404 {
-      column-gap: 6em;
-    }
-  }
-  @media only screen and (max-width: 395px) {
-    .text_404 {
-      column-gap: 4em;
-    }
-    .text_4041 {
-      transform: scaleY(25) scaleX(8);
-    }
-    .text_4042 {
-      transform: scaleY(25) scaleX(8);
-    }
-    .text_4043 {
-      transform: scaleY(25) scaleX(8);
-    }
-  }
-
-  @media (max-width: 275px), (max-height: 520px) {
-    .main {
-      position: relative;
-    }
-  }
-
-  @media only screen and (max-width: 1024px) {
-    .screenM {
-      display: flex;
-    }
-    .screen {
-      display: none;
-    }
-  }
-  @media only screen and (min-width: 1025px) {
-    .screen {
-      display: flex;
-    }
-    .screenM {
-      display: none;
-    }
-  }`;
-
-export default Card;
+export default NotFound;

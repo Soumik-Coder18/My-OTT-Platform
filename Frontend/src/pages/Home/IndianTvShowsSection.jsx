@@ -32,7 +32,7 @@ const IndianTvShowsSection = () => {
 
   return (
     <motion.section
-      className="px-4 md:px-10 py-12 bg-[#F4EBD3]"
+      className="px-4 md:px-10 py-12 bg-gradient-to-br from-slate-900/50 to-purple-900/50 backdrop-blur-sm border border-white/10 rounded-2xl mb-8"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.2, ease: 'easeOut' }}
@@ -41,12 +41,14 @@ const IndianTvShowsSection = () => {
       {/* Header with Show More */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Tv className="w-6 h-6 text-[#555879]" />
-          <h2 className="text-2xl font-semibold text-[#555879]">Popular Indian TV Shows</h2>
+          <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <Tv className="w-5 h-5 text-white" />
+          </div>
+          <h2 className="text-2xl font-semibold text-white">Popular Indian TV Shows</h2>
         </div>
         <Link
           to="/indian-show"
-          className="px-4 py-2 bg-[#DED3C4] text-[#222] rounded-full text-sm font-medium hover:scale-105 transition-transform"
+          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
         >
           Show More
         </Link>
@@ -63,8 +65,8 @@ const IndianTvShowsSection = () => {
             viewport={{ once: true }}
           >
             <Link
-              to={`/tv/${show.id}`}
-              className="bg-[#DED3C4] rounded-lg overflow-hidden shadow hover:shadow-md transition duration-300"
+              to={`/series/${show.id}`}
+              className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden shadow hover:shadow-lg hover:shadow-purple-500/25 hover:border-purple-500/30 transition-all duration-300"
             >
               <img
                 src={
@@ -75,9 +77,9 @@ const IndianTvShowsSection = () => {
                 alt={show.name}
                 className="w-full h-[200px] sm:h-[240px] object-cover rounded-t-2xl"
               />
-              <div className="p-2 text-[#555879]">
+              <div className="p-2 text-white">
                 <h3 className="text-sm font-semibold truncate">{show.name}</h3>
-                <p className="text-xs text-[#888da8]">
+                <p className="text-xs text-gray-300">
                   {show.first_air_date?.slice(0, 4)} • ⭐ {show.vote_average}
                 </p>
               </div>

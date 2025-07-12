@@ -165,15 +165,19 @@ const Hero = ({ featured }) => {
   }, [currentIndex]);
 
   const startAutoScroll = () => {
+    if (!Array.isArray(featured) || featured.length === 0) return;
+    
     timeoutRef.current = setTimeout(() => {
       handleChangeSlide((currentIndex + 1) % featured.length);
     }, 6000);
   };
 
   const handleChangeSlide = (index) => {
+    if (!Array.isArray(featured) || featured.length === 0) return;
+    
     setShowLoader(true);
     setTimeout(() => {
-      setCurrentIndex(index);
+      setCurrentIndex(index % featured.length);
       setShowLoader(false);
     }, 800); // show loader for 800ms
   };
@@ -181,15 +185,17 @@ const Hero = ({ featured }) => {
   if (!Array.isArray(featured) || featured.length === 0) return null;
 
   const currentItem = featured[currentIndex];
+  if (!currentItem) return null;
+  
   const isMovie = currentItem.hasOwnProperty('title');
   const detailPath = isMovie
     ? `/movie/${currentItem.id}`
     : `/series/${currentItem.id}`;
 
   return (
-    <section className="relative w-full h-[620px] sm:h-[520px] md:h-[520px] rounded-3xl overflow-hidden mb-7 bg-[#111]">
+    <section className="relative w-full h-[620px] sm:h-[520px] md:h-[520px] rounded-3xl overflow-hidden mb-7 bg-gradient-to-br from-slate-900 to-purple-900">
   {showLoader ? (
-    <div className="absolute inset-0 flex items-center justify-center bg-[#565878] z-10">
+    <div className="absolute inset-0 flex items-center justify-center bg-purple-900/80 backdrop-blur-sm z-10">
       <Loader />
     </div>
   ) : (
@@ -206,12 +212,12 @@ const Hero = ({ featured }) => {
         <div className="w-full md:w-2/3 relative h-1/2 md:h-full">
           <img
             src={`https://image.tmdb.org/t/p/original${
-              currentItem.backdrop_path || currentItem.poster_path
+              currentItem?.backdrop_path || currentItem?.poster_path || ''
             }`}
-            alt={currentItem.title || currentItem.name}
+            alt={currentItem?.title || currentItem?.name || 'Featured Content'}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-purple-900/70 to-transparent" />
           <div className="absolute bottom-4 left-4 md:bottom-6 md:left-12 text-white">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -219,7 +225,7 @@ const Hero = ({ featured }) => {
               transition={{ delay: 0.5 }}
               className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold max-w-[90%] md:max-w-[70%]"
             >
-              {currentItem.title || currentItem.name}
+              {currentItem?.title || currentItem?.name || 'Featured Content'}
             </motion.h1>
           </div>
         </div>
@@ -230,21 +236,21 @@ const Hero = ({ featured }) => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 100, opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full md:w-1/3 bg-[#565878] text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 space-y-4"
+          className="w-full md:w-1/3 bg-gradient-to-br from-purple-800/90 to-pink-800/90 backdrop-blur-sm text-white flex flex-col justify-between p-4 sm:p-6 md:p-8 space-y-4 border-l border-purple-500/20"
         >
           <img
             src={`https://image.tmdb.org/t/p/w300${
-              currentItem.poster_path || currentItem.backdrop_path
+              currentItem?.poster_path || currentItem?.backdrop_path || ''
             }`}
             alt="Poster"
             className="w-32 sm:w-40 md:w-48 rounded-xl self-center shadow-lg"
           />
-          <p className="text-xs sm:text-sm md:text-base text-gray-300 text-center sm:text-left flex-grow line-clamp-none max-h-[120px] overflow-y-auto">
-            {currentItem.overview}
+          <p className="text-xs sm:text-sm md:text-base text-gray-200 text-center sm:text-left flex-grow line-clamp-none max-h-[120px] overflow-y-auto">
+            {currentItem?.overview || 'No description available'}
           </p>
           <Link
             to={detailPath}
-            className="bg-[#DED3C4] text-[#222] font-medium text-sm sm:text-base px-4 py-2 rounded-xl text-center hover:scale-105 transition-transform self-center sm:self-start"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium text-sm sm:text-base px-4 py-2 rounded-xl text-center hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 self-center sm:self-start"
           >
             View Details
           </Link>
@@ -261,8 +267,8 @@ const Hero = ({ featured }) => {
         onClick={() => handleChangeSlide(index)}
         className={`h-2.5 w-2.5 rounded-full transition ${
           index === currentIndex
-            ? 'bg-[#DED3C4]'
-            : 'bg-[#DED3C4]/40 hover:bg-[#DED3C4]/70'
+            ? 'bg-purple-500'
+            : 'bg-white/40 hover:bg-white/70'
         }`}
       />
     ))}

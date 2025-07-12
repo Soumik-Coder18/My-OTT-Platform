@@ -13,12 +13,12 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: #555879 transparent;
+  scrollbar-color: #2E004F transparent;
 }
 
 body {
-  background-color: #DED3C4;       /* base */
-  color: #555879;                  /* primary text */
+  background: linear-gradient(135deg, #1A0033 0%, #2E004F 20%, #4A004E 40%, #7D4C9E 60%, #B8A9C9 80%, #F9D1F5 100%);
+  color: #2E004F;
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
@@ -31,7 +31,7 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #555879;
+  background-color: #2E004F;
   border-radius: 10px;
 }
 
@@ -46,21 +46,21 @@ body {
 }
 
 .btn-primary {
-  background-color: #555879;
-  color: #F4EBD3;
+  background-color: #2E004F;
+  color: #FFFFFF;
 }
 
 .btn-primary:hover {
-  background-color: #98A1BC;
+  background-color: #7D4C9E;
 }
 
 .btn-secondary {
-  background-color: #98A1BC;
+  background-color: #7D4C9E;
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #555879;
+  background-color: #2E004F;
 }
 
 /* Container helper */

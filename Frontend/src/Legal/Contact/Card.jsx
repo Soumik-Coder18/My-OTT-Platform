@@ -11,6 +11,34 @@ const Card = () => {
           SOUMIK BAG <br />
           <span>Fullstack Dev &amp; UX UI</span>
         </div>
+        
+        {/* Portfolio Link */}
+        <div className="portfolio-link">
+          <a
+            href="https://soumikportfolio-five.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="portfolio-btn"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15,3 21,3 21,9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span>Portfolio</span>
+          </a>
+        </div>
+
         <div className="card-socials">
           {/* Instagram Link */}
           <a
@@ -29,7 +57,6 @@ const Card = () => {
               <path d="M224,202a53,53,0,1,0,53,53A53,53,0,0,0,224,202Zm124-41a29,29,0,1,1,29-29A29,29,0,0,1,348,161ZM398.8,80A82.29,82.29,0,0,0,368,51.2C341.9,32,309.6,24,256,24H192c-53.6,0-85.9,8-112,27.2A82.29,82.29,0,0,0,49.2,80C30,106.1,24,138.4,24,192v64c0,53.6,8,85.9,27.2,112a82.29,82.29,0,0,0,28.8,30.8C106.1,482,138.4,488,192,488h64c53.6,0,85.9-6,112-27.2a82.29,82.29,0,0,0,30.8-28.8C470,341.9,476,309.6,476,256V192C476,138.4,470,106.1,450.8,80ZM224,338a82,82,0,1,1,82-82A82,82,0,0,1,224,338Zm134-164a29,29,0,1,1,29-29A29,29,0,0,1,358,174Z"/>
             </svg>
           </a>
-
 
           {/* GitHub Link */}
           <a
@@ -62,21 +89,28 @@ const Card = () => {
 
 const StyledWrapper = styled.div`
   .card {
-    --font-color: #555879;
-    --font-color-sub: #888da8;
-    --bg-color: #F4EBD3;
-    --main-color: #555879;
-    width: 240px;
-    height: 300px;
-    background: var(--bg-color);
+    --font-color: #ffffff;
+    --font-color-sub: #a855f7;
+    --bg-color: rgba(17, 24, 39, 0.8);
+    --main-color: #a855f7;
+    width: 280px;
+    height: 350px;
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(88, 28, 135, 0.8) 100%);
     border: 2px solid var(--main-color);
-    box-shadow: 4px 4px var(--main-color);
-    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(168, 85, 247, 0.3), 0 0 0 1px rgba(168, 85, 247, 0.1);
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(168, 85, 247, 0.4), 0 0 0 1px rgba(168, 85, 247, 0.2);
   }
 
   .card-photo {
@@ -88,6 +122,14 @@ const StyledWrapper = styled.div`
     background-repeat: no-repeat;
     border-radius: 50%;
     margin-bottom: 1rem;
+    border: 3px solid var(--main-color);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  .card-photo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.8);
   }
 
   .card-title {
@@ -96,18 +138,46 @@ const StyledWrapper = styled.div`
     font-size: 1.25rem;
     font-weight: 600;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 1rem;
   }
 
   .card-title span {
     font-size: 0.875rem;
     color: var(--font-color-sub);
+    opacity: 0.8;
+  }
+
+  .portfolio-link {
+    margin-bottom: 1rem;
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+
+  .portfolio-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--main-color) 0%, #ec4899 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+  }
+
+  .portfolio-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, #ec4899 0%, var(--main-color) 100%);
   }
 
   .card-socials {
     display: flex;
     height: 0;
     opacity: 0;
-    margin-top: 1rem;
     gap: 15px;
     transition: 0.5s ease;
   }
@@ -118,27 +188,34 @@ const StyledWrapper = styled.div`
   }
 
   .card-socials-btn {
-    width: 25px;
-    height: 25px;
-    border: none;
-    background: transparent;
+    width: 35px;
+    height: 35px;
+    border: 2px solid var(--main-color);
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-socials-btn:hover {
+    background: var(--main-color);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
   }
 
   .card-socials-btn svg {
-    width: 100%;
-    height: 100%;
+    width: 20px;
+    height: 20px;
     fill: var(--main-color);
-    transition: transform 0.2s;
+    transition: all 0.3s ease;
   }
 
   .card-socials-btn:hover svg {
-    transform: scale(1.2);
-  }
-
-  .card-photo:hover {
-    transform: scale(1.05);
-    transition: 0.3s ease;
+    fill: white;
   }
 `;
 

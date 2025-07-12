@@ -32,6 +32,29 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/contact', contactRoutes);
 
+// Global Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  
+  // If it's an apiError, use its properties
+  if (err.statusCode) {
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      errors: err.errors || [],
+      data: null
+    });
+  }
+  
+  // For other errors, return a generic error
+  return res.status(500).json({
+    success: false,
+    message: 'Internal Server Error',
+    errors: [],
+    data: null
+  });
+});
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({ message: '❌ API endpoint not found' });

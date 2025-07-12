@@ -26,13 +26,11 @@ export const register = asyncHandler(async (req, res) => {
     throw new apiError(400, 'Username already taken');
   }
 
-  const user = new User({ username, email, password });
-  await user.save();
-
+  const user = await User.create({ username, email, password });
   const token = jwt.sign({ id: user._id }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
 
   res.status(201).json(
-    new apiResponse(201, { token, user: { id: user._id, username: user.username, email: user.email } }, 'User registered successfully')
+    new apiResponse(201, { token, user }, 'User registered successfully')
   );
 });
 
@@ -76,4 +74,3 @@ export const getProfile = asyncHandler(async (req, res) => {
 
   res.status(200).json(new apiResponse(200, user, 'User profile fetched successfully'));
 });
-
