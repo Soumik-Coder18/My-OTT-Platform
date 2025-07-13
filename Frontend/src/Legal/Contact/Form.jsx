@@ -21,7 +21,7 @@ const Form = () => {
 
   const handleSend = async () => {
     try {
-      await API.post('/contact', {
+      await API.post('/api/contact', {
         name,
         email,
         message,
