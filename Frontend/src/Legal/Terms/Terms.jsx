@@ -30,7 +30,7 @@ const Term = () => {
           </h1>
           
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Please read these terms carefully before using our movie browsing platform
+            Please read these terms carefully before using WhisperFrame
           </p>
           
           <p className="text-sm text-gray-400 mt-4">

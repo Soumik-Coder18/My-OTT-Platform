@@ -1,12 +1,62 @@
-# React + Vite
+# WhisperFrame OTT Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern streaming platform built with React, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎬 Movie and TV Show browsing
+- 🔍 Advanced search and filtering
+- 👤 User authentication
+- 💬 AI Chatbot Assistant
+- 📱 Responsive design
+- 🌙 Dark/Light theme support
 
-## Expanding the ESLint configuration
+## Chatbot Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The platform includes an AI-powered chatbot that can answer questions about movies, TV shows, actors, and entertainment topics. The chatbot is designed to always provide entertainment-related responses, even when users ask about other topics.
+
+### Environment Variables
+
+Create a `.env` file in the Frontend directory with your Gemini API key:
+
+```env
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### Getting a Gemini API Key
+
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the generated key and add it to your `.env` file
+
+### Chatbot Features
+
+- **Position**: Bottom-right corner with high z-index
+- **Theme**: Dark/light mode toggle
+- **Cooldown**: 5-second cooldown between messages
+- **Content**: Always responds with entertainment-related content
+- **Styling**: Modern UI with Tailwind CSS
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Technologies Used
+
+- React 19
+- Vite
+- Tailwind CSS
+- Lucide React Icons
+- Google Gemini AI API
+- React Router DOM
+- Framer Motion
