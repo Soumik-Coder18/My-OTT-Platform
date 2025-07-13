@@ -35,7 +35,7 @@ const Form = ({ defaultToSignup = false }) => {
     }
     
     try {
-      const response = await API.post('/users/login', { email, password });
+      const response = await API.post('/api/users/login', { email, password });
       showToast('Login successful!', 'success');
       console.log(response.data);
       
@@ -78,7 +78,7 @@ const Form = ({ defaultToSignup = false }) => {
     }
     
     try {
-      const response = await API.post('/users/register', {
+      const response = await API.post('/api/users/register', {
         username,
         email,
         password
