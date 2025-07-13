@@ -160,7 +160,7 @@ const Home = () => {
         />
       </div>
 
-      <div className="relative z-10 p-6">
+      <div className="relative z-10 p-3 sm:p-4 md:p-6">
       
       {/* 🎬 Top Banner - Featured Movies + Series */}
       <Hero featured={featured} />

@@ -17,6 +17,8 @@ const Movies = () => {
     year: '',
     rating: '',
     sort_by: '',
+    language: '',
+    duration: ''
   });
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
@@ -162,43 +164,44 @@ const Movies = () => {
       <div className="relative z-10">
       {/* Header Section */}
       <motion.div 
-        className="px-4 py-8"
+        className="px-4 py-6 md:py-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
             {/* Left Side - Heading */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 md:gap-4">
               <div className="relative">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25">
-                  <Clapperboard className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+                  <Clapperboard className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <Star className="w-3 h-3 text-white fill-current" />
+                <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                  <Star className="w-2 h-2 md:w-3 md:h-3 text-white fill-current" />
                 </div>
               </div>
               <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2">
                   Popular Movies
                 </h1>
-                <p className="text-gray-300 text-lg">
+                <p className="text-gray-300 text-sm md:text-lg">
                   Discover the latest and greatest films
                 </p>
               </div>
             </div>
 
             {/* Right Side - Filter and Sort */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2 md:gap-4 w-full md:w-auto">
               <motion.button
                 onClick={() => navigate('/indian-movies')}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2 text-sm md:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Film className="w-5 h-5" />
-                Indian Movies
+                <Film className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="hidden sm:inline">Indian Movies</span>
+                <span className="sm:hidden">Indian</span>
               </motion.button>
 
               <FilterDropdown
@@ -220,13 +223,13 @@ const Movies = () => {
       {/* Hero Section - Featured Movie Banner */}
       {featuredMovie && (
         <motion.section 
-          className="relative w-full my-12 px-4 md:px-10"
+          className="relative w-full my-4 md:my-8 lg:my-12 px-3 md:px-6 lg:px-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <motion.div 
-            className="relative w-full aspect-[16/9] sm:aspect-[16/6] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border border-white/10 group"
+            className="relative w-full aspect-[16/10] sm:aspect-[16/8] md:aspect-[16/7] lg:aspect-[16/6] rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border border-white/10 group"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -248,28 +251,29 @@ const Movies = () => {
               />
             </motion.div>
 
-            {/* Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-purple-900/40 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-purple-900/20 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-pink-600/20" />
+            {/* Enhanced Gradient Overlays for Mobile */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-transparent md:from-slate-900/80 md:via-purple-900/40 md:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent md:from-slate-900 md:via-purple-900/20 md:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/30 via-transparent to-pink-600/30 md:from-purple-600/20 md:via-transparent md:to-pink-600/20" />
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 md:p-12">
+            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="max-w-2xl"
+                className="max-w-full md:max-w-2xl"
               >
                 {/* Badge */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4, duration: 0.6 }}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4 border border-white/20"
+                  className="inline-flex items-center gap-1.5 md:gap-2 bg-gradient-to-r from-purple-500/95 to-pink-500/95 backdrop-blur-sm text-white px-2.5 py-1 md:px-3 md:py-1.5 lg:px-4 lg:py-2 rounded-full text-xs md:text-sm font-medium mb-2 md:mb-3 lg:mb-4 border border-white/20"
                 >
-                  <Play className="w-4 h-4" />
-                  Featured Movie
+                  <Play className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
+                  <span className="hidden xs:inline">Featured Movie</span>
+                  <span className="xs:hidden">Featured</span>
                 </motion.div>
 
                 {/* Title */}
@@ -277,7 +281,7 @@ const Movies = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
+                  className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white mb-2 md:mb-3 lg:mb-4 leading-tight"
                 >
                   {featuredMovie.title}
                 </motion.h2>
@@ -287,16 +291,16 @@ const Movies = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6, duration: 0.6 }}
-                  className="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-200"
+                  className="flex flex-wrap items-center gap-2 md:gap-3 lg:gap-4 mb-2 md:mb-3 lg:mb-4 text-xs md:text-sm text-gray-200"
                 >
                   <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <Star className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4 text-yellow-400 fill-current" />
                     <span>{featuredMovie.vote_average?.toFixed(1) || 'N/A'}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span>{featuredMovie.release_date?.slice(0, 4) || 'N/A'}</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="hidden sm:flex items-center gap-1">
                     <span>{featuredMovie.vote_count?.toLocaleString() || '0'} votes</span>
                   </div>
                 </motion.div>
@@ -306,7 +310,7 @@ const Movies = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.6 }}
-                  className="text-sm sm:text-base text-gray-200 line-clamp-3 mb-6 leading-relaxed"
+                  className="text-xs sm:text-sm md:text-base text-gray-200 line-clamp-2 md:line-clamp-3 mb-3 md:mb-4 lg:mb-6 leading-relaxed max-w-full md:max-w-2xl"
                 >
                   {featuredMovie.overview || 'No description available'}
                 </motion.p>
@@ -316,25 +320,27 @@ const Movies = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
-                  className="flex flex-wrap gap-3"
+                  className="flex flex-wrap gap-2 md:gap-3"
                 >
                   <motion.button 
                     onClick={handleWatchNow}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-lg md:rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm lg:text-base"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Play className="w-5 h-5" />
-                    Watch Now
-                    <ExternalLink className="w-4 h-4" />
+                    <Play className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
+                    <span className="hidden sm:inline">Watch Now</span>
+                    <span className="sm:hidden">Watch</span>
+                    <ExternalLink className="w-2.5 h-2.5 md:w-3 md:h-3 lg:w-4 lg:h-4" />
                   </motion.button>
                   <motion.button 
                     onClick={handleMoreInfo}
-                    className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-2"
+                    className="bg-white/10 backdrop-blur-sm text-white px-3 py-2 md:px-4 md:py-2 lg:px-6 lg:py-3 rounded-lg md:rounded-xl font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-1.5 md:gap-2 text-xs md:text-sm lg:text-base"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    More Info
+                    <span className="hidden sm:inline">More Info</span>
+                    <span className="sm:hidden">Info</span>
                   </motion.button>
                 </motion.div>
               </motion.div>
@@ -344,18 +350,18 @@ const Movies = () => {
       )}
 
       {/* All Movies Section */}
-      <div className="px-4 py-16">
+      <div className="px-4 py-8 md:py-16">
         <div className="max-w-7xl mx-auto">
           <motion.div 
-            className="flex items-center gap-3 mb-8"
+            className="flex items-center gap-2 md:gap-3 mb-6 md:mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <Star className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <Star className="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-white">All Movies</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-white">All Movies</h2>
           </motion.div>
 
           {/* Movies Grid */}
@@ -368,7 +374,7 @@ const Movies = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">
                   {movies.slice(0, 18).map((movie, index) => (
                     <motion.div
                       key={movie.id}
@@ -388,7 +394,7 @@ const Movies = () => {
 
                 {/* Pagination */}
                 <motion.div 
-                  className="flex justify-center items-center gap-3 mt-12"
+                  className="flex justify-center items-center gap-2 md:gap-3 mt-8 md:mt-12"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -396,7 +402,7 @@ const Movies = () => {
                   <motion.button
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
-                    className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                    className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                       page === 1 
                         ? 'bg-gray-600/30 text-gray-400 cursor-not-allowed' 
                         : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25'
@@ -404,15 +410,16 @@ const Movies = () => {
                     whileHover={page !== 1 ? { scale: 1.05 } : {}}
                     whileTap={page !== 1 ? { scale: 0.95 } : {}}
                   >
-                    ← Previous
+                    <span className="hidden sm:inline">← Previous</span>
+                    <span className="sm:hidden">←</span>
                   </motion.button>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 md:gap-2">
                     {pageNumbers.map((num) => (
                       <motion.button
                         key={num}
                         onClick={() => handlePageChange(num)}
-                        className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
+                        className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 text-sm md:text-base ${
                           num === page 
                             ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25' 
                             : 'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:scale-105'
@@ -428,7 +435,7 @@ const Movies = () => {
                   <motion.button
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page === totalPages}
-                    className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                    className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                       page === totalPages 
                         ? 'bg-gray-600/30 text-gray-400 cursor-not-allowed' 
                         : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25'
@@ -436,7 +443,8 @@ const Movies = () => {
                     whileHover={page !== totalPages ? { scale: 1.05 } : {}}
                     whileTap={page !== totalPages ? { scale: 0.95 } : {}}
                   >
-                    Next →
+                    <span className="hidden sm:inline">Next →</span>
+                    <span className="sm:hidden">→</span>
                   </motion.button>
                 </motion.div>
               </motion.div>

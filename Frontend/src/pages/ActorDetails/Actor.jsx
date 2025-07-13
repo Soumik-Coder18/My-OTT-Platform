@@ -75,7 +75,7 @@ const Actor = () => {
           </div>
           <h2 className="text-2xl font-bold text-white">{title}</h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6">
           {list.map((actor, index) => (
             <motion.div
               key={actor.id}
@@ -90,7 +90,7 @@ const Actor = () => {
             >
               <Link
                 to={`/actor/${actor.id}`}
-                className="group block bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
+                className="group block bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
               >
                 <div className="relative overflow-hidden">
               <img
@@ -100,7 +100,7 @@ const Actor = () => {
                     : '/no-avatar.png'
                 }
                 alt={actor.name}
-                    className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-48 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -113,12 +113,12 @@ const Actor = () => {
                     </div>
                   )}
                 </div>
-                <div className="p-4">
-                  <h3 className="text-white font-semibold text-center truncate group-hover:text-purple-300 transition-colors">
+                <div className="p-2 md:p-4">
+                  <h3 className="text-white font-semibold text-center truncate group-hover:text-purple-300 transition-colors text-xs md:text-base">
                 {actor.name}
                   </h3>
                   {actor.known_for && actor.known_for.length > 0 && (
-                    <p className="text-gray-300 text-xs text-center mt-1 truncate">
+                    <p className="text-gray-300 text-[10px] md:text-xs text-center mt-0.5 md:mt-1 truncate">
                       {actor.known_for[0]?.title || actor.known_for[0]?.name}
                     </p>
                   )}
@@ -220,26 +220,26 @@ const Actor = () => {
       <div className="relative z-10">
       {/* Header Section */}
       <motion.div 
-        className="px-4 py-8"
+        className="px-3 py-6 md:px-4 md:py-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25">
-                <UserRound className="w-8 h-8 text-white" />
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg shadow-purple-500/25">
+                <UserRound className="w-6 h-6 md:w-8 md:h-8 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                <Star className="w-3 h-3 text-white fill-current" />
+              <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                <Star className="w-2 h-2 md:w-3 md:h-3 text-white fill-current" />
               </div>
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 md:mb-2">
                 Popular Actors
               </h1>
-              <p className="text-gray-300 text-lg">
+              <p className="text-gray-300 text-sm md:text-lg">
                 Discover talented performers from around the world
               </p>
             </div>
@@ -250,7 +250,7 @@ const Actor = () => {
       {/* Hero Section - Featured Actors Showcase */}
       {featuredActors.length > 0 && (
         <motion.section 
-          className="relative w-full my-12 px-4 md:px-10"
+          className="relative w-full my-6 md:my-12 px-3 md:px-6 lg:px-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -258,19 +258,19 @@ const Actor = () => {
           <div className="max-w-7xl mx-auto">
             {/* Hero Header */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center mb-12"
+               initial={{ opacity: 0, y: 30 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-center mb-6 md:mb-12"
             >
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-full mb-6 backdrop-blur-sm">
-                <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                <span className="font-semibold">Featured Performers</span>
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-4 py-2 md:px-6 md:py-3 rounded-full mb-4 md:mb-6 backdrop-blur-sm">
+                <Star className="w-4 h-4 md:w-5 md:h-5 text-yellow-400 fill-current" />
+                <span className="font-semibold text-sm md:text-base">Featured Performers</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 md:mb-4">
                 Meet the <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Stars</span>
               </h2>
-              <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              <p className="text-gray-300 text-sm md:text-lg max-w-2xl mx-auto px-2">
                 Discover the most popular and talented actors from around the world, 
                 bringing stories to life on screen
               </p>
@@ -278,12 +278,12 @@ const Actor = () => {
 
             {/* Featured Actors Carousel */}
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="relative"
+               initial={{ opacity: 0, y: 50 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8, delay: 0.4 }}
+               className="relative"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
                 {featuredActors.map((actor, index) => (
                   <motion.div
                     key={actor.id}
@@ -308,8 +308,8 @@ const Actor = () => {
                         </div>
 
                         {/* Actor Image */}
-                        <div className="relative p-6">
-                          <div className="relative w-32 h-32 mx-auto mb-6">
+                        <div className="relative p-4 md:p-6">
+                          <div className="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 md:mb-6">
                             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
                             <img
                               src={`https://image.tmdb.org/t/p/w300${actor.profile_path}`}
@@ -318,8 +318,8 @@ const Actor = () => {
                             />
                             {/* Popularity Badge */}
                             {actor.popularity > 50 && (
-                              <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
-                                <Star className="w-3 h-3 fill-current" />
+                              <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-2 md:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                                <Star className="w-2 h-2 md:w-3 md:h-3 fill-current" />
                                 Hot
                               </div>
                             )}
@@ -327,19 +327,19 @@ const Actor = () => {
 
                           {/* Actor Info */}
                           <div className="text-center">
-                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                            <h3 className="text-base md:text-xl font-bold text-white mb-1 md:mb-2 group-hover:text-purple-300 transition-colors">
                               {actor.name}
                             </h3>
                             {actor.known_for && actor.known_for.length > 0 && (
-                              <p className="text-gray-300 text-sm mb-3">
+                              <p className="text-gray-300 text-xs md:text-sm mb-2 md:mb-3">
                                 Known for: {actor.known_for[0]?.title || actor.known_for[0]?.name}
                               </p>
                             )}
                             
                             {/* Stats */}
-                            <div className="flex justify-center items-center gap-4 text-sm text-gray-300">
+                            <div className="flex justify-center items-center gap-2 md:gap-4 text-xs md:text-sm text-gray-300">
                               <div className="flex items-center gap-1">
-                                <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                                <Star className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 fill-current" />
                                 <span>{actor.popularity?.toFixed(0) || 'N/A'}</span>
                               </div>
                               <div className="w-1 h-1 bg-gray-500 rounded-full" />
@@ -349,12 +349,12 @@ const Actor = () => {
                             </div>
                           </div>
 
-                                                     {/* Hover Overlay */}
-                           <div className="absolute inset-0 bg-gradient-to-t from-purple-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end justify-center pb-4">
-                             <div className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-3 py-1 rounded-full text-xs font-medium">
-                               View →
-                             </div>
-                           </div>
+                          {/* Hover Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-purple-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end justify-center pb-2 md:pb-4">
+                            <div className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-2 md:px-3 py-1 rounded-full text-xs font-medium">
+                              View →
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </Link>
@@ -373,7 +373,7 @@ const Actor = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="absolute -top-10 -left-10 w-20 h-20 opacity-20"
+                className="hidden sm:block absolute -top-10 -left-10 w-20 h-20 opacity-20"
               >
                 <div className="w-full h-full border-2 border-purple-400 rounded-full flex items-center justify-center">
                   <Star size={24} className="text-purple-400" />
@@ -390,7 +390,7 @@ const Actor = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="absolute -bottom-8 -right-8 w-16 h-16 opacity-20"
+                className="hidden sm:block absolute -bottom-8 -right-8 w-16 h-16 opacity-20"
               >
                 <div className="w-full h-full border-2 border-pink-400 rounded-full flex items-center justify-center">
                   <Award size={20} className="text-pink-400" />
@@ -400,13 +400,13 @@ const Actor = () => {
 
             {/* Call to Action */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
-              className="text-center mt-12"
+               initial={{ opacity: 0, y: 30 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.6, delay: 1.2 }}
+              className="text-center mt-6 md:mt-12"
             >
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-purple-300 px-6 py-3 rounded-full backdrop-blur-sm">
-                <Users className="w-5 h-5" />
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-purple-300 px-4 py-2 md:px-6 md:py-3 rounded-full backdrop-blur-sm text-xs md:text-base">
+                <Users className="w-4 h-4 md:w-5 md:h-5" />
                 <span className="font-medium">Explore {actors.length}+ talented performers</span>
               </div>
             </motion.div>
@@ -415,7 +415,7 @@ const Actor = () => {
       )}
 
       {/* Content Section */}
-      <div className="px-4 py-8">
+      <div className="px-3 py-6 md:px-4 md:py-8">
         <div className="max-w-7xl mx-auto">
           <AnimatePresence mode="wait">
       {(actors.length > 0 || indianActors.length > 0) ? (
@@ -426,14 +426,14 @@ const Actor = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.6 }}
               >
-                                {renderSection('Male Actors', maleActors, <Users className="w-5 h-5 text-white" />)}
-                {renderSection('Female Actors', femaleActors, <Award className="w-5 h-5 text-white" />)}
-                {renderSection('Indian Male Actors', indianMaleActors, <Star className="w-5 h-5 text-white" />)}
-                {renderSection('Indian Female Actors', indianFemaleActors, <Sparkles className="w-5 h-5 text-white" />)}
+                {renderSection('Male Actors', maleActors, <Users className="w-4 h-4 md:w-5 md:h-5 text-white" />)}
+                {renderSection('Female Actors', femaleActors, <Award className="w-4 h-4 md:w-5 md:h-5 text-white" />)}
+                {renderSection('Indian Male Actors', indianMaleActors, <Star className="w-4 h-4 md:w-5 md:h-5 text-white" />)}
+                {renderSection('Indian Female Actors', indianFemaleActors, <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-white" />)}
 
           {/* Pagination */}
                 <motion.div 
-                  className="flex justify-center items-center gap-3 mt-12"
+                  className="flex justify-center items-center gap-2 md:gap-3 mt-8 md:mt-12"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -441,7 +441,7 @@ const Actor = () => {
                   <motion.button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
-                    className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                    className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                       page === 1 
                         ? 'bg-gray-600/30 text-gray-400 cursor-not-allowed' 
                         : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25'
@@ -449,15 +449,16 @@ const Actor = () => {
                     whileHover={page !== 1 ? { scale: 1.05 } : {}}
                     whileTap={page !== 1 ? { scale: 0.95 } : {}}
                   >
-                    ← Previous
+                    <span className="hidden sm:inline">← Previous</span>
+                    <span className="sm:hidden">←</span>
                   </motion.button>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-1 md:gap-2">
             {pageNumbers.map((num) => (
                       <motion.button
                 key={num}
                 onClick={() => handlePageChange(num)}
-                        className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
+                        className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 text-sm md:text-base ${
                           num === page 
                             ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25' 
                             : 'bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 hover:scale-105'
@@ -473,7 +474,7 @@ const Actor = () => {
                   <motion.button
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}
-                    className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                    className={`px-3 py-2 md:px-4 md:py-2 rounded-lg md:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                       page === totalPages 
                         ? 'bg-gray-600/30 text-gray-400 cursor-not-allowed' 
                         : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25'
@@ -481,7 +482,8 @@ const Actor = () => {
                     whileHover={page !== totalPages ? { scale: 1.05 } : {}}
                     whileTap={page !== totalPages ? { scale: 0.95 } : {}}
                   >
-                    Next →
+                    <span className="hidden sm:inline">Next →</span>
+                    <span className="sm:hidden">→</span>
                   </motion.button>
                 </motion.div>
               </motion.div>

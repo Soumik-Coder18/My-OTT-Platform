@@ -113,12 +113,12 @@ const Trending = () => {
     ));
 
   return (
-    <section className="w-full bg-gradient-to-br from-slate-900/50 via-purple-900/30 to-slate-900/50 backdrop-blur-sm border border-purple-500/20 py-14 px-4 md:px-10 rounded-3xl shadow-2xl overflow-hidden">
+    <section className="w-full bg-gradient-to-br from-slate-900/50 via-purple-900/30 to-slate-900/50 backdrop-blur-sm border border-purple-500/20 py-8 sm:py-12 md:py-14 px-3 sm:px-4 md:px-10 rounded-3xl shadow-2xl overflow-hidden">
       <div className="flex justify-center items-center gap-3 mb-10">
         <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
           <Sparkles className="w-6 h-6 text-white" />
         </div>
-        <h2 className="text-3xl font-extrabold text-white text-center tracking-wide">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-white text-center tracking-wide">
           Trending Picks This Week
         </h2>
       </div>
@@ -126,14 +126,14 @@ const Trending = () => {
       <AnimatePresence>
         <motion.div
           layout
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-7 max-w-7xl mx-auto mb-10"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 md:gap-7 max-w-7xl mx-auto mb-8 sm:mb-10"
         >
           {renderRow(topRow)}
         </motion.div>
 
         <motion.div
           layout
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-7 max-w-7xl mx-auto"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 md:gap-7 max-w-7xl mx-auto"
         >
           {renderRow(bottomRow)}
         </motion.div>

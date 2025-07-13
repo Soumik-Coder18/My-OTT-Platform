@@ -49,13 +49,13 @@ const UpcomingReleases = () => {
 
   return (
     <motion.section
-      className="px-6 md:px-10 py-14"
+      className="px-3 sm:px-6 md:px-10 py-8 sm:py-12 md:py-14"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       <motion.h2
-        className="text-3xl md:text-4xl font-bold text-white mb-10 flex items-center justify-center gap-3"
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-10 flex items-center justify-center gap-3"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 120, damping: 20 }}
@@ -67,7 +67,7 @@ const UpcomingReleases = () => {
       </motion.h2>
 
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
