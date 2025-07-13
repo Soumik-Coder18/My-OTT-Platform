@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes/AppRoutes';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Chatbot from './components/Chatbot';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import './index.css';
@@ -16,6 +17,7 @@ function App() {
             <AppRoutes />
           </main>
           <Footer />
+          <Chatbot />
         </BrowserRouter>
       </ToastProvider>
     </AuthProvider>

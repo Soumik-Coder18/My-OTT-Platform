@@ -7,7 +7,7 @@ const sections = [
   {
     icon: <Info className="w-6 h-6 text-white" />,
     title: "Introduction",
-    text: "Welcome to our movie browsing platform. We are committed to protecting your privacy and ensuring the security of your personal information. This policy explains how we handle your data when you use our browsing service.",
+    text: "Welcome to WhisperFrame. We are committed to protecting your privacy and ensuring the security of your personal information. This policy explains how we handle your data when you use our browsing service.",
   },
   {
     icon: <User className="w-6 h-6 text-white" />,
