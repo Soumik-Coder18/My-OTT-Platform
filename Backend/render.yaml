@@ -9,5 +9,9 @@ services:
         value: production
       - key: PORT
         value: 3000
-    healthCheckPath: /
-    autoDeploy: true 
+    healthCheckPath: /health
+    autoDeploy: true
+    plan: free
+    scaling:
+      minInstances: 0
+      maxInstances: 1 
