@@ -14,18 +14,18 @@ const MovieSection = ({ movies }) => {
           <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
             <Clapperboard className="w-5 h-5 text-white" />
           </div>
-          <h2 className="text-2xl font-semibold text-white">Popular Movies</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-white">Popular Movies</h2>
         </div>
         <Link
           to="/movies"
-          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs sm:text-sm font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
         >
           Show More
         </Link>
       </div>
 
       {/* Movie Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         {visibleMovies.map((movie, index) => (
           <motion.div
             key={movie.id}

@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getIndianMovies } from '../../services/movieApi';
 import { motion } from 'framer-motion';
-import { Clapperboard, Star, Filter, Sparkles } from 'lucide-react';
+import { Clapperboard, Star, Filter, Sparkles, ChevronDown } from 'lucide-react';
 import Loader from '../../components/Loader';
 import MovieCard from '../../components/MovieCard';
+import { createPortal } from 'react-dom';
 
 const LANGUAGES = [
-  { code: 'hi', label: 'Hindi', flag: '🇮🇳' },
-  { code: 'ta', label: 'Tamil', flag: '🇮🇳' },
-  { code: 'te', label: 'Telugu', flag: '🇮🇳' },
-  { code: 'ml', label: 'Malayalam', flag: '🇮🇳' },
-  { code: 'kn', label: 'Kannada', flag: '🇮🇳' },
-  { code: 'bn', label: 'Bengali', flag: '🇮🇳' },
-  { code: 'mr', label: 'Marathi', flag: '🇮🇳' },
-  { code: 'gu', label: 'Gujarati', flag: '🇮🇳' },
-  { code: 'pa', label: 'Punjabi', flag: '🇮🇳' },
+  { code: 'hi', label: 'Hindi' },
+  { code: 'ta', label: 'Tamil' },
+  { code: 'te', label: 'Telugu' },
+  { code: 'ml', label: 'Malayalam' },
+  { code: 'kn', label: 'Kannada' },
+  { code: 'bn', label: 'Bengali' },
+  { code: 'mr', label: 'Marathi' },
+  { code: 'gu', label: 'Gujarati' },
+  { code: 'pa', label: 'Punjabi' },
 ];
 
 const IndianMovie = () => {
@@ -24,6 +25,9 @@ const IndianMovie = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownBtnRef = useRef(null);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   const fetchMovies = async (langCode, currentPage) => {
     setLoading(true);
@@ -42,9 +46,40 @@ const IndianMovie = () => {
     fetchMovies(activeLang, page);
   }, [activeLang, page]);
 
+  // Update dropdown position when opened
+  useEffect(() => {
+    if (isDropdownOpen && dropdownBtnRef.current) {
+      const rect = dropdownBtnRef.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [isDropdownOpen]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isDropdownOpen &&
+        dropdownBtnRef.current &&
+        !dropdownBtnRef.current.contains(event.target) &&
+        !document.getElementById('mobile-lang-dropdown-portal')?.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   const handleLanguageChange = (lang) => {
     setActiveLang(lang);
     setPage(1);
+    setIsDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -56,42 +91,73 @@ const IndianMovie = () => {
 
   if (loading) return <Loader />;
 
+  const mobileDropdown = isDropdownOpen && createPortal(
+    <motion.div
+      id="mobile-lang-dropdown-portal"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className="bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-lg shadow-lg z-[9999] max-h-60 overflow-y-auto overscroll-contain fixed"
+      style={{
+        top: dropdownPos.top,
+        left: dropdownPos.left,
+        width: dropdownPos.width,
+      }}
+    >
+      {LANGUAGES.map(({ code, label }) => (
+        <motion.button
+          key={code}
+          onClick={() => handleLanguageChange(code)}
+          className={`w-full text-left px-4 py-4 text-base font-medium transition-all duration-300 ${
+            activeLang === code
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+              : 'text-white hover:bg-white/10'
+          } ${code === LANGUAGES[0].code ? 'rounded-t-lg' : ''} ${code === LANGUAGES[LANGUAGES.length - 1].code ? 'rounded-b-lg' : ''}`}
+          whileHover={{ backgroundColor: activeLang === code ? undefined : 'rgba(255, 255, 255, 0.1)' }}
+        >
+          {label}
+        </motion.button>
+      ))}
+    </motion.div>,
+    document.body
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Hero Section */}
       <motion.section 
-        className="relative py-20 px-4 md:px-10 overflow-hidden"
+        className="relative py-12 md:py-16 lg:py-20 px-3 md:px-6 lg:px-10 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-500 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-blue-500 rounded-full blur-3xl" />
+          <div className="absolute top-20 left-10 w-24 h-24 md:w-32 md:h-32 bg-purple-500 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-32 h-32 md:w-40 md:h-40 bg-pink-500 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-60 md:h-60 bg-blue-500 rounded-full blur-3xl" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-8 md:mb-12 lg:mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-full mb-6 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-4 py-2 md:px-6 md:py-3 rounded-full mb-4 md:mb-6 backdrop-blur-sm"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Sparkles className="w-5 h-5" />
-              <span className="font-semibold">Bollywood & Regional Cinema</span>
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="font-semibold text-sm md:text-base">Bollywood & Regional Cinema</span>
             </motion.div>
             
             <motion.h1
-              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -100,7 +166,7 @@ const IndianMovie = () => {
             </motion.h1>
             
             <motion.p
-              className="text-xl text-gray-300 max-w-2xl mx-auto"
+              className="text-base md:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto px-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -111,22 +177,42 @@ const IndianMovie = () => {
 
           {/* Language Filter */}
           <motion.div
-            className="mb-12"
+            className="mb-8 md:mb-10 lg:mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Filter className="w-5 h-5 text-purple-300" />
-              <span className="text-purple-300 font-medium">Filter by Language</span>
+            <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
+              <Filter className="w-4 h-4 md:w-5 md:h-5 text-purple-300" />
+              <span className="text-purple-300 font-medium text-sm md:text-base">Filter by Language</span>
             </div>
             
-            <div className="flex justify-center gap-3 flex-wrap">
-              {LANGUAGES.map(({ code, label, flag }) => (
+            {/* Mobile Dropdown */}
+            <div className="md:hidden flex justify-center px-4">
+              <div className="relative w-full max-w-xs dropdown-container">
+                <motion.button
+                  ref={dropdownBtnRef}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="w-full bg-white/10 backdrop-blur-sm text-white border border-white/20 px-4 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-between hover:bg-white/20"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span>{LANGUAGES.find(lang => lang.code === activeLang)?.label}</span>
+                  <ChevronDown 
+                    className={`w-4 h-4 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  />
+                </motion.button>
+                {mobileDropdown}
+              </div>
+            </div>
+            
+            {/* Desktop Buttons */}
+            <div className="hidden md:flex justify-center gap-3 flex-wrap px-4">
+              {LANGUAGES.map(({ code, label }) => (
                 <motion.button
                   key={code}
                   onClick={() => handleLanguageChange(code)}
-                  className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+                  className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 text-base ${
                     activeLang === code
                       ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25'
                       : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:scale-105'
@@ -134,8 +220,7 @@ const IndianMovie = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span className="text-lg">{flag}</span>
-                  <span>{label}</span>
+                  {label}
                 </motion.button>
               ))}
             </div>
@@ -145,7 +230,7 @@ const IndianMovie = () => {
 
       {/* Movies Grid Section */}
       <motion.section 
-        className="px-4 md:px-10 pb-20"
+        className="px-3 md:px-6 lg:px-10 pb-12 md:pb-16 lg:pb-20"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6 }}
@@ -153,25 +238,25 @@ const IndianMovie = () => {
         <div className="max-w-7xl mx-auto">
           {/* Results Header */}
           <motion.div
-            className="flex items-center justify-between mb-8"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 md:mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <div className="flex items-center gap-3">
-              <Clapperboard className="w-6 h-6 text-purple-300" />
-              <h2 className="text-2xl font-bold text-white">
+            <div className="flex items-center gap-2 md:gap-3">
+              <Clapperboard className="w-5 h-5 md:w-6 md:h-6 text-purple-300" />
+              <h2 className="text-xl md:text-2xl font-bold text-white">
                 {LANGUAGES.find(lang => lang.code === activeLang)?.label} Movies
               </h2>
             </div>
-            <div className="text-gray-300">
+            <div className="text-gray-300 text-sm md:text-base">
               Page {page} of {totalPages}
             </div>
           </motion.div>
 
           {/* Movies Grid */}
           <motion.div
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 gap-y-12"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-6 gap-y-8 md:gap-y-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.8 }}
@@ -211,7 +296,7 @@ const IndianMovie = () => {
 
           {/* Enhanced Pagination */}
           <motion.div
-            className="flex justify-center items-center gap-3 mt-12"
+            className="flex justify-center items-center gap-2 md:gap-3 mt-8 md:mt-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.0 }}
@@ -219,7 +304,7 @@ const IndianMovie = () => {
             <motion.button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl font-semibold transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                 page === 1
                   ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                   : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:scale-105'
@@ -227,10 +312,11 @@ const IndianMovie = () => {
               whileHover={page !== 1 ? { scale: 1.05 } : {}}
               whileTap={page !== 1 ? { scale: 0.95 } : {}}
             >
-              ← Previous
+              <span className="hidden sm:inline">← Previous</span>
+              <span className="sm:hidden">←</span>
             </motion.button>
 
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 const pageNum = Math.max(1, page - 2) + i;
                 if (pageNum > totalPages) return null;
@@ -238,7 +324,7 @@ const IndianMovie = () => {
                   <motion.button
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
-                    className={`px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`px-3 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl font-semibold transition-all duration-300 text-sm md:text-base ${
                       pageNum === page
                         ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25'
                         : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:scale-105'
@@ -255,7 +341,7 @@ const IndianMovie = () => {
             <motion.button
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${
+              className={`px-4 py-2 md:px-6 md:py-3 rounded-lg md:rounded-xl font-semibold transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                 page === totalPages
                   ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                   : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:scale-105'
@@ -263,7 +349,8 @@ const IndianMovie = () => {
               whileHover={page !== totalPages ? { scale: 1.05 } : {}}
               whileTap={page !== totalPages ? { scale: 0.95 } : {}}
             >
-              Next →
+              <span className="hidden sm:inline">Next →</span>
+              <span className="sm:hidden">→</span>
             </motion.button>
           </motion.div>
         </div>

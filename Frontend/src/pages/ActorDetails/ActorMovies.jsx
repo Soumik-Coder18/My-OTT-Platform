@@ -116,7 +116,7 @@ const ActorMovies = () => {
 
         {/* Credits Grid */}
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 gap-y-12"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
@@ -133,97 +133,82 @@ const ActorMovies = () => {
                 stiffness: 100
               }}
               whileHover={{ y: -8, scale: 1.05 }}
-              className="h-[420px] w-full flex flex-col group"
+              className="w-full flex flex-col group"
             >
               <Link
                 to={`/${item.media_type === 'movie' ? 'movie' : 'series'}/${item.id}`}
                 className="flex-1 relative"
               >
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-full shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500">
-                  {/* Background Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  
-                  {/* Card Content */}
-                  <div className="relative z-10 h-full flex flex-col">
-                    {/* Image Container */}
-                    <div className="relative overflow-hidden rounded-t-2xl">
-                      <img
-                        src={
-                          item.poster_path
-                            ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-                            : '/no-poster.png'
-                        }
-                        alt={item.title || item.name}
-                        className="w-full h-[320px] object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      />
-                      
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      
-                      {/* Top Badge */}
-                      <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/20 rounded-full">
-                        <span className="text-xs text-white font-medium">
-                          {item.media_type === 'movie' ? 'MOVIE' : 'TV'}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-full shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 flex flex-col">
+                  {/* Poster with fixed aspect ratio */}
+                  <div className="relative w-full aspect-[2/3] bg-gray-900 rounded-t-2xl overflow-hidden">
+                    <img
+                      src={
+                        item.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                          : '/no-poster.png'
+                      }
+                      alt={item.title || item.name}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {/* Top Badge */}
+                    <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/20 rounded-full">
+                      <span className="text-[10px] md:text-xs text-white font-medium">
+                        {item.media_type === 'movie' ? 'MOVIE' : 'TV'}
+                      </span>
+                    </div>
+                    {/* Rating Badge */}
+                    {item.vote_average && (
+                      <div className="absolute top-2 right-2 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
+                        <Star className="w-3 h-3 text-white fill-current" />
+                        <span className="text-[10px] md:text-xs text-white font-bold">
+                          {item.vote_average.toFixed(1)}
                         </span>
                       </div>
-                      
-                      {/* Rating Badge */}
-                      {item.vote_average && (
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
-                          <Star className="w-3 h-3 text-white fill-current" />
-                          <span className="text-xs text-white font-bold">
-                            {item.vote_average.toFixed(1)}
-                          </span>
-                        </div>
-                      )}
-                      
-                      {/* Play Button Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-3">
-                          <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z"/>
-                            </svg>
-                          </div>
+                    )}
+                    {/* Play Button Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-2 md:p-3">
+                        <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                          <svg className="w-4 h-4 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
                         </div>
                       </div>
                     </div>
-                    
-                    {/* Content Section */}
-                    <div className="flex-1 p-4 flex flex-col justify-between">
-                      {/* Title and Info */}
-                      <div>
-                        <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
-                          {item.title || item.name}
-                        </h3>
-                        
-                        {/* Release Date */}
-                        {item.release_date && (
-                          <p className="text-gray-400 text-sm mb-2">
-                            {item.release_date?.slice(0, 4) || item.first_air_date?.slice(0, 4) || 'N/A'}
-                          </p>
-                        )}
-                        
-                        {/* Character Name */}
-                        {item.character && (
-                          <p className="text-purple-300 text-sm font-medium mb-2">
-                            as {item.character}
-                          </p>
-                        )}
+                  </div>
+                  {/* Content Section */}
+                  <div className="flex-1 p-2 md:p-4 flex flex-col justify-between">
+                    {/* Title and Info */}
+                    <div>
+                      <h3 className="text-white font-bold text-xs md:text-lg mb-1 md:mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
+                        {item.title || item.name}
+                      </h3>
+                      {/* Release Date */}
+                      {(item.release_date || item.first_air_date) && (
+                        <p className="text-gray-400 text-[10px] md:text-sm mb-1 md:mb-2">
+                          {item.release_date?.slice(0, 4) || item.first_air_date?.slice(0, 4) || 'N/A'}
+                        </p>
+                      )}
+                      {/* Character Name */}
+                      {item.character && (
+                        <p className="text-purple-300 text-[10px] md:text-sm font-medium mb-1 md:mb-2">
+                          as {item.character}
+                        </p>
+                      )}
+                    </div>
+                    {/* Bottom Section */}
+                    <div className="flex items-center justify-between mt-1 md:mt-2">
+                      {/* Popularity */}
+                      <div className="flex items-center gap-1 text-gray-400 text-[10px] md:text-xs">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                        <span>Popular</span>
                       </div>
-                      
-                      {/* Bottom Section */}
-                      <div className="flex items-center justify-between">
-                        {/* Popularity */}
-                        <div className="flex items-center gap-1 text-gray-400 text-xs">
-                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                          <span>Popular</span>
-                        </div>
-                        
-                        {/* Action Indicator */}
-                        <div className="text-purple-300 text-xs font-medium">
-                          Click to view
-                        </div>
+                      {/* Action Indicator */}
+                      <div className="text-purple-300 text-[10px] md:text-xs font-medium">
+                        Click to view
                       </div>
                     </div>
                   </div>
@@ -244,11 +229,11 @@ const ActorMovies = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-row justify-center gap-3 sm:gap-4">
             {visibleCount < credits.length && (
               <motion.button
                 onClick={handleShowMore}
-                className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-purple-500/25 transition-all duration-300 mt-10"
+                className="px-4 py-2 md:px-8 md:py-4 text-sm md:text-base bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg md:rounded-xl font-semibold shadow-lg hover:shadow-purple-500/25 transition-all duration-300 mt-6 md:mt-10 active:scale-95"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -258,7 +243,7 @@ const ActorMovies = () => {
             {visibleCount > 12 && (
               <motion.button
                 onClick={handleShowLess}
-                className="px-10 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 mt-10"
+                className="px-4 py-2 md:px-10 md:py-4 text-sm md:text-base bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-lg md:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300 mt-6 md:mt-10 active:scale-95"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

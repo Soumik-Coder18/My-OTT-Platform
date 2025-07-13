@@ -56,7 +56,7 @@ const Genre = () => {
   };
 
   const renderPageNumbers = () => {
-    const maxPagesToShow = 5;
+    const maxPagesToShow = window.innerWidth < 768 ? 3 : 5; // Show fewer pages on mobile
     const half = Math.floor(maxPagesToShow / 2);
     let start = Math.max(1, page - half);
     let end = Math.min(totalPages, start + maxPagesToShow - 1);
@@ -75,30 +75,30 @@ const Genre = () => {
   if (loading) return <Loader />;
 
   return (
-    <section className="px-4 md:px-10 py-16 min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
+    <section className="px-4 sm:px-6 md:px-10 py-8 md:py-16 min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-12"
         >
           <motion.div
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-full mb-6 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-4 md:px-6 py-2 md:py-3 rounded-full mb-4 md:mb-6 backdrop-blur-sm"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Sparkles className="w-5 h-5" />
-            <span className="font-semibold">Genre Collection</span>
+            <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
+            <span className="font-semibold text-sm md:text-base">Genre Collection</span>
           </motion.div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 px-2">
             {genreName} <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Movies</span>
           </h1>
           
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-base md:text-xl text-gray-300 max-w-2xl mx-auto px-4">
             Discover the best {genreName.toLowerCase()} movies and TV shows
           </p>
         </motion.div>
@@ -108,16 +108,16 @@ const Genre = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex justify-center mb-12"
+          className="flex justify-center mb-8 md:mb-12"
         >
           <div className="relative">
             <motion.button
               onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
-              className="px-8 py-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 text-white rounded-xl font-semibold hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-purple-500/25"
+              className="px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-500/30 text-white rounded-xl font-semibold hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 flex items-center gap-2 md:gap-3 shadow-lg hover:shadow-purple-500/25 text-sm md:text-base"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <SlidersHorizontal size={20} />
+              <SlidersHorizontal size={18} className="md:w-5 md:h-5" />
               Filter by Genre
             </motion.button>
 
@@ -126,11 +126,11 @@ const Genre = () => {
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 w-64 bg-gray-800/90 backdrop-blur-md border border-purple-500/30 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 w-72 md:w-64 bg-gray-800/90 backdrop-blur-md border border-purple-500/30 rounded-2xl shadow-2xl z-50 overflow-hidden"
               >
                 <div className="p-4">
-                  <h4 className="font-semibold text-white mb-4 text-center">Select Genre</h4>
-                  <div className="max-h-80 overflow-y-auto space-y-2">
+                  <h4 className="font-semibold text-white mb-4 text-center text-sm md:text-base">Select Genre</h4>
+                  <div className="max-h-60 md:max-h-80 overflow-y-auto space-y-2">
                     {allGenres.map((genre) => (
                       <motion.button
                         key={genre.id}
@@ -138,7 +138,7 @@ const Genre = () => {
                           navigate(`/genre/${genre.id}`);
                           setGenreDropdownOpen(false);
                         }}
-                        className={`w-full text-left p-3 rounded-xl transition-all duration-300 ${
+                        className={`w-full text-left p-3 rounded-xl transition-all duration-300 text-sm md:text-base ${
                           String(genre.id) === String(id)
                             ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
                             : 'text-gray-300 hover:bg-white/10 hover:text-white'
@@ -162,13 +162,13 @@ const Genre = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mb-16"
+            className="mb-12 md:mb-16"
           >
-            <h2 className="text-2xl font-bold text-white mb-8 text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-6 md:mb-8 text-center px-2">
               Featured <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Highlights</span>
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {heroItems.map((movie, index) => (
                 <motion.div
                   key={movie.id}
@@ -194,7 +194,7 @@ const Genre = () => {
                               : 'https://via.placeholder.com/500x280?text=No+Image'
                           }
                           alt={movie.title || movie.name}
-                          className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
+                          className="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition-transform duration-700"
                         />
                         
                         {/* Gradient Overlay */}
@@ -202,7 +202,7 @@ const Genre = () => {
                         
                         {/* Rating Badge */}
                         {movie.vote_average && (
-                          <div className="absolute top-3 right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
+                          <div className="absolute top-2 md:top-3 right-2 md:right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
                             <Star className="w-3 h-3 text-white fill-current" />
                             <span className="text-xs text-white font-bold">
                               {movie.vote_average.toFixed(1)}
@@ -212,16 +212,16 @@ const Genre = () => {
                         
                         {/* Play Button */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-3">
-                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                              <Play className="w-6 h-6 text-white fill-current" />
+                          <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-2 md:p-3">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                              <Play className="w-5 h-5 md:w-6 md:h-6 text-white fill-current" />
                             </div>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-200 transition-colors duration-300">
+                      <div className="p-4 md:p-6">
+                        <h3 className="text-lg md:text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-200 transition-colors duration-300">
                           {movie.title || movie.name}
                         </h3>
                         <p className="text-gray-400 text-sm mb-3">
@@ -245,11 +245,11 @@ const Genre = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-6 md:mb-8 text-center px-2">
             All <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{genreName}</span> Movies
           </h2>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 gap-y-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6 gap-y-6 md:gap-y-8">
             {movies.map((movie, idx) => (
               <motion.div
                 key={movie.id}
@@ -267,7 +267,7 @@ const Genre = () => {
                   navigate(`/${movie.media_type === 'tv' ? 'series' : 'movie'}/${movie.id}`)
                 }
               >
-                                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-[400px] shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500">
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-[320px] sm:h-[360px] md:h-[400px] shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500">
                   {/* Background Glow */}
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   
@@ -281,7 +281,7 @@ const Genre = () => {
                             : 'https://via.placeholder.com/500x750?text=No+Image'
                         }
                         alt={movie.title || movie.name}
-                                                 className="w-full h-[300px] object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-[200px] sm:h-[240px] md:h-[300px] object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                       
                       {/* Gradient Overlay */}
@@ -289,7 +289,7 @@ const Genre = () => {
                       
                       {/* Rating Badge */}
                       {movie.vote_average && (
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
+                        <div className="absolute top-2 md:top-3 right-2 md:right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
                           <Star className="w-3 h-3 text-white fill-current" />
                           <span className="text-xs text-white font-bold">
                             {movie.vote_average.toFixed(1)}
@@ -299,22 +299,22 @@ const Genre = () => {
                       
                       {/* Play Button Overlay */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-3">
-                          <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Play className="w-6 h-6 text-white fill-current" />
+                        <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-2 md:p-3">
+                          <div className="w-8 h-8 md:w-12 md:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                            <Play className="w-4 h-4 md:w-6 md:h-6 text-white fill-current" />
                           </div>
                         </div>
                       </div>
                     </div>
                     
                     {/* Content Section */}
-                    <div className="flex-1 p-4 flex flex-col justify-between">
+                    <div className="flex-1 p-3 md:p-4 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
+                        <h3 className="text-white font-bold text-sm md:text-lg mb-1 md:mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
                           {movie.title || movie.name}
                         </h3>
                         
-                        <p className="text-gray-400 text-sm mb-2">
+                        <p className="text-gray-400 text-xs md:text-sm mb-2">
                           {movie.release_date?.slice(0, 4) || movie.first_air_date?.slice(0, 4) || 'N/A'}
                         </p>
                       </div>
@@ -343,13 +343,13 @@ const Genre = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center py-20"
+            className="text-center py-12 md:py-20"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-full mb-6 backdrop-blur-sm">
-              <Film className="w-8 h-8 text-purple-300" />
+            <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-full mb-4 md:mb-6 backdrop-blur-sm">
+              <Film className="w-6 h-6 md:w-8 md:h-8 text-purple-300" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">No movies found</h3>
-            <p className="text-gray-400">No movies available for this genre at the moment.</p>
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-2">No movies found</h3>
+            <p className="text-gray-400 text-sm md:text-base">No movies available for this genre at the moment.</p>
           </motion.div>
         )}
 
@@ -359,12 +359,12 @@ const Genre = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex justify-center items-center gap-3 mt-16"
+            className="flex justify-center items-center gap-2 md:gap-3 mt-12 md:mt-16"
           >
             <motion.button
               onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
-              className={`p-3 rounded-xl border transition-all duration-300 flex items-center gap-2 ${
+              className={`p-2 md:p-3 rounded-xl border transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                 page === 1
                   ? 'cursor-not-allowed opacity-50 border-gray-600 text-gray-500'
                   : 'border-purple-500/30 text-white hover:bg-purple-500/20 hover:border-purple-500/50'
@@ -373,15 +373,15 @@ const Genre = () => {
               whileTap={page !== 1 ? { scale: 0.95 } : {}}
             >
               <ChevronLeft className="w-4 h-4" />
-              Previous
+              <span className="hidden sm:inline">Previous</span>
             </motion.button>
 
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2">
               {renderPageNumbers().map((num) => (
                 <motion.button
                   key={num}
                   onClick={() => handlePageChange(num)}
-                  className={`px-4 py-3 rounded-xl border transition-all duration-300 ${
+                  className={`px-3 py-2 md:px-4 md:py-3 rounded-xl border transition-all duration-300 text-sm md:text-base ${
                     num === page
                       ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-purple-500 shadow-lg'
                       : 'border-purple-500/30 text-white hover:bg-purple-500/20 hover:border-purple-500/50'
@@ -397,7 +397,7 @@ const Genre = () => {
             <motion.button
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}
-              className={`p-3 rounded-xl border transition-all duration-300 flex items-center gap-2 ${
+              className={`p-2 md:p-3 rounded-xl border transition-all duration-300 flex items-center gap-1 md:gap-2 text-sm md:text-base ${
                 page === totalPages
                   ? 'cursor-not-allowed opacity-50 border-gray-600 text-gray-500'
                   : 'border-purple-500/30 text-white hover:bg-purple-500/20 hover:border-purple-500/50'
@@ -405,7 +405,7 @@ const Genre = () => {
               whileHover={page !== totalPages ? { scale: 1.05 } : {}}
               whileTap={page !== totalPages ? { scale: 0.95 } : {}}
             >
-              Next
+              <span className="hidden sm:inline">Next</span>
               <ChevronRight className="w-4 h-4" />
             </motion.button>
           </motion.div>

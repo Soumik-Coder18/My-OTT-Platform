@@ -72,6 +72,11 @@ const Header = () => {
     navigate('/');
   };
 
+  // Function to close mobile menu
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -234,7 +239,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-slate-900/95 backdrop-blur-md border-t border-purple-500/20">
+        <div className="md:hidden bg-gradient-to-b from-purple-900/80 to-pink-900/80 backdrop-blur-md border-t border-purple-500/30">
           <div className="px-4 py-4 space-y-4">
             {/* Mobile Search */}
             {isAuthenticated && (
@@ -251,12 +256,17 @@ const Header = () => {
 
             {/* Mobile Navigation */}
             <nav className="space-y-2">
-              <Link to="/" className="flex items-center gap-2 text-white hover:text-purple-300 transition py-2">
+              <Link 
+                to="/" 
+                onClick={closeMobileMenu}
+                className="flex items-center gap-2 text-white hover:text-purple-300 transition py-2"
+              >
                 <Home size={16} /> Home
               </Link>
               <Link 
                 to={isAuthenticated ? "/movies" : "/login"} 
                 onClick={(e) => {
+                  closeMobileMenu();
                   if (!isAuthenticated) {
                     e.preventDefault();
                     navigate('/login', { state: { from: { pathname: '/movies' } } });
@@ -269,6 +279,7 @@ const Header = () => {
               <Link 
                 to={isAuthenticated ? "/series" : "/login"}
                 onClick={(e) => {
+                  closeMobileMenu();
                   if (!isAuthenticated) {
                     e.preventDefault();
                     navigate('/login', { state: { from: { pathname: '/series' } } });
@@ -281,6 +292,7 @@ const Header = () => {
               <Link 
                 to={isAuthenticated ? "/favorites" : "/login"}
                 onClick={(e) => {
+                  closeMobileMenu();
                   if (!isAuthenticated) {
                     e.preventDefault();
                     navigate('/login', { state: { from: { pathname: '/favorites' } } });
@@ -293,6 +305,7 @@ const Header = () => {
               <Link 
                 to={isAuthenticated ? "/actor" : "/login"}
                 onClick={(e) => {
+                  closeMobileMenu();
                   if (!isAuthenticated) {
                     e.preventDefault();
                     navigate('/login', { state: { from: { pathname: '/actor' } } });
@@ -323,12 +336,14 @@ const Header = () => {
               <div className="pt-4 border-t border-purple-500/20 space-y-2">
                 <Link
                   to="/login"
+                  onClick={closeMobileMenu}
                   className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold px-4 py-2 rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
                 >
                   <LogIn size={16} /> Login
                 </Link>
                 <Link
                   to="/signup"
+                  onClick={closeMobileMenu}
                   className="flex items-center gap-2 border border-purple-500 text-white font-semibold px-4 py-2 rounded-md hover:bg-purple-500 hover:text-white transition-all duration-300"
                 >
                   <UserPlus size={16} /> Sign Up

@@ -30,26 +30,26 @@ const Favorites = () => {
     const displayItems = showAll[type] ? items : items.slice(0, 6);
     return (
       <motion.div
-        className="mb-16"
+        className="mb-12 md:mb-16"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg">
-              <Icon className="text-purple-300" size={24} />
+        <div className="flex flex-row items-center justify-between mb-6 md:mb-8">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg">
+              <Icon className="text-purple-300 w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <h2 className="text-3xl font-bold text-white">{title}</h2>
-            <span className="px-3 py-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm text-gray-300">
+            <h2 className="text-2xl md:text-3xl font-bold text-white">{title}</h2>
+            <span className="px-2 py-0.5 md:px-3 md:py-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-xs md:text-sm text-gray-300">
               {items.length} items
             </span>
           </div>
           {items.length > 6 && (
             <motion.button
               onClick={() => setShowAll((prev) => ({ ...prev, [type]: !prev[type] }))}
-              className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300"
+              className="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-lg md:rounded-xl font-semibold hover:bg-white/20 transition-all duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -57,7 +57,7 @@ const Favorites = () => {
             </motion.button>
           )}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 gap-y-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-6 gap-y-8 md:gap-y-12">
           {displayItems.map((item, idx) => (
             <motion.div
               key={item.id}
@@ -70,51 +70,53 @@ const Favorites = () => {
                 stiffness: 100
               }}
               whileHover={{ y: -12, scale: 1.05 }}
-              className="h-[450px] w-full flex flex-col group"
+              className="w-full flex flex-col group"
             >
               <div className="flex-1 relative">
                 <Link to={`/${item.media_type === 'tv' ? 'series' : 'movie'}/${item.id}`}>
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-full shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500">
+                  <div className="relative overflow-hidden rounded-xl md:rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 h-full shadow-lg hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-500 flex flex-col">
                     {/* Background Glow Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 rounded-xl md:rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     
                     {/* Card Content */}
                     <div className="relative z-10 h-full flex flex-col">
                       {/* Image Container */}
-                      <div className="relative overflow-hidden rounded-t-2xl">
-                        <img
-                          src={
-                            item.poster_path
-                              ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
-                              : 'https://via.placeholder.com/300x450?text=No+Image'
-                          }
-                          alt={item.title || item.name}
-                          className="w-full h-[320px] object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                        />
+                      <div className="relative overflow-hidden rounded-t-xl md:rounded-t-2xl">
+                        <div className="w-full aspect-[2/3] bg-gray-900">
+                          <img
+                            src={
+                              item.poster_path
+                                ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                                : 'https://via.placeholder.com/300x450?text=No+Image'
+                            }
+                            alt={item.title || item.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                          />
+                        </div>
                         
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         
                         {/* Top Badge */}
-                        <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/20 rounded-full">
-                          <span className="text-xs text-white font-medium">
+                        <div className="absolute top-2 left-2 md:top-3 md:left-3 px-1.5 py-0.5 md:px-2 md:py-1 bg-black/60 backdrop-blur-sm border border-white/20 rounded-full">
+                          <span className="text-[10px] md:text-xs text-white font-medium">
                             {item.media_type === 'tv' ? 'TV' : 'Movie'}
                           </span>
                         </div>
                         
                         {/* Rating Badge */}
-                        <div className="absolute top-3 right-3 px-2 py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
+                        <div className="absolute top-2 right-2 md:top-3 md:right-3 px-1.5 py-0.5 md:px-2 md:py-1 bg-yellow-500/90 backdrop-blur-sm border border-yellow-400/30 rounded-full flex items-center gap-1">
                           <Star className="w-3 h-3 text-white fill-current" />
-                          <span className="text-xs text-white font-bold">
+                          <span className="text-[10px] md:text-xs text-white font-bold">
                             {item.vote_average?.toFixed(1) || 'N/A'}
                           </span>
                         </div>
                         
                         {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-3">
-                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <div className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-full p-2 md:p-3">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                              <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z"/>
                               </svg>
                             </div>
@@ -123,27 +125,27 @@ const Favorites = () => {
                       </div>
                       
                       {/* Content Section */}
-                      <div className="flex-1 p-4 flex flex-col justify-between">
+                      <div className="flex-1 p-2 md:p-4 flex flex-col justify-between">
                         {/* Title and Info */}
                         <div>
-                          <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
+                          <h3 className="text-white font-bold text-sm md:text-lg mb-1 md:mb-2 line-clamp-2 leading-tight group-hover:text-purple-200 transition-colors duration-300">
                             {item.title || item.name}
                           </h3>
                           
                           {/* Release Date */}
                           {item.release_date && (
-                            <p className="text-gray-400 text-sm mb-2">
+                            <p className="text-gray-400 text-xs md:text-sm mb-1 md:mb-2">
                               {item.release_date?.slice(0, 4) || item.first_air_date?.slice(0, 4) || 'N/A'}
                             </p>
                           )}
                           
                           {/* Genres */}
                           {item.genre_ids && (
-                            <div className="flex flex-wrap gap-1 mb-3">
+                            <div className="flex flex-wrap gap-1 mb-2 md:mb-3">
                               {item.genre_ids.slice(0, 2).map((genreId) => (
                                 <span
                                   key={genreId}
-                                  className="px-2 py-1 bg-purple-500/20 border border-purple-400/30 text-purple-200 rounded-full text-xs"
+                                  className="px-1.5 py-0.5 md:px-2 md:py-1 bg-purple-500/20 border border-purple-400/30 text-purple-200 rounded-full text-[10px] md:text-xs"
                                 >
                                   {genreId}
                                 </span>
@@ -153,15 +155,15 @@ const Favorites = () => {
                         </div>
                         
                         {/* Bottom Section */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mt-1 md:mt-0">
                           {/* Popularity */}
-                          <div className="flex items-center gap-1 text-gray-400 text-xs">
+                          <div className="flex items-center gap-1 text-gray-400 text-[10px] md:text-xs">
                             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                             <span>Popular</span>
                           </div>
                           
                           {/* Action Indicator */}
-                          <div className="text-purple-300 text-xs font-medium">
+                          <div className="text-purple-300 text-[10px] md:text-xs font-medium">
                             Click to view
                           </div>
                         </div>
@@ -173,17 +175,17 @@ const Favorites = () => {
                 {/* Remove Button */}
                 <motion.button
                   onClick={() => handleRemove(item)}
-                  className="absolute -top-2 -right-2 bg-red-500/90 backdrop-blur-sm text-white rounded-full p-2 shadow-lg hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 border-2 border-white/20"
+                  className="absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-red-500/90 backdrop-blur-sm text-white rounded-full p-1.5 md:p-2 shadow-lg hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 border-2 border-white/20"
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   title="Remove from favorites"
                 >
-                  <XCircle size={16} />
+                  <XCircle className="w-3 h-3 md:w-4 md:h-4" />
                 </motion.button>
                 
                 {/* Corner Decorations */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-purple-400 rounded-tl-lg opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-pink-400 rounded-br-lg opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute top-1 left-1 md:top-2 md:left-2 w-3 h-3 md:w-4 md:h-4 border-l-2 border-t-2 border-purple-400 rounded-tl-lg opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-1 right-1 md:bottom-2 md:right-2 w-3 h-3 md:w-4 md:h-4 border-r-2 border-b-2 border-pink-400 rounded-br-lg opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             </motion.div>
           ))}
@@ -404,7 +406,7 @@ const Favorites = () => {
       <div className="relative z-10">
       {/* Hero Section */}
       <motion.section 
-        className="relative py-20 px-4 md:px-10 overflow-hidden"
+        className="relative py-12 md:py-20 px-4 md:px-10 overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -419,23 +421,23 @@ const Favorites = () => {
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-full mb-6 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-4 py-2 md:px-6 md:py-3 rounded-full mb-4 md:mb-6 backdrop-blur-sm"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <Heart className="w-5 h-5" />
-              <span className="font-semibold">Your Personal Collection</span>
+              <Heart className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="font-semibold text-sm md:text-base">Your Personal Collection</span>
             </motion.div>
             
             <motion.h1
-              className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+              className="text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -444,7 +446,7 @@ const Favorites = () => {
             </motion.h1>
             
             <motion.p
-              className="text-xl text-gray-300 max-w-2xl mx-auto"
+              className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -457,7 +459,7 @@ const Favorites = () => {
 
       {/* Content Section */}
       <motion.section 
-        className="px-4 md:px-10 pb-20"
+        className="px-4 md:px-10 pb-12 md:pb-20"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5 }}
@@ -471,14 +473,14 @@ const Favorites = () => {
       {/* Undo Notification */}
       {recentlyRemoved && (
         <motion.div
-          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-6 py-4 rounded-2xl shadow-lg flex items-center gap-4 z-50"
+          className="fixed bottom-4 md:bottom-6 left-4 right-4 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl shadow-lg flex flex-col sm:flex-row items-center gap-2 md:gap-4 z-50"
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.9 }}
         >
-          <div className="flex items-center gap-3">
-            <XCircle className="w-5 h-5 text-red-400" />
-            <span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <XCircle className="w-4 h-4 md:w-5 md:h-5 text-red-400" />
+            <span className="text-sm md:text-base">
               Removed <strong>{recentlyRemoved.title || recentlyRemoved.name}</strong>
             </span>
           </div>
@@ -492,7 +494,7 @@ const Favorites = () => {
                 // Error handling is done in the hook
               }
             }}
-            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
+            className="px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

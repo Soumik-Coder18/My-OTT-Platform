@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, X, MessageCircle, Loader2, Sparkles } from 'lucide-react';
+import { Send, Bot, X, MessageCircle, Loader2 } from 'lucide-react';
 import { CHATBOT_CONFIG, getRandomWelcomeMessage } from '../config/chatbot';
 
 const Chatbot = () => {
@@ -16,7 +16,6 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [cooldown, setCooldown] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
-  const [isDark, setIsDark] = useState(CHATBOT_CONFIG.DEFAULT_THEME === 'dark');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -116,11 +115,7 @@ const Chatbot = () => {
       {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`relative p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 ${
-          isDark 
-            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white' 
-            : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-        }`}
+        className="relative p-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 bg-gradient-to-r from-purple-600 to-pink-600 text-white"
       >
         {isOpen ? (
           <X size={24} />
@@ -134,34 +129,18 @@ const Chatbot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className={`absolute bottom-16 right-0 w-80 h-96 rounded-lg shadow-2xl border ${
-          isDark 
-            ? 'bg-gray-900 border-gray-700' 
-            : 'bg-white border-gray-200'
-        } transition-all duration-300 max-h-[80vh] overflow-hidden`}>
+        <div className="absolute bottom-16 right-0 w-80 h-96 rounded-lg shadow-2xl border bg-gray-900 border-gray-700 transition-all duration-300 max-h-[80vh] overflow-hidden">
           
           {/* Header */}
-          <div className={`p-4 rounded-t-lg ${
-            isDark 
-              ? 'bg-gradient-to-r from-purple-600 to-pink-600' 
-              : 'bg-gradient-to-r from-blue-500 to-purple-500'
-          } text-white flex items-center justify-between`}>
+          <div className="p-4 rounded-t-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Bot size={20} />
               <span className="font-semibold">WhisperFrame AI</span>
             </div>
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className="p-1 rounded-full hover:bg-white/20 transition-colors"
-            >
-              <Sparkles size={16} />
-            </button>
           </div>
 
           {/* Messages */}
-          <div className={`h-64 overflow-y-auto p-4 space-y-3 ${
-            isDark ? 'bg-gray-900' : 'bg-gray-50'
-          }`}>
+          <div className="h-64 overflow-y-auto p-4 space-y-3 bg-gray-900">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -169,18 +148,14 @@ const Chatbot = () => {
               >
                 <div className={`max-w-xs px-3 py-2 rounded-lg ${
                   message.type === 'user'
-                    ? isDark
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-blue-500 text-white'
-                    : isDark
-                      ? 'bg-gray-800 text-gray-100'
-                      : 'bg-white text-gray-800 border'
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-800 text-gray-100'
                 }`}>
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   <p className={`text-xs mt-1 ${
                     message.type === 'user'
                       ? 'text-purple-200'
-                      : isDark ? 'text-gray-400' : 'text-gray-500'
+                      : 'text-gray-400'
                   }`}>
                     {formatTime(message.timestamp)}
                   </p>
@@ -190,9 +165,7 @@ const Chatbot = () => {
             
             {isLoading && (
               <div className="flex justify-start">
-                <div className={`max-w-xs px-3 py-2 rounded-lg ${
-                  isDark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-800 border'
-                }`}>
+                <div className="max-w-xs px-3 py-2 rounded-lg bg-gray-800 text-gray-100">
                   <div className="flex items-center space-x-2">
                     <Loader2 size={16} className="animate-spin" />
                     <span className="text-sm">Thinking...</span>
@@ -205,9 +178,7 @@ const Chatbot = () => {
           </div>
 
           {/* Input Area */}
-          <div className={`p-4 border-t ${
-            isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
+          <div className="p-4 border-t bg-gray-900 border-gray-700">
             <div className="flex space-x-2">
               <textarea
                 ref={inputRef}
@@ -216,11 +187,7 @@ const Chatbot = () => {
                 onKeyPress={handleKeyPress}
                 placeholder={cooldown ? `Please wait ${cooldownTime}s...` : "Ask about movies, shows, actors..."}
                 disabled={isLoading || cooldown}
-                className={`flex-1 p-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 ${
-                  isDark
-                    ? 'bg-gray-800 text-white placeholder-gray-400 focus:ring-purple-500'
-                    : 'bg-gray-100 text-gray-800 placeholder-gray-500 focus:ring-blue-500'
-                } ${(isLoading || cooldown) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`flex-1 p-2 text-sm rounded-lg resize-none focus:outline-none focus:ring-2 bg-gray-800 text-white placeholder-gray-400 focus:ring-purple-500 ${(isLoading || cooldown) ? 'opacity-50 cursor-not-allowed' : ''}`}
                 rows="1"
               />
               <button
@@ -228,12 +195,8 @@ const Chatbot = () => {
                 disabled={!inputMessage.trim() || isLoading || cooldown}
                 className={`p-2 rounded-lg transition-colors relative ${
                   !inputMessage.trim() || isLoading || cooldown
-                    ? isDark
-                      ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : isDark
-                      ? 'bg-purple-600 text-white hover:bg-purple-700'
-                      : 'bg-blue-500 text-white hover:bg-blue-600'
+                    ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                    : 'bg-purple-600 text-white hover:bg-purple-700'
                 }`}
               >
                 {cooldown ? (

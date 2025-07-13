@@ -25,7 +25,7 @@ export const getIndianMovies = (language = 'hi', page = 1) =>
   });
 
 export const getPopularMovies = (filters = {}, page = 1, region = 'US') => {
-  const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
+  const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by || filters.language || filters.duration;
   const endpoint = hasFilters ? '/discover/movie' : '/movie/popular';
 
   const params = {
@@ -36,7 +36,24 @@ export const getPopularMovies = (filters = {}, page = 1, region = 'US') => {
     ...(filters.year && { primary_release_year: filters.year }),
     ...(filters.rating && { 'vote_average.gte': filters.rating }),
     ...(filters.sort_by && { sort_by: filters.sort_by }),
+    ...(filters.language && { with_original_language: filters.language }),
   };
+
+  // Handle duration filter
+  if (filters.duration) {
+    switch (filters.duration) {
+      case 'short':
+        params['with_runtime.lte'] = 90;
+        break;
+      case 'medium':
+        params['with_runtime.gte'] = 90;
+        params['with_runtime.lte'] = 120;
+        break;
+      case 'long':
+        params['with_runtime.gte'] = 120;
+        break;
+    }
+  }
 
   return API.get(endpoint, { params });
 };
@@ -69,7 +86,7 @@ export const searchMovies = (query, region = 'US') =>
 // ==========================================
 
 export const getPopularSeries = (filters = {}, page = 1, region = 'US') => {
-  const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by;
+  const hasFilters = filters.genre || filters.year || filters.rating || filters.sort_by || filters.language || filters.duration;
   const endpoint = hasFilters ? '/discover/tv' : '/tv/popular';
 
   const params = {
@@ -80,7 +97,24 @@ export const getPopularSeries = (filters = {}, page = 1, region = 'US') => {
     ...(filters.year && { first_air_date_year: filters.year }),
     ...(filters.rating && { 'vote_average.gte': filters.rating }),
     ...(filters.sort_by && { sort_by: filters.sort_by }),
+    ...(filters.language && { with_original_language: filters.language }),
   };
+
+  // Handle duration filter for TV shows (episode runtime)
+  if (filters.duration) {
+    switch (filters.duration) {
+      case 'short':
+        params['with_runtime.lte'] = 30;
+        break;
+      case 'medium':
+        params['with_runtime.gte'] = 30;
+        params['with_runtime.lte'] = 60;
+        break;
+      case 'long':
+        params['with_runtime.gte'] = 60;
+        break;
+    }
+  }
 
   return API.get(endpoint, { params });
 };

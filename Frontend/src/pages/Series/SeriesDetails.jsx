@@ -84,7 +84,7 @@ const SeriesDetails = () => {
       {/* Hero Section with Backdrop */}
       {series && (
         <motion.section 
-          className="relative w-full h-[70vh] min-h-[500px] overflow-hidden"
+          className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] min-h-[400px] sm:min-h-[450px] md:min-h-[500px] overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
@@ -109,13 +109,13 @@ const SeriesDetails = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-transparent to-pink-600/20" />
 
           {/* Content Overlay */}
-          <div className="absolute inset-0 flex items-end p-6 md:p-12">
+          <div className="absolute inset-0 flex items-end p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
             <div className="max-w-7xl mx-auto w-full">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-col lg:flex-row gap-8 items-end"
+                className="flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 items-end"
               >
                 {/* Poster */}
                 <motion.div
@@ -124,7 +124,7 @@ const SeriesDetails = () => {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="relative"
                 >
-                  <div className="relative w-48 md:w-64 lg:w-80">
+                  <div className="relative w-32 sm:w-40 md:w-48 lg:w-64 xl:w-80">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-xl opacity-50" />
                     <img
                       src={`https://image.tmdb.org/t/p/w500${series.poster_path}`}
@@ -146,10 +146,11 @@ const SeriesDetails = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.8, duration: 0.6 }}
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4 border border-white/20"
+                    className="inline-flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-purple-500/90 to-pink-500/90 backdrop-blur-sm text-white px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium mb-2 sm:mb-3 md:mb-4 border border-white/20"
                   >
-                    <Sparkles className="w-4 h-4" />
-                    Featured Series
+                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Featured Series</span>
+                    <span className="sm:hidden">Series</span>
                   </motion.div>
 
                   {/* Title */}
@@ -157,7 +158,7 @@ const SeriesDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9, duration: 0.6 }}
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+                    className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 leading-tight"
                   >
                     {series.name}
                   </motion.h1>
@@ -168,7 +169,7 @@ const SeriesDetails = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.0, duration: 0.6 }}
-                      className="text-lg text-gray-300 italic mb-4"
+                      className="text-sm sm:text-base md:text-lg text-gray-300 italic mb-2 sm:mb-3 md:mb-4"
                     >
                       "{series.tagline}"
                     </motion.p>
@@ -179,10 +180,10 @@ const SeriesDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.1, duration: 0.6 }}
-                    className="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-200"
+                    className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3 md:mb-4 text-xs sm:text-sm text-gray-200"
                   >
                     <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                      <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-current" />
                       <span>{series.vote_average?.toFixed(1) || 'N/A'}</span>
                     </div>
                     <div className="flex items-center gap-1">
@@ -202,12 +203,12 @@ const SeriesDetails = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.2, duration: 0.6 }}
-                      className="flex flex-wrap gap-2 mb-6"
+                      className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4 md:mb-6"
                     >
                       {series.genres.map((genre) => (
                         <span
                           key={genre.id}
-                          className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-3 py-1 rounded-full text-sm"
+                          className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm"
                         >
                           {genre.name}
                         </span>
@@ -220,7 +221,7 @@ const SeriesDetails = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.3, duration: 0.6 }}
-                    className="flex flex-wrap gap-3"
+                    className="flex flex-wrap gap-2 sm:gap-3"
                   >
                     <motion.button 
                       onClick={async () => {
@@ -264,27 +265,29 @@ const SeriesDetails = () => {
                           window.open(justWatchUrl, '_blank');
                         }
                       }}
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-2"
+                      className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Play className="w-5 h-5" />
-                      Watch Now
+                      <Play className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                      <span className="hidden sm:inline">Watch Now</span>
+                      <span className="sm:hidden">Watch</span>
                     </motion.button>
 
                     <motion.button 
                       onClick={() => navigate(`/download/${series.id}`)}
-                      className="bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-2"
+                      className="bg-white/10 backdrop-blur-sm text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 border border-white/20 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <Download className="w-5 h-5" />
-                      Download
+                      <Download className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                      <span className="hidden sm:inline">Download</span>
+                      <span className="sm:hidden">DL</span>
                     </motion.button>
 
                     <motion.button 
                       onClick={handleToggleFavorite}
-                      className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 ${
+                      className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-300 flex items-center gap-1 sm:gap-2 text-xs sm:text-sm md:text-base ${
                         isFavorite
                           ? 'bg-red-500 text-white hover:bg-red-600 hover:scale-105'
                           : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:scale-105 border border-white/20'
@@ -294,13 +297,15 @@ const SeriesDetails = () => {
                     >
                       {isFavorite ? (
                         <>
-                          <Heart className="w-5 h-5 fill-current" />
-                          Favorited
+                          <Heart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-current" />
+                          <span className="hidden sm:inline">Favorited</span>
+                          <span className="sm:hidden">Liked</span>
                         </>
                       ) : (
                         <>
-                          <Heart className="w-5 h-5" />
-                          Add to Favorites
+                          <Heart className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                          <span className="hidden sm:inline">Add to Favorites</span>
+                          <span className="sm:hidden">Like</span>
                         </>
                       )}
                     </motion.button>
