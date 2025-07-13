@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, AlertCircle, Info, Sparkles } from 'lucide-react';
+import { X, CheckCircle, AlertCircle, Info, Sparkles, Server, Clock } from 'lucide-react';
 
 const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
   useEffect(() => {
@@ -19,7 +19,9 @@ const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
       case 'error':
         return <AlertCircle className="w-5 h-5" />;
       case 'warning':
-        return <AlertCircle className="w-5 h-5" />;
+        return <Clock className="w-5 h-5" />;
+      case 'info':
+        return <Server className="w-5 h-5" />;
       default:
         return <Info className="w-5 h-5" />;
     }
@@ -51,6 +53,14 @@ const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
           glow: 'shadow-yellow-500/25',
           accent: 'from-yellow-400 to-orange-400'
         };
+      case 'info':
+        return {
+          bg: 'bg-gradient-to-r from-blue-500/90 to-purple-500/90',
+          border: 'border-blue-400/30',
+          icon: 'text-blue-300',
+          glow: 'shadow-blue-500/25',
+          accent: 'from-blue-400 to-purple-400'
+        };
       default:
         return {
           bg: 'bg-gradient-to-r from-purple-500/90 to-pink-500/90',
@@ -70,7 +80,7 @@ const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
         initial={{ opacity: 0, y: 50, scale: 0.3, x: 100 }}
         animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
         exit={{ opacity: 0, scale: 0.5, x: 100, transition: { duration: 0.2 } }}
-        className={`fixed bottom-6 right-6 z-[9999] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl ${colors.glow} backdrop-blur-sm border ${colors.border} ${colors.bg} text-white`}
+        className={`fixed bottom-6 right-6 z-[9999] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl ${colors.glow} backdrop-blur-sm border ${colors.border} ${colors.bg} text-white max-w-sm`}
         style={{ pointerEvents: 'auto' }}
         whileHover={{ scale: 1.02, y: -2 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
@@ -81,13 +91,15 @@ const Toast = ({ message, type = 'info', onClose, duration = 3000 }) => {
         {/* Content */}
         <div className="relative z-10 flex items-center gap-3">
           {/* Icon Container */}
-          <div className={`p-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full ${colors.icon}`}>
+          <div className={`p-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full ${colors.icon} ${
+            type === 'info' ? 'animate-pulse' : ''
+          }`}>
             {getIcon()}
           </div>
           
           {/* Message */}
           <div className="flex-1">
-            <span className="font-semibold text-white">{message}</span>
+            <span className="font-semibold text-white text-sm leading-relaxed">{message}</span>
           </div>
           
           {/* Close Button */}

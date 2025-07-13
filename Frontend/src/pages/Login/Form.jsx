@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import API from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import { Loader2, Server } from 'lucide-react';
 
 const Form = ({ defaultToSignup = false }) => {
   const { login } = useAuth();
@@ -10,6 +11,9 @@ const Form = ({ defaultToSignup = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [flipped, setFlipped] = useState(defaultToSignup);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isColdStart, setIsColdStart] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -24,6 +28,58 @@ const Form = ({ defaultToSignup = false }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Cold start detection and retry logic
+  const handleColdStart = async (apiCall, maxRetries = 3) => {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await Promise.race([
+          apiCall(),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timeout')), 15000)
+          )
+        ]);
+        
+        // If we get here, server is responding - no cold start needed
+        setIsColdStart(false);
+        setRetryCount(0);
+        return response;
+        
+      } catch (error) {
+        console.log(`Attempt ${attempt} failed:`, error.message);
+        
+        // Check if it's a server connectivity issue (not auth error)
+        const isServerError = error.code === 'ERR_NETWORK' || 
+                             error.message === 'Request timeout' ||
+                             error.response?.status >= 500 ||
+                             !error.response; // No response means server is down
+        
+        const isAuthError = error.response?.status === 401 || 
+                           error.response?.status === 400;
+        
+        // Only show cold start messages for actual server issues
+        if (isServerError && !isAuthError) {
+          if (attempt === 1) {
+            setIsColdStart(true);
+            showToast('🔄 Server is starting up, please wait...', 'info', 5000);
+          } else if (attempt < maxRetries) {
+            const waitTime = attempt * 2000; // Progressive delay: 2s, 4s, 6s
+            showToast(`⏳ Server is still starting... Retrying in ${waitTime/1000}s (${attempt}/${maxRetries})`, 'warning', waitTime);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+          } else {
+            setIsColdStart(false);
+            setRetryCount(0);
+            throw new Error('Server is taking longer than expected. Please try again.');
+          }
+        } else {
+          // For auth errors or other non-server issues, don't retry
+          setIsColdStart(false);
+          setRetryCount(0);
+          throw error;
+        }
+      }
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -34,9 +90,14 @@ const Form = ({ defaultToSignup = false }) => {
       return;
     }
     
+    setIsLoading(true);
+    
     try {
-      const response = await API.post('/api/users/login', { email, password });
-      showToast('Login successful!', 'success');
+      const response = await handleColdStart(() => 
+        API.post('/api/users/login', { email, password })
+      );
+      
+      showToast('🎉 Login successful! Welcome back!', 'success');
       console.log(response.data);
       
       // Use the auth context to login
@@ -54,11 +115,17 @@ const Form = ({ defaultToSignup = false }) => {
       if (message === 'Email and password are required') {
         showToast('Please enter both email and password.', 'error');
       } else if (message === 'Invalid credentials') {
-        showToast('Invalid email or password. Please try again.', 'error');
+        showToast('❌ Invalid email or password. Please try again.', 'error');
+      } else if (message === 'Request timeout' || message === 'Server is taking longer than expected. Please try again.') {
+        showToast('⏰ Server is taking longer than expected. Please try again.', 'error');
+      } else if (error.code === 'ERR_NETWORK') {
+        showToast('🌐 Network error. Please check your connection and try again.', 'error');
       } else {
-        showToast(message, 'error');
+        showToast(`❌ ${message}`, 'error');
       }
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,15 +144,19 @@ const Form = ({ defaultToSignup = false }) => {
       return;
     }
     
+    setIsLoading(true);
+    
     try {
-      const response = await API.post('/api/users/register', {
-        username,
-        email,
-        password
-      });
+      const response = await handleColdStart(() => 
+        API.post('/api/users/register', {
+          username,
+          email,
+          password
+        })
+      );
       
       // Registration successful - automatically log in
-      showToast('Registration successful! You are now logged in.', 'success');
+      showToast('🎉 Registration successful! Welcome to WhisperFrame!', 'success');
       console.log(response.data);
       
       // Use the auth context to login
@@ -103,13 +174,19 @@ const Form = ({ defaultToSignup = false }) => {
       if (message === 'All fields are required') {
         showToast('Please fill in all fields.', 'error');
       } else if (message === 'User already exists') {
-        showToast('An account with this email already exists.', 'error');
+        showToast('❌ An account with this email already exists.', 'error');
       } else if (message === 'Username already taken') {
-        showToast('This username is already taken.', 'error');
+        showToast('❌ This username is already taken.', 'error');
+      } else if (message === 'Request timeout' || message === 'Server is taking longer than expected. Please try again.') {
+        showToast('⏰ Server is taking longer than expected. Please try again.', 'error');
+      } else if (error.code === 'ERR_NETWORK') {
+        showToast('🌐 Network error. Please check your connection and try again.', 'error');
       } else {
-        showToast(message, 'error');
+        showToast(`❌ ${message}`, 'error');
       }
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -129,6 +206,7 @@ const Form = ({ defaultToSignup = false }) => {
             className="sr-only peer"
             checked={flipped}
             onChange={() => setFlipped(!flipped)}
+            disabled={isLoading}
           />
           <div className="absolute top-0 left-0 w-full h-full rounded-full border-2 border-purple-300 transition-all duration-300
             peer-checked:bg-gradient-to-r peer-checked:from-purple-500 peer-checked:via-pink-500 peer-checked:to-pink-600
@@ -160,7 +238,8 @@ const Form = ({ defaultToSignup = false }) => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <input
                 name="password"
@@ -168,13 +247,24 @@ const Form = ({ defaultToSignup = false }) => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <button
                 type="submit"
-                className="mt-4 w-32 h-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300"
+                disabled={isLoading}
+                className={`mt-4 w-32 h-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+                  isColdStart ? 'animate-pulse' : ''
+                }`}
               >
-                Log In
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {isColdStart && <Server className="w-4 h-4 animate-pulse" />}
+                  </>
+                ) : (
+                  'Log In'
+                )}
               </button>
             </form>
           </div>
@@ -189,7 +279,8 @@ const Form = ({ defaultToSignup = false }) => {
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <input
                 name="email"
@@ -197,7 +288,8 @@ const Form = ({ defaultToSignup = false }) => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <input
                 name="password"
@@ -205,13 +297,24 @@ const Form = ({ defaultToSignup = false }) => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full h-12 px-4 border-2 border-purple-500/30 rounded-xl bg-gray-700/50 text-white placeholder-gray-400 font-medium backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-gray-700/70 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               />
               <button
                 type="submit"
-                className="mt-4 w-32 h-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300"
+                disabled={isLoading}
+                className={`mt-4 w-32 h-12 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/25 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${
+                  isColdStart ? 'animate-pulse' : ''
+                }`}
               >
-                Sign Up
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {isColdStart && <Server className="w-4 h-4 animate-pulse" />}
+                  </>
+                ) : (
+                  'Sign Up'
+                )}
               </button>
             </form>
           </div>
