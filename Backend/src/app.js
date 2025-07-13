@@ -21,9 +21,25 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Root route (GET instead of POST for better semantics)
-app.post('/', (req, res) => {
-  res.send('🎬 My-OTT-Platform API is running');
+// Root route and health check
+app.get('/', (req, res) => {
+  res.json({
+    message: '🎬 WhisperFrame API is running',
+    status: 'OK',
+    timestamp: new Date(),
+    uptime: process.uptime()
+  });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'WhisperFrame Backend is healthy',
+    timestamp: new Date(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // API Routes
