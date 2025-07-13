@@ -17,6 +17,9 @@ import {
   ChevronDown,
 } from 'lucide-react';
 
+const SEARCH_HISTORY_KEY = 'wf_search_history';
+const MAX_HISTORY = 8;
+
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -25,6 +28,32 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const profileDropdownRef = useRef(null);
+  const [searchHistory, setSearchHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const searchInputRef = useRef(null);
+
+  // Load search history from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem(SEARCH_HISTORY_KEY);
+    if (stored) setSearchHistory(JSON.parse(stored));
+  }, []);
+
+  // Save to localStorage when searchHistory changes
+  useEffect(() => {
+    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(searchHistory));
+  }, [searchHistory]);
+
+  // Add search to history
+  const addToHistory = (query) => {
+    if (!query.trim()) return;
+    setSearchHistory(prev => {
+      const filtered = prev.filter(q => q.toLowerCase() !== query.toLowerCase());
+      return [query, ...filtered].slice(0, MAX_HISTORY);
+    });
+  };
+
+  // Clear search history
+  const clearHistory = () => setSearchHistory([]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -39,6 +68,7 @@ const Header = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchTerm.trim()) return;
+    addToHistory(searchTerm.trim());
 
     // Redirect to login if not authenticated
     if (!isAuthenticated) {
@@ -115,15 +145,42 @@ const Header = () => {
         {isAuthenticated && (
           <form
             onSubmit={handleSearch}
-            className="hidden md:flex flex-1 mx-6"
+            className="hidden md:flex flex-1 mx-6 relative"
+            autoComplete="off"
           >
             <input
               type="text"
               value={searchTerm}
+              ref={searchInputRef}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setShowHistory(true)}
+              onBlur={() => setTimeout(() => setShowHistory(false), 150)}
               placeholder="Search movies or shows..."
               className="w-full px-4 py-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
+            {/* Search History Dropdown */}
+            {showHistory && searchHistory.length > 0 && (
+              <div className="absolute left-0 top-full mt-1 w-full bg-slate-900/95 border border-purple-500/20 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                <div className="flex justify-between items-center px-3 py-2 border-b border-purple-500/10">
+                  <span className="text-xs text-gray-400">Recent Searches</span>
+                  <button type="button" onClick={clearHistory} className="text-xs text-purple-400 hover:underline">Clear</button>
+                </div>
+                {searchHistory.map((q, idx) => (
+                  <button
+                    key={q + idx}
+                    type="button"
+                    className="w-full text-left px-4 py-2 text-sm text-white hover:bg-purple-500/10 transition"
+                    onMouseDown={() => {
+                      setSearchTerm(q);
+                      setShowHistory(false);
+                      setTimeout(() => searchInputRef.current?.focus(), 0);
+                    }}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
           </form>
         )}
 
@@ -243,14 +300,40 @@ const Header = () => {
           <div className="px-4 py-4 space-y-4">
             {/* Mobile Search */}
             {isAuthenticated && (
-              <form onSubmit={handleSearch} className="mb-4">
+              <form onSubmit={handleSearch} className="mb-4 relative" autoComplete="off">
                 <input
                   type="text"
                   value={searchTerm}
+                  ref={searchInputRef}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={() => setShowHistory(true)}
+                  onBlur={() => setTimeout(() => setShowHistory(false), 150)}
                   placeholder="Search movies or shows..."
-                  className="w-full px-4 py-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-4 py-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
+                {/* Search History Dropdown (Mobile) */}
+                {showHistory && searchHistory.length > 0 && (
+                  <div className="absolute left-0 top-full mt-1 w-full bg-slate-900/95 border border-purple-500/20 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                    <div className="flex justify-between items-center px-3 py-2 border-b border-purple-500/10">
+                      <span className="text-xs text-gray-400">Recent Searches</span>
+                      <button type="button" onClick={clearHistory} className="text-xs text-purple-400 hover:underline">Clear</button>
+                    </div>
+                    {searchHistory.map((q, idx) => (
+                      <button
+                        key={q + idx}
+                        type="button"
+                        className="w-full text-left px-4 py-2 text-sm text-white hover:bg-purple-500/10 transition"
+                        onMouseDown={() => {
+                          setSearchTerm(q);
+                          setShowHistory(false);
+                          setTimeout(() => searchInputRef.current?.focus(), 0);
+                        }}
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </form>
             )}
 

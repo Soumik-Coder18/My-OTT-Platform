@@ -149,12 +149,12 @@ const SearchResults = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: index * 0.05, duration: 0.5 }}
-        className="group cursor-pointer"
+        className="group cursor-pointer w-full"
       >
-        <Link to={path}>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 p-2 md:p-4 bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 rounded-xl">
+        <Link to={path} className="block w-full">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4 p-2 md:p-4 bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 rounded-xl w-full">
             {/* Image */}
-            <div className="relative w-14 h-20 md:w-16 md:h-24 flex-shrink-0">
+            <div className="relative w-20 h-28 flex-shrink-0">
               <img
                 src={
                   item.poster_path
@@ -162,7 +162,7 @@ const SearchResults = () => {
                     : 'https://via.placeholder.com/200x300?text=No+Image'
                 }
                 alt={title}
-                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full object-cover rounded-lg"
               />
               <div className="absolute top-1 left-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full px-1 py-0.5">
                 <span className="text-white text-xs font-medium">
@@ -170,10 +170,9 @@ const SearchResults = () => {
                 </span>
               </div>
             </div>
-            
             {/* Content */}
-            <div className="flex-1 min-w-0">
-              <h3 className="text-white font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-purple-300 transition-colors duration-300 truncate">
+            <div className="flex-1 min-w-0 w-full">
+              <h3 className="text-white font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-purple-300 transition-colors duration-300 break-words whitespace-normal">
                 {title}
               </h3>
               <div className="flex flex-wrap items-center gap-2 md:gap-4 text-gray-300 text-xs md:text-sm">
@@ -191,9 +190,8 @@ const SearchResults = () => {
                 </div>
               </div>
             </div>
-            
             {/* Play Button */}
-            <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-2 md:mt-0">
+            <div className="flex-shrink-0 mt-2 md:mt-0">
               <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                 <Play className="w-4 h-4 md:w-5 md:h-5 text-white fill-current" />
               </div>
