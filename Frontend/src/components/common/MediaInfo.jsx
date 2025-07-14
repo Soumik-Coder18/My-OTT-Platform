@@ -119,6 +119,8 @@ const MediaInfo = ({ media, mediaType, isFavorite, handleToggleFavorite }) => {
 
   const cast = media.credits?.cast?.slice(0, 8) || [];
   const directors = media.credits?.crew?.filter((person) => person.job === 'Director') || [];
+  const musicDirectors = media.credits?.crew?.filter((person) =>
+    person.job === 'Original Music Composer' || person.job === 'Music Director' || person.job === 'Composer') || [];
 
   return (
     <motion.div
@@ -174,7 +176,7 @@ const MediaInfo = ({ media, mediaType, isFavorite, handleToggleFavorite }) => {
         )}
 
         {directors.length > 0 && (
-          <p className="text-sm mb-4 text-[#7D4C9E]">
+          <p className="text-sm mb-2 text-[#7D4C9E]">
             <strong>Director{directors.length > 1 ? 's' : ''}:</strong>{' '}
             {directors.map((dir, idx) => (
               <span key={dir.id}>
@@ -187,6 +189,24 @@ const MediaInfo = ({ media, mediaType, isFavorite, handleToggleFavorite }) => {
                   {dir.name}
                 </a>
                 {idx < directors.length - 1 && ', '}
+              </span>
+            ))}
+          </p>
+        )}
+        {musicDirectors.length > 0 && (
+          <p className="text-sm mb-4 text-[#7D4C9E]">
+            <strong>Music Director{musicDirectors.length > 1 ? 's' : ''}:</strong>{' '}
+            {musicDirectors.map((md, idx) => (
+              <span key={md.id}>
+                <a
+                  href={`https://www.google.com/search?q=${encodeURIComponent(md.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#2E004F] hover:underline"
+                >
+                  {md.name}
+                </a>
+                {idx < musicDirectors.length - 1 && ', '}
               </span>
             ))}
           </p>

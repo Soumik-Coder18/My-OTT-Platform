@@ -12,6 +12,8 @@ import ScenePreviews from '../../components/common/ScenePreviews';
 import MediaInfo from '../../components/common/MediaInfo';
 import YouMightAlsoLike from '../../components/common/YouMightAlsoLike';
 import Cast from '../../components/common/Cast';
+import { fetchSongsFromiTunes } from '../../services/itunes';
+import MovieSongs from '../../components/common/MovieSongs';
 
 // Hooks
 import { useFavorites } from '../../hooks/useFavorites';
@@ -24,6 +26,8 @@ const MovieDetails = () => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [backdrops, setBackdrops] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [songs, setSongs] = useState([]);
+  const [songsLoading, setSongsLoading] = useState(false);
 
   const { favorites, addFavorite, removeFavorite } = useFavorites();
   const isFavorite = favorites.some(
@@ -63,6 +67,17 @@ const MovieDetails = () => {
 
     fetchMovie();
   }, [id, navigate]);
+
+  // Fetch iTunes songs after movie is loaded
+  useEffect(() => {
+    if (movie && movie.title) {
+      setSongsLoading(true);
+      fetchSongsFromiTunes(`${movie.title} soundtrack`).then((tracks) => {
+        setSongs(tracks);
+        setSongsLoading(false);
+      });
+    }
+  }, [movie]);
 
   if (loading) return <Loader />;
 
@@ -388,6 +403,9 @@ const MovieDetails = () => {
             </div>
           </motion.section>
         )}
+
+        {/* iTunes Songs Section */}
+        <MovieSongs songs={songs} loading={songsLoading} />
 
         {/* Cast Section */}
         <Cast mediaType="movie" id={id} />
