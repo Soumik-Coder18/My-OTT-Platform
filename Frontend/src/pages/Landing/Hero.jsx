@@ -110,7 +110,7 @@ const Hero = () => {
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 px-6 py-3 rounded-full mb-8 backdrop-blur-sm"
               >
                 <Sparkles size={20} className="text-pink-400" />
-                <span className="font-semibold">🎬 Your Ultimate Movie Experience</span>
+                <span className="font-semibold">Your Ultimate Movie Experience</span>
               </motion.div>
 
               {/* Main Heading */}
